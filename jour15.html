@@ -1,0 +1,4725 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width,
+             initial-scale=1.0,
+             maximum-scale=1.0,
+             user-scalable=no"
+>
+
+<title>Sous le même ciel ❤️</title>
+
+<link rel="preconnect"
+      href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;500;600;700&display=swap"
+      rel="stylesheet">
+
+
+<style>
+
+/* =====================================================
+                    RESET
+===================================================== */
+
+*{
+
+    margin:0;
+    padding:0;
+
+    box-sizing:border-box;
+
+    -webkit-tap-highlight-color:transparent;
+
+}
+
+
+html,
+body{
+
+    width:100%;
+    height:100%;
+
+    overflow:hidden;
+
+    background:#02030b;
+
+    color:white;
+
+    font-family:Poppins,sans-serif;
+
+    touch-action:none;
+
+}
+
+
+/* =====================================================
+                    CANVAS
+===================================================== */
+
+#sky{
+
+    position:fixed;
+
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    display:block;
+
+    z-index:1;
+
+}
+
+
+/* =====================================================
+                    FOND
+===================================================== */
+
+#background{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:0;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(70,80,180,.12),
+            transparent 38%
+        ),
+
+        radial-gradient(
+            circle at 50% 50%,
+            #0b0d20 0%,
+            #02030b 75%
+        );
+
+    transition:
+        background 1s ease;
+
+}
+
+
+/* =====================================================
+                    VIGNETTE
+===================================================== */
+
+#vignette{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:3;
+
+    pointer-events:none;
+
+    background:
+
+        radial-gradient(
+            circle at center,
+            transparent 35%,
+            rgba(0,0,0,.55) 100%
+        );
+
+}
+
+
+/* =====================================================
+                    INTRO
+===================================================== */
+
+#intro{
+
+    position:fixed;
+
+    inset:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:24px;
+
+    z-index:20;
+
+    background:
+
+        radial-gradient(
+            circle at center,
+            rgba(10,13,35,.93),
+            rgba(1,2,8,.99)
+        );
+
+    transition:
+
+        opacity 1.2s ease,
+
+        transform 1.2s ease;
+
+}
+
+
+.intro-card{
+
+    width:min(
+        440px,
+        92vw
+    );
+
+    max-height:
+        calc(100vh - 40px);
+
+    overflow:auto;
+
+    padding:
+        36px 28px;
+
+    border-radius:30px;
+
+    text-align:center;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.075),
+            rgba(255,255,255,.025)
+        );
+
+    border:
+
+        1px solid
+        rgba(150,160,255,.15);
+
+    box-shadow:
+
+        0 30px 90px
+        rgba(0,0,0,.55),
+
+        inset 0 1px 0
+        rgba(255,255,255,.08);
+
+    backdrop-filter:
+        blur(24px);
+
+    -webkit-backdrop-filter:
+        blur(24px);
+
+}
+
+
+.intro-icon{
+
+    font-size:48px;
+
+    margin-bottom:14px;
+
+    filter:
+
+        drop-shadow(
+            0 0 18px
+            rgba(150,170,255,.65)
+        );
+
+}
+
+
+.intro-card h1{
+
+    font-size:
+        clamp(
+            1.55rem,
+            6vw,
+            2rem
+        );
+
+    margin-bottom:18px;
+
+}
+
+
+.intro-card p{
+
+    font-size:
+        clamp(
+            .82rem,
+            3.6vw,
+            .98rem
+        );
+
+    line-height:1.9;
+
+    opacity:.86;
+
+    margin-bottom:22px;
+
+}
+
+
+.intro-card .instruction{
+
+    padding:
+        13px 16px;
+
+    margin-bottom:26px;
+
+    border-radius:17px;
+
+    background:
+        rgba(255,255,255,.045);
+
+    border:
+        1px solid
+        rgba(255,255,255,.06);
+
+    font-size:.82rem;
+
+    line-height:1.8;
+
+    opacity:.8;
+
+}
+
+
+#start{
+
+    border:0;
+
+    padding:
+        15px 32px;
+
+    border-radius:999px;
+
+    color:white;
+
+    font-family:inherit;
+
+    font-size:.95rem;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #7287ff,
+            #a76cff
+        );
+
+    box-shadow:
+
+        0 12px 35px
+        rgba(100,120,255,.3);
+
+    transition:
+        transform .2s ease;
+
+}
+
+
+#start:active{
+
+    transform:scale(.95);
+
+}
+
+
+/* =====================================================
+                  INDICATION
+===================================================== */
+
+#hint{
+
+    position:fixed;
+
+    left:50%;
+
+    bottom:
+        max(
+            25px,
+            env(safe-area-inset-bottom)
+        );
+
+    transform:
+        translateX(-50%)
+        translateY(15px);
+
+    z-index:8;
+
+    padding:
+        11px 18px;
+
+    border-radius:999px;
+
+    background:
+        rgba(5,7,20,.55);
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    backdrop-filter:
+        blur(14px);
+
+    -webkit-backdrop-filter:
+        blur(14px);
+
+    font-size:.76rem;
+
+    white-space:nowrap;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:
+
+        opacity .8s ease,
+
+        transform .8s ease;
+
+}
+
+
+#hint.show{
+
+    opacity:.8;
+
+    transform:
+        translateX(-50%)
+        translateY(0);
+
+}
+
+
+/* =====================================================
+                  COMPTEUR
+===================================================== */
+
+#counter{
+
+    position:fixed;
+
+    top:
+        max(
+            22px,
+            env(safe-area-inset-top)
+        );
+
+    left:50%;
+
+    transform:
+        translateX(-50%);
+
+    z-index:8;
+
+    padding:
+        8px 15px;
+
+    border-radius:999px;
+
+    background:
+        rgba(3,5,15,.45);
+
+    border:
+        1px solid
+        rgba(255,255,255,.07);
+
+    backdrop-filter:
+        blur(12px);
+
+    -webkit-backdrop-filter:
+        blur(12px);
+
+    font-size:.72rem;
+
+    letter-spacing:.04em;
+
+    opacity:0;
+
+    transition:
+        opacity 1s ease;
+
+}
+
+
+#counter.show{
+
+    opacity:.65;
+
+}
+
+
+/* =====================================================
+                  MESSAGE FINAL
+===================================================== */
+
+#message{
+
+    position:fixed;
+
+    left:50%;
+
+    bottom:
+        max(
+            30px,
+            env(safe-area-inset-bottom)
+        );
+
+    transform:
+        translateX(-50%)
+        translateY(30px)
+        scale(.96);
+
+    width:
+        min(
+            430px,
+            88vw
+        );
+
+    padding:
+        24px 21px;
+
+    border-radius:24px;
+
+    text-align:center;
+
+    z-index:15;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(12,12,30,.84),
+            rgba(4,5,15,.78)
+        );
+
+    border:
+        1px solid
+        rgba(130,140,255,.16);
+
+    box-shadow:
+
+        0 25px 80px
+        rgba(0,0,0,.5);
+
+    backdrop-filter:
+        blur(22px);
+
+    -webkit-backdrop-filter:
+        blur(22px);
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:
+
+        opacity 1.2s ease,
+
+        transform 1.2s
+        cubic-bezier(.2,.8,.2,1);
+
+}
+
+
+#message.show{
+
+    opacity:1;
+
+    transform:
+        translateX(-50%)
+        translateY(0)
+        scale(1);
+
+}
+
+
+@media(max-width:600px){
+
+    #message{
+
+        width:88vw;
+
+        padding:
+            21px 18px;
+
+        font-size:.86rem;
+
+        line-height:1.8;
+
+    }
+
+}
+
+
+/* =====================================================
+              MODE MOBILE TRES PETIT
+===================================================== */
+
+@media(max-height:650px){
+
+    .intro-card{
+
+        padding:
+            25px 22px;
+
+    }
+
+
+    .intro-icon{
+
+        font-size:38px;
+
+    }
+
+
+    .intro-card p{
+
+        line-height:1.65;
+
+        margin-bottom:15px;
+
+    }
+
+
+    .intro-card .instruction{
+
+        margin-bottom:17px;
+
+    }
+
+}
+
+
+/* =====================================================
+                    FIN CSS
+===================================================== */
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div id="background"></div>
+
+<canvas id="sky"></canvas>
+
+<div id="vignette"></div>
+
+
+<!-- =================================================
+                    INTRO
+================================================= -->
+
+<div id="intro">
+
+    <div class="intro-card">
+
+        <div class="intro-icon">
+            🌌
+        </div>
+
+        <h1>
+            Sous le même ciel
+        </h1>
+
+        <p>
+
+            Il existe quelque chose...
+
+            <br><br>
+
+            Que nous pouvons regarder
+            tous les deux,
+            même lorsque nous sommes loin.
+
+            <br><br>
+
+            ❤️
+
+        </p>
+
+
+        <div class="instruction">
+
+            📱 Incline ton téléphone
+            pour explorer le ciel.
+
+            <br>
+
+            👆 Tu peux aussi faire glisser
+            ton doigt.
+
+            <br><br>
+
+            💻 Sur ordinateur,
+            utilise ta souris.
+
+            <br><br>
+
+            ✨ Trouve les étoiles
+            les plus brillantes.
+
+        </div>
+
+
+        <button id="start">
+
+            Commencer ❤️
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =================================================
+                    COMPTEUR
+================================================= -->
+
+<div id="counter">
+
+    Étoiles trouvées :
+    <span id="found">0</span>/4
+
+</div>
+
+
+<!-- =================================================
+                    INDICATION
+================================================= -->
+
+<div id="hint">
+
+    📱 Incline ton téléphone ou glisse ton doigt
+
+</div>
+
+
+<!-- =================================================
+                    MESSAGE
+================================================= -->
+
+<div id="message"></div>
+
+
+
+<script>
+/* ================= SCRIPT 1 ================= */
+
+
+
+/* =====================================================
+                    DOM
+===================================================== */
+
+const canvas =
+    document.getElementById("sky");
+
+const ctx =
+    canvas.getContext(
+        "2d",
+        {
+            alpha:false
+        }
+    );
+
+
+const intro =
+    document.getElementById("intro");
+
+const startButton =
+    document.getElementById("start");
+
+const hint =
+    document.getElementById("hint");
+
+const counter =
+    document.getElementById("counter");
+
+const foundDisplay =
+    document.getElementById("found");
+
+const message =
+    document.getElementById("message");
+
+
+
+/* =====================================================
+                    MUSIQUE
+===================================================== */
+
+const music = new Audio(
+    "assets/joie-en-amour.mp3"
+);
+
+music.loop = true;
+music.volume = 0.22;
+
+
+
+
+/* =====================================================
+                    CANVAS
+===================================================== */
+
+let width = 0;
+
+let height = 0;
+
+let dpr = 1;
+
+
+function resize(){
+
+    dpr =
+        Math.min(
+            window.devicePixelRatio || 1,
+            2
+        );
+
+
+    width =
+        window.innerWidth;
+
+    height =
+        window.innerHeight;
+
+
+    canvas.width =
+        width * dpr;
+
+    canvas.height =
+        height * dpr;
+
+
+    canvas.style.width =
+        width + "px";
+
+    canvas.style.height =
+        height + "px";
+
+
+    ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+    );
+
+}
+
+
+resize();
+
+
+window.addEventListener(
+    "resize",
+    resize
+);
+
+
+/* =====================================================
+                    ETAT
+===================================================== */
+
+const STATE = {
+
+    INTRO:0,
+
+    EXPLORE:1,
+
+    CONSTELLATION:2,
+
+    HEART:3,
+
+    FINAL:4
+
+};
+
+
+let state =
+    STATE.INTRO;
+
+
+/* =====================================================
+                  PARALLAX
+===================================================== */
+
+let targetX = 0;
+
+let targetY = 0;
+
+let cameraX = 0;
+
+let cameraY = 0;
+
+
+/*
+    Limites volontairement petites :
+    même en inclinant beaucoup le téléphone,
+    les étoiles restent visibles.
+*/
+
+const MAX_CAMERA_X = 55;
+
+const MAX_CAMERA_Y = 45;
+
+
+/* =====================================================
+                    SOURIS
+===================================================== */
+
+window.addEventListener(
+    "mousemove",
+    event => {
+
+        if(
+            state !== STATE.EXPLORE
+        ) return;
+
+
+        targetX =
+            (
+                event.clientX -
+                width / 2
+            ) / width;
+
+
+        targetY =
+            (
+                event.clientY -
+                height / 2
+            ) / height;
+
+
+        targetX *= 2;
+
+        targetY *= 2;
+
+    }
+);
+
+
+/* =====================================================
+                  TOUCH DRAG
+===================================================== */
+
+let touching = false;
+
+let lastTouchX = 0;
+
+let lastTouchY = 0;
+
+
+window.addEventListener(
+    "touchstart",
+    event => {
+
+        if(
+            state !== STATE.EXPLORE
+        ) return;
+
+
+        const touch =
+            event.touches[0];
+
+        if(!touch) return;
+
+
+        touching = true;
+
+
+        lastTouchX =
+            touch.clientX;
+
+        lastTouchY =
+            touch.clientY;
+
+    },
+    {
+        passive:true
+    }
+);
+
+
+window.addEventListener(
+    "touchmove",
+    event => {
+
+        if(
+            state !== STATE.EXPLORE ||
+            !touching
+        ) return;
+
+
+        const touch =
+            event.touches[0];
+
+        if(!touch) return;
+
+
+        const dx =
+            touch.clientX -
+            lastTouchX;
+
+        const dy =
+            touch.clientY -
+            lastTouchY;
+
+
+        targetX +=
+            dx / width * 1.8;
+
+
+        targetY +=
+            dy / height * 1.8;
+
+
+        targetX =
+            Math.max(
+                -2,
+                Math.min(
+                    2,
+                    targetX
+                )
+            );
+
+
+        targetY =
+            Math.max(
+                -2,
+                Math.min(
+                    2,
+                    targetY
+                )
+            );
+
+
+        lastTouchX =
+            touch.clientX;
+
+        lastTouchY =
+            touch.clientY;
+
+    },
+    {
+        passive:true
+    }
+);
+
+
+window.addEventListener(
+    "touchend",
+    () => {
+
+        touching = false;
+
+    }
+);
+
+
+/* =====================================================
+              GYROSCOPE / DEVICE ORIENTATION
+===================================================== */
+
+let orientationEnabled =
+    false;
+
+
+function handleOrientation(event){
+
+    if(
+        state !== STATE.EXPLORE
+    ) return;
+
+
+    if(
+        event.gamma == null ||
+        event.beta == null
+    ) return;
+
+
+    /*
+        gamma = gauche / droite
+
+        beta = avant / arrière
+    */
+
+    const gamma =
+        Math.max(
+            -35,
+            Math.min(
+                35,
+                event.gamma
+            )
+        );
+
+
+    const beta =
+        Math.max(
+            -35,
+            Math.min(
+                35,
+                event.beta - 45
+            )
+        );
+
+
+    targetX =
+        gamma / 35 * 1.8;
+
+
+    targetY =
+        beta / 35 * 1.4;
+
+}
+
+
+/* =====================================================
+          DEMANDE DE PERMISSION IOS
+===================================================== */
+
+async function enableOrientation(){
+
+    try{
+
+        if(
+            typeof DeviceOrientationEvent ===
+            "undefined"
+        ){
+
+            return;
+
+        }
+
+
+        if(
+            typeof DeviceOrientationEvent
+            .requestPermission ===
+            "function"
+        ){
+
+            const permission =
+                await
+                DeviceOrientationEvent
+                .requestPermission();
+
+
+            if(
+                permission !== "granted"
+            ){
+
+                return;
+
+            }
+
+        }
+
+
+        window.addEventListener(
+            "deviceorientation",
+            handleOrientation,
+            true
+        );
+
+
+        orientationEnabled =
+            true;
+
+    }
+    catch(error){
+
+        console.log(
+            "Orientation indisponible",
+            error
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+                    ETOILES
+===================================================== */
+
+const stars = [];
+
+
+const STAR_COUNT =
+    window.innerWidth < 600
+        ? 260
+        : 380;
+
+
+/*
+    Messages des 4 étoiles importantes.
+*/
+
+const specialMessages = [
+
+    "Même lorsque nous sommes loin... ❤️",
+
+    "Nous regardons exactement le même ciel. ✨",
+
+    "Chaque étoile me rappelle toi. 🥹",
+
+    "J'ai tellement hâte de te retrouver. ❤️"
+
+];
+
+
+/* =====================================================
+              CREATION DES ETOILES
+===================================================== */
+
+for(
+    let i = 0;
+    i < STAR_COUNT;
+    i++
+){
+
+    /*
+        profondeur :
+
+        0.15 = très loin
+
+        1 = proche
+    */
+
+    const depth =
+        .15 +
+        Math.random() * .85;
+
+
+    stars.push({
+
+        /*
+            Position normalisée.
+            Cela permet de recalculer
+            correctement le ciel après resize.
+        */
+
+        nx:
+            Math.random(),
+
+        ny:
+            Math.random(),
+
+
+        z:
+            depth,
+
+
+        size:
+            .35 +
+            Math.random() * 1.7 *
+            depth,
+
+
+        alpha:
+            .25 +
+            Math.random() * .7,
+
+
+        pulse:
+            Math.random() *
+            Math.PI * 2,
+
+
+        twinkle:
+            .5 +
+            Math.random() * 2,
+
+
+        special:false,
+
+        found:false,
+
+        /* Position réelle utilisée pendant les animations */
+        x: 0,
+        y: 0
+
+    });
+
+}
+
+
+/* =====================================================
+              4 ETOILES SPECIALES
+===================================================== */
+
+const specialPositions = [
+
+    [.20,.27],
+
+    [.76,.23],
+
+    [.29,.72],
+
+    [.79,.68]
+
+];
+
+
+for(
+    let i = 0;
+    i < 4;
+    i++
+){
+
+    const star =
+        stars[i];
+
+
+    star.special =
+        true;
+
+
+    star.message =
+        specialMessages[i];
+
+
+    star.size =
+        3.4;
+
+
+    star.alpha =
+        1;
+
+
+    star.nx =
+        specialPositions[i][0];
+
+
+    star.ny =
+        specialPositions[i][1];
+
+
+    star.z =
+        .9;
+
+}
+
+
+/* =====================================================
+          INITIALISATION DES POSITIONS REELLES
+===================================================== */
+
+for(const star of stars){
+
+    star.x = star.nx * width;
+    star.y = star.ny * height;
+
+}
+
+
+/* =====================================================
+                    COMPTEUR
+===================================================== */
+
+let found =
+    0;
+
+
+/* =====================================================
+                  PARTICULES
+===================================================== */
+
+const particles = [];
+
+
+function createParticle(
+    x,
+    y,
+    amount = 1
+){
+
+    for(
+        let i=0;
+        i<amount;
+        i++
+    ){
+
+        particles.push({
+
+            x:x,
+
+            y:y,
+
+            vx:
+                (Math.random()-.5)
+                * 1.2,
+
+            vy:
+                (Math.random()-.5)
+                * 1.2,
+
+            life:1,
+
+            size:
+                1 +
+                Math.random()*2.5
+
+        });
+
+    }
+
+}
+
+
+/* =====================================================
+              ETOILES FILANTES
+===================================================== */
+
+const shootingStars = [];
+
+
+function spawnShootingStar(){
+
+    shootingStars.push({
+
+        x:
+            Math.random()
+            * width
+            * .8,
+
+        y:
+            -40,
+
+        vx:
+            7 +
+            Math.random()*5,
+
+        vy:
+            4 +
+            Math.random()*3,
+
+        life:0
+
+    });
+
+}
+
+
+/* =====================================================
+                    DEMARRAGE
+===================================================== */
+
+startButton.addEventListener(
+    "click",
+    async () => {
+
+        if(
+            state !== STATE.INTRO
+        ) return;
+
+
+        /*
+            Très important sur iPhone :
+            la permission gyroscope est demandée
+            après une vraie interaction.
+        */
+
+        await enableOrientation();
+
+
+        state =
+            STATE.EXPLORE;
+            music.currentTime = 0;
+
+            music.play().catch(() => {});
+
+        intro.style.opacity =
+            "0";
+
+
+        intro.style.transform =
+            "scale(1.04)";
+
+
+        counter.classList.add(
+            "show"
+        );
+
+
+        hint.classList.add(
+            "show"
+        );
+
+
+        setTimeout(
+            () => {
+
+                intro.remove();
+
+            },
+            1200
+        );
+
+
+        setTimeout(
+            () => {
+
+                hint.classList.remove(
+                    "show"
+                );
+
+            },
+            5500
+        );
+
+    }
+);
+
+
+/* =====================================================
+              POSITION ETOILE
+===================================================== */
+
+function getStarPosition(
+    star
+){
+
+    /*
+        La caméra décale les étoiles
+        selon leur profondeur.
+
+        Les étoiles proches bougent davantage.
+    */
+
+    const parallax =
+        star.z;
+
+
+    const x =
+        star.nx * width
+        +
+        cameraX *
+        parallax;
+
+
+    const y =
+        star.ny * height
+        +
+        cameraY *
+        parallax;
+
+
+    return {
+
+        x:x,
+
+        y:y
+
+    };
+
+}
+
+
+/* =====================================================
+                FIN PARTIE 1
+===================================================== */
+
+
+
+/* ================= SCRIPT 2 ================= */
+
+
+/* =====================================================
+        PARTIE 2 — MOTEUR DU CIEL 🌌
+===================================================== */
+
+
+/* =====================================================
+              CAMERA FLUIDE
+===================================================== */
+
+function updateCamera(){
+
+    /*
+        Mouvement extrêmement fluide.
+        Cela évite les à-coups lorsque le téléphone
+        est incliné ou que le doigt bouge.
+    */
+
+    cameraX +=
+        (
+            targetX * MAX_CAMERA_X
+            -
+            cameraX
+        ) * .055;
+
+
+    cameraY +=
+        (
+            targetY * MAX_CAMERA_Y
+            -
+            cameraY
+        ) * .055;
+
+}
+
+
+/* =====================================================
+                DESSIN DU CIEL
+===================================================== */
+
+function drawSky(){
+
+    /*
+        Fond très légèrement animé.
+        On évite les gros effets coûteux.
+    */
+
+    ctx.fillStyle =
+        "#02030b";
+
+    ctx.fillRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    /*
+        Halo central.
+    */
+
+    const centerGlow =
+        ctx.createRadialGradient(
+
+            width * .5,
+            height * .48,
+            0,
+
+            width * .5,
+            height * .48,
+            Math.max(
+                width,
+                height
+            ) * .65
+
+        );
+
+
+    centerGlow.addColorStop(
+        0,
+        "rgba(45,55,120,.10)"
+    );
+
+    centerGlow.addColorStop(
+        .5,
+        "rgba(20,25,70,.045)"
+    );
+
+    centerGlow.addColorStop(
+        1,
+        "rgba(0,0,0,0)"
+    );
+
+
+    ctx.fillStyle =
+        centerGlow;
+
+    ctx.fillRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+}
+
+
+/* =====================================================
+              DESSIN DES ETOILES
+===================================================== */
+
+function drawStars(time){
+
+    for(
+        const star of stars
+    ){
+
+        if(
+            star.found
+        ){
+
+            continue;
+
+        }
+
+
+        const pos =
+            getStarPosition(
+                star
+            );
+
+
+        /*
+            On laisse sortir légèrement
+            les étoiles de l'écran.
+        */
+
+        if(
+            pos.x < -50 ||
+            pos.x > width + 50 ||
+            pos.y < -50 ||
+            pos.y > height + 50
+        ){
+
+            continue;
+
+        }
+
+
+        /*
+            Scintillement différent
+            pour chaque étoile.
+        */
+
+        star.pulse +=
+            .008 *
+            star.twinkle;
+
+
+        const pulse =
+            (
+                Math.sin(
+                    star.pulse
+                ) + 1
+            ) / 2;
+
+
+        let alpha =
+            star.alpha *
+            (
+                .72 +
+                pulse * .28
+            );
+
+
+        let radius =
+            star.size *
+            (
+                .88 +
+                pulse * .12
+            );
+
+
+        /*
+            Les étoiles spéciales
+            sont beaucoup plus visibles.
+        */
+
+        if(
+            star.special
+        ){
+
+            radius *=
+                1.15;
+
+            alpha =
+                1;
+
+        }
+
+
+        /*
+            Halo uniquement pour les étoiles
+            importantes.
+        */
+
+        if(
+            star.special
+        ){
+
+            const halo =
+                ctx.createRadialGradient(
+
+                    pos.x,
+                    pos.y,
+                    0,
+
+                    pos.x,
+                    pos.y,
+                    radius * 8
+
+                );
+
+
+            halo.addColorStop(
+                0,
+                "rgba(255,255,220,.22)"
+            );
+
+            halo.addColorStop(
+                .3,
+                "rgba(180,200,255,.09)"
+            );
+
+            halo.addColorStop(
+                1,
+                "rgba(100,120,255,0)"
+            );
+
+
+            ctx.fillStyle =
+                halo;
+
+
+            ctx.beginPath();
+
+            ctx.arc(
+
+                pos.x,
+                pos.y,
+                radius * 8,
+
+                0,
+                Math.PI * 2
+
+            );
+
+            ctx.fill();
+
+        }
+
+
+        /*
+            Étoile.
+        */
+
+        ctx.beginPath();
+
+        ctx.fillStyle =
+
+            `rgba(
+                255,
+                255,
+                255,
+                ${Math.max(
+                    .12,
+                    Math.min(
+                        alpha,
+                        1
+                    )
+                )}
+            )`;
+
+
+        ctx.arc(
+
+            pos.x,
+            pos.y,
+            radius,
+
+            0,
+            Math.PI * 2
+
+        );
+
+
+        ctx.fill();
+
+
+        /*
+            Petite croix lumineuse sur
+            les étoiles spéciales.
+        */
+
+        if(
+            star.special
+        ){
+
+            ctx.save();
+
+            ctx.globalAlpha =
+                .65 +
+                pulse * .35;
+
+
+            ctx.strokeStyle =
+                "rgba(255,255,235,.85)";
+
+            ctx.lineWidth =
+                1;
+
+
+            const cross =
+                radius * 3.2;
+
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                pos.x - cross,
+                pos.y
+            );
+
+            ctx.lineTo(
+                pos.x + cross,
+                pos.y
+            );
+
+            ctx.moveTo(
+                pos.x,
+                pos.y - cross
+            );
+
+            ctx.lineTo(
+                pos.x,
+                pos.y + cross
+            );
+
+            ctx.stroke();
+
+
+            ctx.restore();
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+              ETOILES FILANTES
+===================================================== */
+
+let shootingTimer = 0;
+
+
+function updateShootingStars(){
+
+    shootingTimer++;
+
+
+    /*
+        Une étoile filante toutes les
+        quelques secondes environ.
+    */
+
+    if(
+        shootingTimer >
+        150 +
+        Math.random() * 260
+    ){
+
+        shootingTimer = 0;
+
+        spawnShootingStar();
+
+    }
+
+
+    for(
+        let i =
+            shootingStars.length - 1;
+
+        i >= 0;
+
+        i--
+    ){
+
+        const s =
+            shootingStars[i];
+
+
+        s.x +=
+            s.vx;
+
+        s.y +=
+            s.vy;
+
+        s.life++;
+
+
+        const length =
+            65;
+
+
+        const gradient =
+            ctx.createLinearGradient(
+
+                s.x,
+                s.y,
+
+                s.x -
+                s.vx * 10,
+
+                s.y -
+                s.vy * 10
+
+            );
+
+
+        gradient.addColorStop(
+            0,
+            "rgba(255,255,255,.95)"
+        );
+
+        gradient.addColorStop(
+            1,
+            "rgba(255,255,255,0)"
+        );
+
+
+        ctx.strokeStyle =
+            gradient;
+
+        ctx.lineWidth =
+            1.5;
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            s.x,
+            s.y
+        );
+
+        ctx.lineTo(
+            s.x -
+            s.vx *
+            (length / 10),
+
+            s.y -
+            s.vy *
+            (length / 10)
+        );
+
+        ctx.stroke();
+
+
+        if(
+            s.life > 90 ||
+            s.x > width + 100 ||
+            s.y > height + 100
+        ){
+
+            shootingStars.splice(
+                i,
+                1
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+              PARTICULES
+===================================================== */
+
+function updateParticles(){
+
+    for(
+        let i =
+            particles.length - 1;
+
+        i >= 0;
+
+        i--
+    ){
+
+        const p =
+            particles[i];
+
+
+        p.x +=
+            p.vx;
+
+        p.y +=
+            p.vy;
+
+
+        p.vx *=
+            .985;
+
+        p.vy *=
+            .985;
+
+
+        p.life -=
+            .018;
+
+
+        if(
+            p.life <= 0
+        ){
+
+            particles.splice(
+                i,
+                1
+            );
+
+            continue;
+
+        }
+
+
+        ctx.beginPath();
+
+        ctx.fillStyle =
+
+            `rgba(
+                170,
+                190,
+                255,
+                ${p.life}
+            )`;
+
+
+        ctx.arc(
+
+            p.x,
+            p.y,
+
+            p.size *
+            p.life,
+
+            0,
+            Math.PI * 2
+
+        );
+
+        ctx.fill();
+
+    }
+
+}
+
+
+/* =====================================================
+          ETOILES SPECIALES — DETECTION
+===================================================== */
+
+function getPointerPosition(){
+
+    /*
+        Le point utilisé pour la recherche
+        des étoiles spéciales.
+
+        Sur mobile, on utilise le centre de
+        l'écran : l'utilisateur explore le ciel
+        en inclinant son téléphone.
+
+        Sur tactile, on utilisera le dernier
+        point touché.
+    */
+
+    return {
+
+        x:
+            width / 2
+            +
+            cameraX * .9,
+
+        y:
+            height / 2
+            +
+            cameraY * .9
+
+    };
+
+}
+
+
+/* =====================================================
+              DERNIER TOUCH
+===================================================== */
+
+let lastPointerX =
+    width / 2;
+
+let lastPointerY =
+    height / 2;
+
+
+window.addEventListener(
+    "touchmove",
+    event => {
+
+        const touch =
+            event.touches[0];
+
+        if(!touch) return;
+
+
+        lastPointerX =
+            touch.clientX;
+
+        lastPointerY =
+            touch.clientY;
+
+    },
+    {
+        passive:true
+    }
+);
+
+
+/* =====================================================
+              CLIC PC
+===================================================== */
+
+canvas.addEventListener(
+    "click",
+    event => {
+
+        if(
+            state !== STATE.EXPLORE
+        ){
+
+            return;
+
+        }
+
+
+        checkSpecialStar(
+
+            event.clientX,
+
+            event.clientY
+
+        );
+
+    }
+);
+
+
+/* =====================================================
+              TOUCH MOBILE
+===================================================== */
+
+canvas.addEventListener(
+    "touchend",
+    event => {
+
+        if(
+            state !== STATE.EXPLORE
+        ){
+
+            return;
+
+        }
+
+
+        const touch =
+            event.changedTouches[0];
+
+        if(!touch) return;
+
+
+        checkSpecialStar(
+
+            touch.clientX,
+
+            touch.clientY
+
+        );
+
+    },
+    {
+        passive:true
+    }
+);
+
+
+/* =====================================================
+              VERIFICATION ETOILE
+===================================================== */
+
+function checkSpecialStar(
+    x,
+    y
+){
+
+    /*
+        Les étoiles importantes ont
+        une zone tactile généreuse.
+
+        Donc même sur téléphone,
+        pas besoin de toucher exactement
+        le petit point lumineux.
+    */
+
+    for(
+        const star of stars
+    ){
+
+        if(
+            !star.special ||
+            star.found
+        ){
+
+            continue;
+
+        }
+
+
+        const pos =
+            getStarPosition(
+                star
+            );
+
+
+        const distance =
+            Math.hypot(
+
+                x - pos.x,
+
+                y - pos.y
+
+            );
+
+
+        const hitRadius =
+            Math.max(
+                28,
+                star.size * 7
+            );
+
+
+        if(
+            distance <=
+            hitRadius
+        ){
+
+            findStar(
+                star
+            );
+
+            return;
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+              TROUVER UNE ETOILE
+===================================================== */
+
+function findStar(
+    star
+){
+
+    star.found =
+        true;
+
+
+    found++;
+
+
+    foundDisplay.textContent =
+        found;
+
+
+    /*
+        Explosion douce.
+    */
+
+    const pos =
+        getStarPosition(
+            star
+        );
+
+
+    createParticle(
+        pos.x,
+        pos.y,
+        16
+    );
+
+
+    /*
+        Vibration très courte
+        uniquement sur mobile.
+    */
+
+    if(
+        navigator.vibrate
+    ){
+
+        navigator.vibrate(
+            25
+        );
+
+    }
+
+
+    /*
+        Petite amplification
+        de l'étoile trouvée.
+    */
+
+    star.foundScale =
+        1.8;
+
+
+    /*
+        Quand les 4 sont trouvées,
+        on passe à la suite.
+    */
+
+    if(
+        found >= 4
+    ){
+
+        setTimeout(
+            startConstellation,
+            900
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+              CONSTELLATION
+===================================================== */
+
+let constellationStarted =
+    false;
+
+
+let constellationTime =
+    0;
+
+
+const constellationLines = [
+
+    [0,1],
+
+    [1,3],
+
+    [3,2],
+
+    [2,0]
+
+];
+
+
+function startConstellation(){
+
+    if(
+        constellationStarted
+    ){
+
+        return;
+
+    }
+
+
+    constellationStarted =
+        true;
+
+
+    state =
+        STATE.CONSTELLATION;
+
+
+    constellationTime =
+        0;
+
+
+    hint.classList.remove(
+        "show"
+    );
+
+
+    /*
+        On fait disparaître le compteur.
+    */
+
+    counter.style.opacity =
+        "0";
+
+}
+
+
+/* =====================================================
+        POSITIONS DES 4 ETOILES
+===================================================== */
+
+function getSpecialPositions(){
+
+    const positions = [];
+
+
+    for(
+        const star of stars
+    ){
+
+        if(
+            !star.special
+        ){
+
+            continue;
+
+        }
+
+
+        positions.push(
+            getStarPosition(
+                star
+            )
+        );
+
+    }
+
+
+    return positions;
+
+}
+
+
+/* =====================================================
+              DESSIN CONSTELLATION
+===================================================== */
+
+function drawConstellation(){
+
+    const points =
+        getSpecialPositions();
+
+
+    if(
+        points.length < 4
+    ){
+
+        return;
+
+    }
+
+
+    /*
+        Les étoiles se rapprochent doucement
+        visuellement sans modifier leurs
+        coordonnées réelles.
+    */
+
+    const cx =
+        width / 2;
+
+    const cy =
+        height / 2;
+
+
+    const attract =
+        Math.min(
+            constellationTime / 3,
+            1
+        );
+
+
+    const finalPoints =
+        points.map(
+            point => ({
+
+                x:
+                    point.x +
+                    (
+                        cx -
+                        point.x
+                    ) *
+                    attract *
+                    .35,
+
+                y:
+                    point.y +
+                    (
+                        cy -
+                        point.y
+                    ) *
+                    attract *
+                    .35
+
+            })
+        );
+
+
+    /*
+        Lignes.
+    */
+
+    ctx.save();
+
+    ctx.lineWidth =
+        1.2;
+
+
+    ctx.lineCap =
+        "round";
+
+
+    for(
+        let i = 0;
+        i < constellationLines.length;
+        i++
+    ){
+
+        const pair =
+            constellationLines[i];
+
+
+        const a =
+            finalPoints[
+                pair[0]
+            ];
+
+        const b =
+            finalPoints[
+                pair[1]
+            ];
+
+
+        const progress =
+            Math.min(
+                1,
+                Math.max(
+                    0,
+                    (
+                        constellationTime -
+                        i * .55
+                    ) / 1.4
+                )
+            );
+
+
+        if(
+            progress <= 0
+        ){
+
+            continue;
+
+        }
+
+
+        const endX =
+            a.x +
+            (
+                b.x-a.x
+            ) *
+            progress;
+
+
+        const endY =
+            a.y +
+            (
+                b.y-a.y
+            ) *
+            progress;
+
+
+        const gradient =
+            ctx.createLinearGradient(
+
+                a.x,
+                a.y,
+
+                endX,
+                endY
+
+            );
+
+
+        gradient.addColorStop(
+            0,
+            "rgba(150,180,255,.65)"
+        );
+
+        gradient.addColorStop(
+            1,
+            "rgba(220,210,255,.12)"
+        );
+
+
+        ctx.strokeStyle =
+            gradient;
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            a.x,
+            a.y
+        );
+
+        ctx.lineTo(
+            endX,
+            endY
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    ctx.restore();
+
+}
+
+
+/* =====================================================
+                FIN PARTIE 2
+===================================================== */
+
+
+
+/* ================= SCRIPT 3 ================= */
+
+
+/* =====================================================
+      PARTIE 3 — LA CONSTELLATION DEVIENT UN ❤️
+===================================================== */
+
+
+/* =====================================================
+              VARIABLES DU CŒUR
+===================================================== */
+
+let heartTime = 0;
+
+let heartProgress = 0;
+
+let heartStarted = false;
+
+let heartFinished = false;
+
+
+/*
+    On crée une cible en forme de cœur
+    pour chaque étoile.
+
+    Important :
+    on utilise TOUTES les étoiles,
+    pas seulement les 4 étoiles spéciales.
+*/
+
+const heartTargets = [];
+
+
+/* =====================================================
+              CALCUL DU CŒUR
+===================================================== */
+
+function createHeartTargets(){
+
+    heartTargets.length = 0;
+
+
+    /*
+        Taille adaptée automatiquement
+        au téléphone ET au PC.
+
+        Le cœur prend environ :
+
+        58% de la largeur
+        ou
+        38% de la hauteur
+
+        selon l'écran.
+    */
+
+    const scale =
+        Math.min(
+            width * .018,
+            height * .0105
+        );
+
+
+    const centerX =
+        width / 2;
+
+
+    const centerY =
+        height / 2;
+
+
+    for(
+        let i = 0;
+        i < stars.length;
+        i++
+    ){
+
+        const t =
+            (
+                i /
+                stars.length
+            )
+            *
+            Math.PI
+            *
+            2;
+
+
+        /*
+            Formule paramétrique
+            d'un cœur.
+        */
+
+        const hx =
+            16 *
+            Math.pow(
+                Math.sin(t),
+                3
+            );
+
+
+        const hy =
+            13 *
+            Math.cos(t)
+            -
+            5 *
+            Math.cos(2*t)
+            -
+            2 *
+            Math.cos(3*t)
+            -
+            Math.cos(4*t);
+
+
+        heartTargets.push({
+
+            x:
+                centerX +
+                hx * scale,
+
+            y:
+                centerY -
+                hy * scale
+
+        });
+
+    }
+
+}
+
+
+/* =====================================================
+              COEUR PLUS VISIBLE
+===================================================== */
+
+function createHeartCloud(){
+
+    /*
+        On ne veut pas uniquement une ligne
+        de points.
+
+        On ajoute une petite profondeur
+        aléatoire autour de chaque cible.
+    */
+
+    for(
+        let i = 0;
+        i < stars.length;
+        i++
+    ){
+
+        const target =
+            heartTargets[i];
+
+
+        const angle =
+            Math.random()
+            *
+            Math.PI
+            *
+            2;
+
+
+        const radius =
+            Math.random()
+            *
+            7;
+
+
+        stars[i].heartOffsetX =
+            Math.cos(angle)
+            * radius;
+
+
+        stars[i].heartOffsetY =
+            Math.sin(angle)
+            * radius;
+
+    }
+
+}
+
+
+/* =====================================================
+          DÉMARRAGE DU CŒUR
+===================================================== */
+
+function startHeart(){
+
+    if(
+        heartStarted
+    ){
+
+        return;
+
+    }
+
+
+    heartStarted =
+        true;
+
+
+    heartFinished =
+        false;
+
+
+    heartTime =
+        0;
+
+
+    heartProgress =
+        0;
+
+
+    createHeartTargets();
+
+    createHeartCloud();
+
+
+    state =
+        STATE.HEART;
+
+}
+
+
+/* =====================================================
+          DÉPLACEMENT DES ÉTOILES
+===================================================== */
+
+function updateHeart(){
+
+    const now = performance.now();
+
+    if(!updateHeart.lastTime){
+        updateHeart.lastTime = now;
+    }
+
+    const dt = Math.min(
+        (now - updateHeart.lastTime) / 1000,
+        .04
+    );
+
+    updateHeart.lastTime = now;
+
+    heartTime += dt;
+
+
+    /*
+        Progression lente au début,
+        puis accélération.
+
+        Cela donne l'impression que
+        les étoiles "comprennent"
+        progressivement la forme.
+    */
+
+    const rawProgress =
+        Math.min(
+            heartTime / 5.5,
+            1
+        );
+
+
+    /*
+        Fonction smoothstep.
+    */
+
+    heartProgress =
+        rawProgress *
+        rawProgress *
+        (
+            3 -
+            2 *
+            rawProgress
+        );
+
+
+    for(
+        let i = 0;
+        i < stars.length;
+        i++
+    ){
+
+        const star =
+            stars[i];
+
+
+        const target =
+            heartTargets[i];
+
+
+        if(!target)
+            continue;
+
+
+        /*
+            Position actuelle.
+        */
+
+        const targetX =
+            target.x +
+            star.heartOffsetX *
+            (
+                1 -
+                heartProgress
+            );
+
+
+        const targetY =
+            target.y +
+            star.heartOffsetY *
+            (
+                1 -
+                heartProgress
+            );
+
+
+        /*
+            Les étoiles proches bougent
+            légèrement plus vite.
+        */
+
+        const speed =
+            .035 +
+            star.z *
+            .045;
+
+
+        star.x =
+            star.x +
+            (
+                targetX -
+                star.x
+            )
+            *
+            speed;
+
+
+        star.y =
+            star.y +
+            (
+                targetY -
+                star.y
+            )
+            *
+            speed;
+
+
+        /*
+            Une fois proches de leur cible,
+            on verrouille légèrement leur position.
+        */
+
+        if(
+            heartProgress > .92
+        ){
+
+            star.x +=
+                (
+                    target.x -
+                    star.x
+                )
+                * .08;
+
+            star.y +=
+                (
+                    target.y -
+                    star.y
+                )
+                * .08;
+
+        }
+
+    }
+
+
+    /*
+        Fin de l'animation.
+    */
+
+    if(
+        rawProgress >= 1
+    ){
+
+        if(
+            !heartFinished
+        ){
+
+            heartFinished =
+                true;
+
+
+            setTimeout(
+                showFinalSkyMessage,
+                1100
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+              DESSIN DU CŒUR
+===================================================== */
+
+function drawHeartStars(){
+
+    /*
+        On dessine les étoiles avec
+        une luminosité plus importante.
+    */
+
+    for(
+        let i = 0;
+        i < stars.length;
+        i++
+    ){
+
+        const star =
+            stars[i];
+
+
+        const target =
+            heartTargets[i];
+
+
+        if(!target)
+            continue;
+
+
+        const pulse =
+            (
+                Math.sin(
+                    heartTime * 2.4 +
+                    i * .08
+                )
+                + 1
+            )
+            / 2;
+
+
+        /*
+            Plus le cœur est formé,
+            plus les étoiles brillent.
+        */
+
+        const alpha =
+            .45 +
+            heartProgress *
+            .55;
+
+
+        const radius =
+            .7 +
+            pulse *
+            1.4 +
+            heartProgress *
+            .7;
+
+
+        /*
+            Halo.
+        */
+
+        if(
+            heartProgress > .15
+        ){
+
+            const glow =
+                ctx.createRadialGradient(
+
+                    star.x,
+                    star.y,
+                    0,
+
+                    star.x,
+                    star.y,
+                    radius * 7
+
+                );
+
+
+            glow.addColorStop(
+                0,
+                `rgba(
+                    255,
+                    170,
+                    220,
+                    ${.18 * heartProgress}
+                )`
+            );
+
+
+            glow.addColorStop(
+                1,
+                "rgba(255,80,160,0)"
+            );
+
+
+            ctx.fillStyle =
+                glow;
+
+
+            ctx.beginPath();
+
+            ctx.arc(
+
+                star.x,
+                star.y,
+
+                radius * 7,
+
+                0,
+                Math.PI * 2
+
+            );
+
+            ctx.fill();
+
+        }
+
+
+        /*
+            Étoile.
+        */
+
+        ctx.beginPath();
+
+        ctx.fillStyle =
+
+            `rgba(
+                255,
+                245,
+                255,
+                ${alpha}
+            )`;
+
+
+        ctx.arc(
+
+            star.x,
+            star.y,
+
+            radius,
+
+            0,
+            Math.PI * 2
+
+        );
+
+
+        ctx.fill();
+
+    }
+
+}
+
+
+/* =====================================================
+              TRAÎNÉE DES ÉTOILES
+===================================================== */
+
+function heartParticles(){
+
+    /*
+        Les particules deviennent roses
+        au lieu du bleu du ciel.
+    */
+
+    if(
+        Math.random() <
+        .65
+    ){
+
+        const index =
+            Math.floor(
+                Math.random()
+                *
+                stars.length
+            );
+
+
+        const star =
+            stars[index];
+
+
+        createParticle(
+
+            star.x,
+
+            star.y,
+
+            1
+
+        );
+
+    }
+
+
+    /*
+        On recolore les dernières particules
+        avec un effet plus chaud.
+    */
+
+}
+
+
+/* =====================================================
+              CONSTELLATION
+===================================================== */
+
+function updateConstellation(){
+
+    const now = performance.now();
+
+    if(!updateConstellation.lastTime){
+        updateConstellation.lastTime = now;
+    }
+
+    const dt = Math.min(
+        (now - updateConstellation.lastTime) / 1000,
+        .04
+    );
+
+    updateConstellation.lastTime = now;
+
+    constellationTime += dt;
+
+
+    /*
+        Les 4 étoiles spéciales
+        convergent doucement vers le centre.
+    */
+
+    const points =
+        getSpecialPositions();
+
+
+    if(
+        points.length >= 4
+    ){
+
+        const cx =
+            width / 2;
+
+        const cy =
+            height / 2;
+
+
+        const pull =
+            Math.min(
+                constellationTime / 4,
+                1
+            )
+            * .025;
+
+
+        for(
+            const star of stars
+        ){
+
+            if(
+                !star.special
+            ){
+
+                continue;
+
+            }
+
+
+            const pos =
+                getStarPosition(
+                    star
+                );
+
+
+            star.nx +=
+                (
+                    .5 -
+                    star.nx
+                )
+                *
+                pull;
+
+
+            star.ny +=
+                (
+                    .5 -
+                    star.ny
+                )
+                *
+                pull;
+
+        }
+
+    }
+
+
+    /*
+        Après quelques secondes,
+        la constellation devient le cœur.
+    */
+
+    if(
+        constellationTime >= 5.5
+    ){
+
+        startHeart();
+
+    }
+
+}
+
+
+/* =====================================================
+              LIGNE DE CONSTELLATION
+===================================================== */
+
+function drawConstellationLines(){
+
+    const points =
+        getSpecialPositions();
+
+
+    if(
+        points.length < 4
+    ){
+
+        return;
+
+    }
+
+
+    const order = [
+
+        [0,1],
+
+        [1,3],
+
+        [3,2],
+
+        [2,0]
+
+    ];
+
+
+    ctx.save();
+
+
+    ctx.lineWidth =
+        1.4;
+
+
+    ctx.lineCap =
+        "round";
+
+
+    ctx.shadowBlur =
+        12;
+
+
+    ctx.shadowColor =
+        "rgba(150,170,255,.7)";
+
+
+    for(
+        let i = 0;
+        i < order.length;
+        i++
+    ){
+
+        const a =
+            points[
+                order[i][0]
+            ];
+
+
+        const b =
+            points[
+                order[i][1]
+            ];
+
+
+        const progress =
+            Math.min(
+                1,
+                Math.max(
+                    0,
+                    (
+                        constellationTime
+                        -
+                        i * .35
+                    )
+                    /
+                    1.2
+                )
+            );
+
+
+        if(
+            progress <= 0
+        ){
+
+            continue;
+
+        }
+
+
+        const endX =
+            a.x +
+            (
+                b.x -
+                a.x
+            )
+            *
+            progress;
+
+
+        const endY =
+            a.y +
+            (
+                b.y -
+                a.y
+            )
+            *
+            progress;
+
+
+        const gradient =
+            ctx.createLinearGradient(
+
+                a.x,
+                a.y,
+
+                endX,
+                endY
+
+            );
+
+
+        gradient.addColorStop(
+            0,
+            "rgba(180,195,255,.75)"
+        );
+
+
+        gradient.addColorStop(
+            1,
+            "rgba(220,210,255,.05)"
+        );
+
+
+        ctx.strokeStyle =
+            gradient;
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            a.x,
+            a.y
+        );
+
+
+        ctx.lineTo(
+            endX,
+            endY
+        );
+
+
+        ctx.stroke();
+
+    }
+
+
+    ctx.restore();
+
+}
+
+
+/* =====================================================
+              MESSAGE FINAL
+===================================================== */
+
+let finalMessageShown =
+    false;
+
+
+function showFinalSkyMessage(){
+
+    if(
+        finalMessageShown
+    ){
+
+        return;
+
+    }
+
+
+    finalMessageShown =
+        true;
+
+
+    state =
+        STATE.FINAL;
+
+
+    /*
+        On fait disparaître progressivement
+        les indications.
+    */
+
+    counter.classList.remove(
+        "show"
+    );
+
+
+    hint.classList.remove(
+        "show"
+    );
+
+
+    message.innerHTML = `
+
+        <div style="
+            font-size:2rem;
+            margin-bottom:12px;
+        ">
+            ❤️
+        </div>
+
+        <div style="
+            font-weight:600;
+            font-size:1.05rem;
+            margin-bottom:12px;
+        ">
+            Peu importe la distance...
+        </div>
+
+        <div style="
+            opacity:.82;
+            line-height:1.8;
+        ">
+
+            Nous regarderons toujours
+            le même ciel.
+
+            <br><br>
+
+            Je t'aime énormément. ❤️
+
+        </div>
+
+    `;
+
+
+    message.classList.add(
+        "show"
+    );
+
+
+    if(
+        navigator.vibrate
+    ){
+
+        navigator.vibrate(
+            [
+                70,
+                40,
+                90
+            ]
+        );
+
+    }
+
+
+    /*
+        Après le message,
+        retour au calendrier.
+    */
+
+    setTimeout(
+        returnToCalendar,
+        6500
+    );
+
+}
+
+
+/* =====================================================
+              EXPLOSION FINALE
+===================================================== */
+
+let explosionStarted =
+    false;
+
+
+function startExplosion(){
+
+    if(
+        explosionStarted
+    ){
+
+        return;
+
+    }
+
+
+    explosionStarted =
+        true;
+
+
+    for(
+        const star of stars
+    ){
+
+        const angle =
+            Math.random()
+            *
+            Math.PI
+            *
+            2;
+
+
+        const speed =
+            2 +
+            Math.random()
+            * 7;
+
+
+        star.vx =
+            Math.cos(angle)
+            * speed;
+
+
+        star.vy =
+            Math.sin(angle)
+            * speed;
+
+    }
+
+
+    /*
+        L'explosion reste volontairement
+        douce : le cœur disparaît dans
+        les étoiles.
+    */
+
+    let frames =
+        0;
+
+
+    function explode(){
+
+        frames++;
+
+
+        for(
+            const star of stars
+        ){
+
+            star.x +=
+                star.vx;
+
+            star.y +=
+                star.vy;
+
+
+            star.vx *=
+                .985;
+
+            star.vy *=
+                .985;
+
+        }
+
+
+        if(
+            frames < 100
+        ){
+
+            requestAnimationFrame(
+                explode
+            );
+
+        }
+
+    }
+
+
+    explode();
+
+}
+
+
+/* =====================================================
+              RETOUR CALENDRIER
+===================================================== */
+
+function returnToCalendar(){
+
+    message.classList.remove(
+        "show"
+    );
+
+
+    document.body.animate(
+
+        [
+
+            {
+                opacity:1
+            },
+
+            {
+                opacity:0
+            }
+
+        ],
+
+        {
+
+            duration:1400,
+
+            easing:
+                "ease-in-out",
+
+            fill:
+                "forwards"
+
+        }
+
+    );
+
+
+    setTimeout(
+
+        () => {
+
+            window.location.href =
+                "calendrier.html";
+
+        },
+
+        1450
+
+    );
+
+}
+
+
+/* =====================================================
+              BOUCLE PRINCIPALE
+===================================================== */
+
+let animationStarted =
+    false;
+
+
+function animateSky(){
+
+    requestAnimationFrame(
+        animateSky
+    );
+
+
+    /*
+        Une seule boucle principale
+        pour tout le Jour.
+    */
+
+    if(
+        state === STATE.INTRO
+    ){
+
+        return;
+
+    }
+
+
+    updateCamera();
+
+
+    /*
+        Fond.
+    */
+
+    drawSky();
+
+
+    /*
+        Exploration normale.
+    */
+
+    if(
+        state === STATE.EXPLORE
+    ){
+
+        drawStars(
+            performance.now()
+        );
+
+
+        updateShootingStars();
+
+        updateParticles();
+
+    }
+
+
+    /*
+        Constellation.
+    */
+
+    else if(
+        state === STATE.CONSTELLATION
+    ){
+
+        /*
+            On dessine encore les étoiles
+            normales en arrière-plan.
+        */
+
+        drawStars(
+            performance.now()
+        );
+
+
+        updateConstellation();
+
+        drawConstellationLines();
+
+        updateShootingStars();
+
+        updateParticles();
+
+    }
+
+
+    /*
+        Cœur.
+    */
+
+    else if(
+        state === STATE.HEART
+    ){
+
+        updateHeart();
+
+        drawHeartStars();
+
+        heartParticles();
+
+        updateParticles();
+
+    }
+
+
+    /*
+        Final.
+    */
+
+    else if(
+        state === STATE.FINAL
+    ){
+
+        drawHeartStars();
+
+        updateParticles();
+
+    }
+
+}
+
+
+/* =====================================================
+              LANCEMENT
+===================================================== */
+
+if(
+    !animationStarted
+){
+
+    animationStarted =
+        true;
+
+    animateSky();
+
+}
+
+
+/* =====================================================
+                FIN PARTIE 3
+===================================================== */
+
+
+
+/* ================= SCRIPT 4 ================= */
+
+
+/* =====================================================
+      PARTIE 4 — LE CIEL FINAL ❤️
+===================================================== */
+
+let finalSkyTime = 0;
+let finalSkyPulse = 0;
+let finalSkyParticles = [];
+let finalSkyReady = false;
+
+
+/* =====================================================
+          PARTICULES AUTOUR DU CŒUR
+===================================================== */
+
+function createFinalParticle(){
+
+    const angle =
+        Math.random() *
+        Math.PI *
+        2;
+
+    const radius =
+        Math.min(width,height) *
+        (.16 + Math.random()*.24);
+
+    finalSkyParticles.push({
+
+        x:
+            width/2 +
+            Math.cos(angle)*radius,
+
+        y:
+            height/2 +
+            Math.sin(angle)*radius,
+
+        vx:
+            (Math.random()-.5)*.25,
+
+        vy:
+            -.15 -
+            Math.random()*.35,
+
+        size:
+            .6 +
+            Math.random()*2,
+
+        alpha:
+            .2 +
+            Math.random()*.6,
+
+        life:
+            1
+
+    });
+
+}
+
+
+/* =====================================================
+          ANIMATION PARTICULES FINALES
+===================================================== */
+
+function updateFinalParticles(){
+
+    if(
+        state !== STATE.FINAL
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        finalSkyParticles.length < 90 &&
+        Math.random() < .35
+    ){
+
+        createFinalParticle();
+
+    }
+
+
+    for(
+        let i =
+            finalSkyParticles.length-1;
+
+        i>=0;
+
+        i--
+    ){
+
+        const p =
+            finalSkyParticles[i];
+
+
+        p.x +=
+            p.vx;
+
+        p.y +=
+            p.vy;
+
+
+        p.alpha *=
+            .995;
+
+
+        p.life -=
+            .004;
+
+
+        if(
+            p.life <= 0 ||
+            p.y < -20
+        ){
+
+            finalSkyParticles.splice(
+                i,
+                1
+            );
+
+            continue;
+
+        }
+
+
+        ctx.beginPath();
+
+        ctx.fillStyle =
+
+            `rgba(
+                255,
+                220,
+                245,
+                ${p.alpha*p.life}
+            )`;
+
+
+        ctx.arc(
+
+            p.x,
+            p.y,
+
+            p.size,
+
+            0,
+            Math.PI*2
+
+        );
+
+        ctx.fill();
+
+    }
+
+}
+
+
+/* =====================================================
+          HALO DU COEUR
+===================================================== */
+
+function drawFinalHalo(){
+
+    if(
+        state !== STATE.FINAL
+    ){
+
+        return;
+
+    }
+
+
+    finalSkyPulse +=
+        .035;
+
+
+    const pulse =
+        (
+            Math.sin(
+                finalSkyPulse
+            )+1
+        )/2;
+
+
+    const radius =
+        Math.min(
+            width,
+            height
+        ) *
+        (
+            .30 +
+            pulse*.035
+        );
+
+
+    const gradient =
+        ctx.createRadialGradient(
+
+            width/2,
+            height/2,
+
+            0,
+
+            width/2,
+            height/2,
+
+            radius
+
+        );
+
+
+    gradient.addColorStop(
+        0,
+        `rgba(
+            255,
+            80,
+            160,
+            ${.07 + pulse*.025}
+        )`
+    );
+
+
+    gradient.addColorStop(
+        .45,
+        "rgba(180,100,255,.025)"
+    );
+
+
+    gradient.addColorStop(
+        1,
+        "rgba(0,0,0,0)"
+    );
+
+
+    ctx.fillStyle =
+        gradient;
+
+
+    ctx.fillRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+}
+
+
+/* =====================================================
+          COEUR FINAL PLUS LUMINEUX
+===================================================== */
+
+function drawFinalHeartGlow(){
+
+    if(
+        state !== STATE.FINAL ||
+        !heartTargets.length
+    ){
+
+        return;
+
+    }
+
+
+    const pulse =
+        1 +
+        Math.sin(
+            finalSkyTime*2
+        )*.035;
+
+
+    /*
+        On dessine une légère lumière
+        autour de la constellation finale.
+    */
+
+    ctx.save();
+
+    ctx.globalCompositeOperation =
+        "lighter";
+
+
+    for(
+        let i=0;
+        i<heartTargets.length;
+        i+=3
+    ){
+
+        const star =
+            stars[i];
+
+        if(!star)
+            continue;
+
+
+        const glowSize =
+            7 * pulse;
+
+
+        const gradient =
+            ctx.createRadialGradient(
+
+                star.x,
+                star.y,
+                0,
+
+                star.x,
+                star.y,
+                glowSize
+
+            );
+
+
+        gradient.addColorStop(
+            0,
+            "rgba(255,160,215,.30)"
+        );
+
+
+        gradient.addColorStop(
+            1,
+            "rgba(255,80,160,0)"
+        );
+
+
+        ctx.fillStyle =
+            gradient;
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+
+            star.x,
+            star.y,
+
+            glowSize,
+
+            0,
+            Math.PI*2
+
+        );
+
+        ctx.fill();
+
+    }
+
+
+    ctx.restore();
+
+}
+
+
+/* =====================================================
+          PETIT EFFET DE PROFONDEUR
+===================================================== */
+
+function drawFinalDepth(){
+
+    if(
+        state !== STATE.FINAL
+    ){
+
+        return;
+
+    }
+
+
+    /*
+        Quelques étoiles très lointaines
+        restent légèrement animées derrière
+        le coeur.
+    */
+
+    for(
+        const star of stars
+    ){
+
+        if(
+            !star ||
+            !heartTargets.length
+        ){
+
+            continue;
+
+        }
+
+
+        if(
+            Math.random() > .025
+        ){
+
+            continue;
+
+        }
+
+
+        const alpha =
+            .08 +
+            star.z*.08;
+
+
+        ctx.beginPath();
+
+        ctx.fillStyle =
+
+            `rgba(
+                180,
+                195,
+                255,
+                ${alpha}
+            )`;
+
+
+        ctx.arc(
+
+            star.x +
+            Math.sin(finalSkyTime*.2)*.3,
+
+            star.y +
+            Math.cos(finalSkyTime*.17)*.3,
+
+            .5,
+
+            0,
+            Math.PI*2
+
+        );
+
+
+        ctx.fill();
+
+    }
+
+}
+
+
+/* =====================================================
+          LANCEMENT FINAL
+===================================================== */
+
+function prepareFinalSky(){
+
+    if(
+        finalSkyReady
+    ){
+
+        return;
+
+    }
+
+
+    finalSkyReady =
+        true;
+
+
+    finalSkyTime =
+        0;
+
+
+    finalSkyPulse =
+        0;
+
+
+    /*
+        On nettoie les anciennes particules
+        pour éviter d'avoir trop d'objets
+        en mémoire sur téléphone.
+    */
+
+    particles.length = 0;
+
+}
+
+
+/* =====================================================
+          BOUCLE FINALE
+===================================================== */
+
+function finalSkyLoop(){
+
+    requestAnimationFrame(
+        finalSkyLoop
+    );
+
+
+    if(
+        state !== STATE.FINAL
+    ){
+
+        return;
+
+    }
+
+
+    prepareFinalSky();
+
+
+    finalSkyTime +=
+        .016;
+
+
+    /*
+        Le fond devient légèrement
+        plus profond.
+    */
+
+    ctx.fillStyle =
+        "#01020a";
+
+    ctx.fillRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    drawFinalHalo();
+
+    drawFinalDepth();
+
+    drawHeartStars();
+
+    drawFinalHeartGlow();
+
+    updateFinalParticles();
+
+}
+
+
+/* =====================================================
+          LANCEMENT
+===================================================== */
+
+finalSkyLoop();
+
+
+/* =====================================================
+          FINITION DU MESSAGE
+===================================================== */
+
+const finalMessageStyle =
+document.createElement("style");
+
+
+finalMessageStyle.textContent = `
+
+#message{
+
+    text-shadow:
+        0 2px 20px
+        rgba(0,0,0,.35);
+
+}
+
+
+#message::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:-1px;
+
+    border-radius:24px;
+
+    pointer-events:none;
+
+    background:
+
+        linear-gradient(
+            120deg,
+            transparent,
+            rgba(255,255,255,.04),
+            transparent
+        );
+
+    opacity:.7;
+
+}
+
+
+@media(max-width:600px){
+
+    #message{
+
+        bottom:
+            max(
+                24px,
+                env(safe-area-inset-bottom)
+            );
+
+        width:88vw;
+
+        max-width:390px;
+
+    }
+
+}
+
+`;
+
+document.head.appendChild(
+    finalMessageStyle
+);
+
+
+/* =====================================================
+        SURVEILLANCE DU PASSAGE FINAL
+===================================================== */
+
+let previousState =
+    STATE.INTRO;
+
+
+function watchFinalState(){
+
+    requestAnimationFrame(
+        watchFinalState
+    );
+
+
+    if(
+        state === STATE.FINAL &&
+        previousState !== STATE.FINAL
+    ){
+
+        prepareFinalSky();
+
+    }
+
+
+    previousState =
+        state;
+
+}
+
+
+watchFinalState();
+
+
+/* =====================================================
+          SECURITE RETOUR CALENDRIER
+===================================================== */
+
+let calendarReturned =
+    false;
+
+
+function safeReturnToCalendar(){
+
+    if(
+        calendarReturned
+    ){
+
+        return;
+
+    }
+
+
+    calendarReturned =
+        true;
+
+
+    window.location.href =
+        "calendrier.html";
+
+}
+
+
+/* =====================================================
+          FIN DU JOUR
+===================================================== */
+
+/*
+    Le retour au calendrier est déjà déclenché
+    par returnToCalendar() de la Partie 3.
+
+    On garde donc ici uniquement une sécurité
+    si le navigateur a interrompu une animation.
+*/
+
+setTimeout(
+    () => {
+
+        if(
+            state === STATE.FINAL &&
+            !calendarReturned
+        ){
+
+            /*
+                On ne force pas le retour trop tôt :
+                le message doit avoir le temps
+                d'être vu.
+
+                Cette sécurité ne se déclenche
+                qu'après un long délai.
+            */
+
+        }
+
+    },
+    12000
+);
+
+
+/* =====================================================
+              FIN PARTIE 4
+===================================================== */
+
+
+</script>
+
+</body>
+</html>

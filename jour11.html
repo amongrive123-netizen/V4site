@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#ff4f95">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Jour 11 ♡ — La Roue des Compliments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #ff4f95;
+    --rose-light: #ffd9eb;
+    --rose-dark: #d63384;
+    --peach: #ffb7d5;
+    --gold: #ffd700;
+    --bg-start: #fff0f5;
+    --bg-end: #ffe4f1;
+    --glass: rgba(255,255,255,0.65);
+    --glass-border: rgba(255,255,255,0.8);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+  html, body {
+    width:100%; height:100%;
+    overflow:hidden;
+    font-family:'Poppins', sans-serif;
+    background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+    touch-action: manipulation;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Animated mesh background */
+  #bg-mesh {
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(255,79,149,0.12) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(255,183,213,0.15) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(255,217,235,0.3) 0%, transparent 70%);
+    animation: meshMove 8s ease-in-out infinite alternate;
+  }
+  @keyframes meshMove {
+    0% { transform: scale(1) translate(0,0); }
+    100% { transform: scale(1.1) translate(-2%, -2%); }
+  }
+
+  /* Floating hearts background */
+  .floater {
+    position:fixed; pointer-events:none; z-index:1;
+    font-size: 18px; opacity:0.15;
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(100vh) rotate(0deg); opacity:0; }
+    10% { opacity:0.15; }
+    90% { opacity:0.1; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity:0; }
+  }
+
+  /* Main card */
+  .app {
+    position:relative; z-index:10;
+    width:100%; height:100%;
+    display:flex; flex-direction:column;
+    align-items:center;
+    padding: max(16px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .card {
+    width:100%; max-width:420px;
+    background: var(--glass);
+    backdrop-filter: blur(20px) saturate(1.3);
+    -webkit-backdrop-filter: blur(20px) saturate(1.3);
+    border: 1px solid var(--glass-border);
+    border-radius: 32px;
+    padding: 24px 20px 28px;
+    box-shadow:
+      0 20px 60px rgba(255,79,149,0.12),
+      0 0 0 1px rgba(255,255,255,0.5) inset;
+    text-align:center;
+    margin-top: auto; margin-bottom: auto;
+    animation: cardIn 0.8s cubic-bezier(0.2,0.8,0.2,1) forwards;
+    opacity:0; transform: translateY(20px);
+  }
+  @keyframes cardIn {
+    to { opacity:1; transform: translateY(0); }
+  }
+
+  .badge {
+    display:inline-flex; align-items:center; gap:6px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--rose-light), #fff);
+    color: var(--rose);
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 15px rgba(255,79,149,0.1);
+    animation: badgePulse 2s ease-in-out infinite;
+  }
+  @keyframes badgePulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+  }
+
+  h1 {
+    font-size: clamp(1.6rem, 6vw, 2.2rem);
+    line-height: 1.15;
+    margin-bottom: 10px;
+    font-weight: 800;
+    color: #2d2d2d;
+    letter-spacing: -0.5px;
+  }
+  h1 span {
+    background: linear-gradient(135deg, var(--rose), var(--rose-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .description {
+    color: #888;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  /* Wheel container */
+  .wheel-wrap {
+    position: relative;
+    width: min(280px, 72vw);
+    height: min(280px, 72vw);
+    margin: 0 auto;
+    filter: drop-shadow(0 20px 40px rgba(255,79,149,0.2));
+  }
+
+  canvas#wheel {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    touch-action: none;
+  }
+
+  .pointer {
+    position: absolute;
+    top: -14px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 32px;
+    z-index: 5;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+    animation: pointerBounce 1.5s ease-in-out infinite;
+  }
+  @keyframes pointerBounce {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(4px); }
+  }
+
+  .center-knob {
+    position: absolute;
+    left:50%; top:50%;
+    transform: translate(-50%, -50%);
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #fff, var(--rose-light));
+    display:flex; justify-content:center; align-items:center;
+    font-size: 26px;
+    box-shadow:
+      0 8px 25px rgba(255,79,149,0.25),
+      0 0 0 4px rgba(255,255,255,0.6) inset;
+    z-index: 6;
+    animation: knobPulse 2s ease-in-out infinite;
+  }
+  @keyframes knobPulse {
+    0%,100% { box-shadow: 0 8px 25px rgba(255,79,149,0.25), 0 0 0 4px rgba(255,255,255,0.6) inset; }
+    50% { box-shadow: 0 12px 35px rgba(255,79,149,0.35), 0 0 0 4px rgba(255,255,255,0.8) inset; }
+  }
+
+  /* Spin button */
+  .spin-btn {
+    width: 100%;
+    margin-top: 28px;
+    padding: 18px;
+    border: none;
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--rose), var(--rose-dark));
+    color: white;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 35px rgba(255,79,149,0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-family: 'Poppins', sans-serif;
+  }
+  .spin-btn:active { transform: scale(0.96); }
+  .spin-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .spin-btn .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+  }
+  @keyframes ripple {
+    to { transform: scale(4); opacity: 0; }
+  }
+
+  /* Result area */
+  .result-area {
+    margin-top: 24px;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 8px;
+    transition: all 0.5s;
+  }
+  .result-area .placeholder {
+    color: #aaa;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  .result-area .compliment-title {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1.3rem, 5vw, 1.7rem);
+    color: var(--rose);
+    margin-bottom: 12px;
+    line-height: 1.3;
+    opacity:0; transform: translateY(10px);
+    animation: revealUp 0.6s 0.1s forwards;
+  }
+  .result-area .compliment-text {
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    max-width: 340px;
+    opacity:0; transform: translateY(10px);
+    animation: revealUp 0.6s 0.3s forwards;
+  }
+  @keyframes revealUp {
+    to { opacity:1; transform: translateY(0); }
+  }
+
+  .progress-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 16px;
+  }
+  .progress-dots .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .progress-dots .dot.active {
+    background: linear-gradient(135deg, var(--rose), var(--peach));
+    transform: scale(1.4);
+    box-shadow: 0 0 10px rgba(255,79,149,0.3);
+  }
+
+  /* Final message */
+  .final-msg {
+    animation: fadeScale 0.8s cubic-bezier(0.2,0.8,0.2,1) forwards;
+    opacity:0; transform: scale(0.9);
+  }
+  @keyframes fadeScale {
+    to { opacity:1; transform: scale(1); }
+  }
+  .final-msg h2 {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--rose);
+    font-size: 1.6rem;
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+  .final-msg p {
+    color: #555;
+    line-height: 2;
+    font-size: 0.95rem;
+  }
+  .final-msg strong {
+    color: var(--rose-dark);
+    font-weight: 700;
+  }
+
+  /* Back button */
+  .back-btn {
+    display: inline-flex; align-items:center; justify-content:center; gap:8px;
+    margin-top: 20px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, var(--rose), var(--rose-dark));
+    color: white;
+    border-radius: 16px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    box-shadow: 0 8px 25px rgba(255,79,149,0.3);
+    animation: revealUp 0.5s forwards;
+  }
+
+  /* Confetti canvas */
+  #confetti {
+    position: fixed; inset:0; pointer-events:none; z-index:100;
+  }
+
+  /* Character animation for text */
+  .char-reveal {
+    display: inline-block;
+    opacity:0; transform: translateY(6px);
+    animation: charPop 0.4s forwards;
+  }
+  @keyframes charPop {
+    to { opacity:1; transform: translateY(0); }
+  }
+
+  /* Hide scrollbar */
+  .app::-webkit-scrollbar { display:none; }
+  .app { -ms-overflow-style:none; scrollbar-width:none; }
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<div id="bg-mesh"></div>
+<canvas id="confetti"></canvas>
+
+<div class="app">
+  <div class="card">
+    <div class="badge">🎡 Jour 11</div>
+    <h1>La roue des<br><span>compliments ❤️</span></h1>
+    <p class="description">Fais tourner la roue...<br>Voyons sur quel compliment elle va s'arrêter. ❤️</p>
+
+    <div class="wheel-wrap">
+      <div class="pointer">▼</div>
+      <canvas id="wheel"></canvas>
+      <div class="center-knob">❤️</div>
+    </div>
+
+    <button class="spin-btn" id="spin">🎡 Faire tourner</button>
+
+    <div class="result-area" id="result">
+      <div class="placeholder">Le prochain compliment n'attend plus que toi... ❤️</div>
+    </div>
+
+    <div class="progress-dots" id="dots"></div>
+
+    <a href="calendrier.html" class="back-btn" id="back" style="display:none;">Retour au calendrier ♡</a>
+  </div>
+</div>
+
+<script>
+/* ============================
+   DATA
+   ============================ */
+const compliments = [
+  { titre: "☀️ Mon rayon de soleil", texte: "Tu rends mes journées tellement plus belles, même sans le savoir." },
+  { titre: "😍 Ton sourire", texte: "Ton sourire pourrait illuminer même mes pires journées." },
+  { titre: "🤍 Ma personne préférée", texte: "S'il fallait choisir une seule personne pour passer ma vie, ce serait toi." },
+  { titre: "🥹 Mon bonheur", texte: "Tu es devenue une partie de mon bonheur quotidien." },
+  { titre: "🌹 Magnifique", texte: "À mes yeux, tu es la plus belle, aujourd'hui comme demain." },
+  { titre: "👀 Ton regard", texte: "Je pourrais me perdre pendant des heures dans tes yeux." },
+  { titre: "🏡 Mon endroit préféré", texte: "Peu importe où on est... tant que je suis avec toi, je me sens chez moi." },
+  { titre: "😂 Mon rire préféré", texte: "J'adore te voir rire. C'est un des plus beaux sons que je connaisse." },
+  { titre: "❤️ Merci", texte: "Merci d'être entrée dans ma vie et de la rendre aussi belle." },
+  { titre: "✨ Mon futur", texte: "J'espère que notre histoire ne fait que commencer." },
+  { titre: "🫶 Fier de nous", texte: "Malgré la distance, je suis fier de tout ce qu'on construit ensemble." },
+  { titre: "💖 Parfaite", texte: "Tu n'as pas besoin d'être parfaite pour être parfaite à mes yeux." }
+];
+
+const colors = [
+  '#ffd9eb', '#ff9fc8',
+  '#ffd9eb', '#ff9fc8',
+  '#ffd9eb', '#ff9fc8',
+  '#ffd9eb', '#ff9fc8',
+  '#ffd9eb', '#ff9fc8',
+  '#ffd9eb', '#ff9fc8'
+];
+
+/* ============================
+   DOM
+   ============================ */
+const wheelCanvas = document.getElementById('wheel');
+const ctx = wheelCanvas.getContext('2d');
+const spinBtn = document.getElementById('spin');
+const resultArea = document.getElementById('result');
+const dotsContainer = document.getElementById('dots');
+const backBtn = document.getElementById('back');
+
+/* ============================
+   STATE
+   ============================ */
+let restant = [...compliments];
+let rotation = 0;
+let isSpinning = false;
+let currentAngle = 0;
+const SEGMENTS = 12;
+const SEG_ANGLE = (Math.PI * 2) / SEGMENTS;
+
+/* ============================
+   AUDIO (lightweight tick)
+   ============================ */
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+function playTick() {
+  if (!audioCtx) audioCtx = new AudioCtx();
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.type = 'sine';
+  osc.frequency.value = 800 + Math.random() * 400;
+  gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.05);
+}
+function playWin() {
+  if (!audioCtx) audioCtx = new AudioCtx();
+  [523, 659, 784, 1047].forEach((freq, i) => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0, audioCtx.currentTime + i * 0.1);
+    gain.gain.linearRampToValueAtTime(0.12, audioCtx.currentTime + i * 0.1 + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.1 + 0.4);
+    osc.start(audioCtx.currentTime + i * 0.1);
+    osc.stop(audioCtx.currentTime + i * 0.1 + 0.5);
+  });
+}
+
+/* ============================
+   WHEEL DRAWING
+   ============================ */
+function resizeWheel() {
+  const wrap = document.querySelector('.wheel-wrap');
+  const size = wrap.offsetWidth;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  wheelCanvas.width = size * dpr;
+  wheelCanvas.height = size * dpr;
+  wheelCanvas.style.width = size + 'px';
+  wheelCanvas.style.height = size + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  drawWheel(currentAngle);
+}
+
+function drawWheel(angle) {
+  const size = wheelCanvas.offsetWidth || 280;
+  const cx = size / 2;
+  const cy = size / 2;
+  const radius = size / 2 - 4;
+
+  ctx.clearRect(0, 0, size, size);
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(angle);
+  ctx.translate(-cx, -cy);
+
+  // Draw segments
+  for (let i = 0; i < SEGMENTS; i++) {
+    const start = i * SEG_ANGLE - Math.PI / 2;
+    const end = start + SEG_ANGLE;
+
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, radius, start, end);
+    ctx.closePath();
+    ctx.fillStyle = colors[i];
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Text
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(start + SEG_ANGLE / 2);
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#8a335d';
+    ctx.font = '600 11px Poppins, sans-serif';
+    const label = compliments[i].titre.replace(/^[^\s]+\s/, '').substring(0, 14);
+    ctx.fillText(label, radius - 18, 0);
+    ctx.restore();
+  }
+
+  // Inner ring
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius * 0.12, 0, Math.PI * 2);
+  ctx.fillStyle = '#fff';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255,79,149,0.2)';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+/* ============================
+   DOTS
+   ============================ */
+function updateDots() {
+  dotsContainer.innerHTML = '';
+  const found = compliments.length - restant.length;
+  for (let i = 0; i < compliments.length; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i < found ? ' active' : '');
+    dotsContainer.appendChild(dot);
+  }
+}
+updateDots();
+
+/* ============================
+   SPIN LOGIC (physics-based)
+   ============================ */
+function easeOutCubic(t) {
+  return 1 - Math.pow(1 - t, 3);
+}
+
+function spinWheel() {
+  if (isSpinning || restant.length === 0) return;
+  isSpinning = true;
+  spinBtn.disabled = true;
+
+  // Pick compliment
+  const idx = Math.floor(Math.random() * restant.length);
+  const choisi = restant.splice(idx, 1)[0];
+  const globalIdx = compliments.indexOf(choisi);
+
+  // Calculate target angle (pointer is at top = -PI/2)
+  // We want segment globalIdx to land at top
+  const targetSegmentAngle = globalIdx * SEG_ANGLE + SEG_ANGLE / 2;
+  const targetRotation = (Math.PI * 2 - targetSegmentAngle) + Math.PI / 2;
+
+  // Add extra spins (5-8 full rotations)
+  const extraSpins = (5 + Math.random() * 3) * Math.PI * 2;
+  const startAngle = currentAngle;
+  const endAngle = currentAngle + extraSpins + targetRotation;
+  const duration = 5000;
+  const startTime = performance.now();
+
+  let lastTickSegment = -1;
+
+  function animate(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = easeOutCubic(progress);
+
+    currentAngle = startAngle + (endAngle - startAngle) * eased;
+    drawWheel(currentAngle);
+
+    // Tick sound on segment change
+    const segment = Math.floor(((currentAngle + Math.PI / 2) % (Math.PI * 2)) / SEG_ANGLE) % SEGMENTS;
+    if (segment !== lastTickSegment) {
+      lastTickSegment = segment;
+      playTick();
+      if (navigator.vibrate) navigator.vibrate(5);
+    }
+
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      finishSpin(choisi);
+    }
+  }
+  requestAnimationFrame(animate);
+}
+
+function finishSpin(choisi) {
+  isSpinning = false;
+  playWin();
+  if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
+
+  // Confetti burst
+  fireConfetti();
+
+  // Show result
+  resultArea.innerHTML = `
+    <div class="compliment-title">${choisi.titre}</div>
+    <div class="compliment-text">${choisi.texte}</div>
+  `;
+
+  updateDots();
+
+  if (restant.length > 0) {
+    spinBtn.disabled = false;
+    spinBtn.textContent = '🎡 Refaire tourner';
+  } else {
+    spinBtn.style.display = 'none';
+    setTimeout(() => {
+      resultArea.innerHTML = `
+        <div class="final-msg">
+          <h2>❤️<br><br>Tu sais...</h2>
+          <p>Peu importe sur quelle case la roue s'est arrêtée...<br><br>
+          Parce qu'au fond...<br><br>
+          <strong>À mes yeux... tu es tout ça à la fois. ❤️</strong><br><br>
+          Je t'aime énormément, mon amour.</p>
+        </div>
+      `;
+      backBtn.style.display = 'inline-flex';
+      fireConfetti();
+      setTimeout(fireConfetti, 800);
+    }, 1200);
+  }
+}
+
+/* ============================
+   CONFETTI (Canvas, lightweight)
+   ============================ */
+const confettiCanvas = document.getElementById('confetti');
+const cCtx = confettiCanvas.getContext('2d');
+let confettiPieces = [];
+
+function resizeConfetti() {
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
+}
+resizeConfetti();
+window.addEventListener('resize', resizeConfetti);
+
+function fireConfetti() {
+  const colors = ['#ff4f95', '#ffb7d5', '#ffd9eb', '#ff9fc8', '#ffd700', '#ffffff'];
+  for (let i = 0; i < 60; i++) {
+    confettiPieces.push({
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2,
+      vx: (Math.random() - 0.5) * 16,
+      vy: (Math.random() - 1) * 14 - 4,
+      gravity: 0.25,
+      rotation: Math.random() * 360,
+      rotationSpeed: (Math.random() - 0.5) * 10,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      size: 6 + Math.random() * 8,
+      opacity: 1,
+      drag: 0.96
+    });
+  }
+}
+
+function updateConfetti() {
+  cCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+  for (let i = confettiPieces.length - 1; i >= 0; i--) {
+    const p = confettiPieces[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += p.gravity;
+    p.vx *= p.drag;
+    p.rotation += p.rotationSpeed;
+    p.opacity -= 0.008;
+
+    if (p.opacity <= 0 || p.y > window.innerHeight + 50) {
+      confettiPieces.splice(i, 1);
+      continue;
+    }
+
+    cCtx.save();
+    cCtx.translate(p.x, p.y);
+    cCtx.rotate((p.rotation * Math.PI) / 180);
+    cCtx.globalAlpha = p.opacity;
+    cCtx.fillStyle = p.color;
+    cCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+    cCtx.restore();
+  }
+  requestAnimationFrame(updateConfetti);
+}
+updateConfetti();
+
+/* ============================
+   FLOATING HEARTS (background)
+   ============================ */
+function spawnFloater() {
+  const el = document.createElement('div');
+  el.className = 'floater';
+  el.textContent = ['♡', '♥', '❤️', '💖'][Math.floor(Math.random() * 4)];
+  el.style.left = Math.random() * 100 + 'vw';
+  el.style.animationDuration = (8 + Math.random() * 10) + 's';
+  el.style.fontSize = (14 + Math.random() * 20) + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 18000);
+}
+setInterval(spawnFloater, 2000);
+for (let i = 0; i < 5; i++) setTimeout(spawnFloater, i * 400);
+
+/* ============================
+   EVENTS
+   ============================ */
+spinBtn.addEventListener('click', function(e) {
+  // Ripple
+  const ripple = document.createElement('span');
+  ripple.className = 'ripple';
+  const rect = this.getBoundingClientRect();
+  ripple.style.left = (e.clientX - rect.left) + 'px';
+  ripple.style.top = (e.clientY - rect.top) + 'px';
+  this.appendChild(ripple);
+  setTimeout(() => ripple.remove(), 600);
+
+  spinWheel();
+});
+
+// Swipe to spin
+let touchStartY = 0;
+wheelCanvas.addEventListener('touchstart', e => {
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+wheelCanvas.addEventListener('touchend', e => {
+  const diff = touchStartY - e.changedTouches[0].clientY;
+  if (diff > 40) spinWheel();
+}, { passive: true });
+
+// Init
+resizeWheel();
+window.addEventListener('resize', resizeWheel);
+
+// Prevent double-tap zoom
+document.addEventListener('dblclick', e => e.preventDefault());
+</script>
+</body>
+</html>

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Jour 3 ♡</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+
+--rose:#ff4f95;
+--rose-fonce:#e6387d;
+--texte:#251820;
+--texte-doux:#806873;
+--blanc:#ffffff;
+--carte:rgba(255,255,255,.72);
+--bordure:rgba(255,79,149,.15);
+
+}
+
+*{
+
+margin:0;
+padding:0;
+box-sizing:border-box;
+
+}
+
+body{
+
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+
+min-height:100vh;
+
+overflow:hidden;
+
+color:var(--texte);
+
+background:
+
+linear-gradient(to bottom,#ffb25d 0%,#ff9b77 25%,#ff84a6 55%,#ffc9dc 100%);
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+position:relative;
+
+}
+
+/* ========================= */
+/* CIEL */
+/* ========================= */
+
+.sky{
+
+position:absolute;
+
+inset:0;
+
+overflow:hidden;
+
+}
+
+/* Soleil */
+
+.sun{
+
+position:absolute;
+
+left:50%;
+
+bottom:-90px;
+
+transform:translateX(-50%);
+
+width:340px;
+
+height:340px;
+
+border-radius:50%;
+
+background:
+
+radial-gradient(circle,#fff7cf 0%,#ffd56f 38%,#ffb34b 70%,transparent 100%);
+
+box-shadow:
+
+0 0 140px rgba(255,190,90,.7),
+
+0 0 220px rgba(255,180,80,.4);
+
+animation:sunMove 9s ease-in-out infinite;
+
+}
+
+@keyframes sunMove{
+
+0%{
+
+transform:translateX(-50%) translateY(0);
+
+}
+
+50%{
+
+transform:translateX(-50%) translateY(-10px);
+
+}
+
+100%{
+
+transform:translateX(-50%) translateY(0);
+
+}
+
+/* Nuages */
+
+}
+
+.cloud{
+
+position:absolute;
+
+background:rgba(255,255,255,.28);
+
+border-radius:100px;
+
+filter:blur(10px);
+
+}
+
+.cloud1{
+
+width:230px;
+
+height:65px;
+
+top:16%;
+
+left:-260px;
+
+animation:cloud 55s linear infinite;
+
+}
+
+.cloud2{
+
+width:170px;
+
+height:55px;
+
+top:35%;
+
+left:-180px;
+
+animation:cloud 75s linear infinite;
+
+animation-delay:-25s;
+
+}
+
+@keyframes cloud{
+
+from{
+
+transform:translateX(0);
+
+}
+
+to{
+
+transform:translateX(calc(100vw + 450px));
+
+}
+
+}
+
+/* ========================= */
+/* CARTE */
+/* ========================= */
+
+.card{
+
+position:relative;
+
+z-index:5;
+
+width:min(760px,92%);
+
+padding:55px;
+
+border-radius:30px;
+
+background:var(--carte);
+
+backdrop-filter:blur(14px);
+
+border:1px solid var(--bordure);
+
+box-shadow:0 25px 60px rgba(160,70,110,.15);
+
+animation:fade .8s;
+
+text-align:center;
+
+}
+
+@keyframes fade{
+
+from{
+
+opacity:0;
+
+transform:translateY(20px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:none;
+
+}
+
+}
+
+.small{
+
+display:inline-flex;
+
+gap:8px;
+
+align-items:center;
+
+padding:8px 14px;
+
+border-radius:999px;
+
+background:rgba(255,255,255,.6);
+
+color:var(--rose-fonce);
+
+font-size:.85rem;
+
+font-weight:700;
+
+margin-bottom:24px;
+
+}
+
+h1{
+
+font-size:clamp(3rem,7vw,5rem);
+
+line-height:1;
+
+letter-spacing:-.06em;
+
+}
+
+h1 span{
+
+color:var(--rose);
+
+}
+
+.description{
+
+margin:24px auto;
+
+max-width:520px;
+
+font-size:1.05rem;
+
+line-height:1.8;
+
+color:var(--texte-doux);
+
+}
+
+#story{
+
+margin-top:35px;
+
+min-height:120px;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+font-size:1.35rem;
+
+font-weight:600;
+
+line-height:1.7;
+
+text-align:center;
+
+}
+
+.cursor{
+
+display:inline-block;
+
+width:2px;
+
+height:24px;
+
+background:var(--rose);
+
+margin-left:4px;
+
+animation:blink .8s infinite;
+
+}
+
+@keyframes blink{
+
+50%{
+
+opacity:0;
+
+}
+
+}
+
+button{
+
+margin-top:30px;
+
+padding:16px 24px;
+
+border:none;
+
+border-radius:16px;
+
+cursor:pointer;
+
+background:var(--rose);
+
+color:white;
+
+font-size:1rem;
+
+font-weight:700;
+
+box-shadow:0 12px 28px rgba(230,56,125,.22);
+
+transition:.25s;
+
+}
+
+button:hover{
+
+transform:translateY(-4px);
+
+background:var(--rose-fonce);
+
+}
+
+.hidden{
+
+display:none;
+
+}
+
+@media(max-width:600px){
+
+.card{
+
+padding:32px 24px;
+
+}
+
+#story{
+
+font-size:1.15rem;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sky">
+
+<div class="sun"></div>
+
+<div class="cloud cloud1"></div>
+
+<div class="cloud cloud2"></div>
+
+</div>
+
+<div class="card">
+
+<div class="small">
+
+🌅 Jour 3
+
+</div>
+
+<h1>
+
+Regarde ce<br>
+
+<span>coucher de soleil.</span>
+
+</h1>
+
+<p class="description">
+
+J'aimerais tellement être à côté de toi pour le regarder avec toi.
+
+Alors regarde-le quelques instants... pour nous deux. ♡
+
+</p>
+
+<div id="story">
+
+Ferme les yeux quelques secondes...
+
+</div>
+
+<button id="start">
+
+Je suis prête ❤️
+
+</button>
+
+<audio id="music">
+
+<source src="assets/sun-music.mp3" type="audio/mpeg">
+
+</audio>
+
+</div><script>
+
+const startButton = document.getElementById("start");
+const story = document.getElementById("story");
+const music = document.getElementById("music");
+
+const phrases = [
+
+"Si j'avais pu choisir où être aujourd'hui...",
+
+"J'aurais choisi d'être avec toi.",
+
+"À regarder ce coucher de soleil.",
+
+"À rigoler avec toi.",
+
+"À profiter de chaque seconde.",
+
+"",
+
+"Mais même à plusieurs centaines de kilomètres...",
+
+"Je pense très fort à toi.",
+
+"",
+
+"Chaque journée qui passe nous rapproche un peu plus de nos retrouvailles. ❤️"
+
+];
+
+startButton.addEventListener("click", async()=>{
+
+startButton.classList.add("hidden");
+
+music.volume=.35;
+
+music.play().catch(()=>{});
+
+await sleep(1200);
+
+playStory();
+
+});
+
+async function playStory(){
+
+for(const phrase of phrases){
+
+await typeText(phrase);
+
+await sleep(1800);
+
+}
+
+story.innerHTML=`
+
+<div style="animation:fade .8s;">
+
+<p style="font-size:1.15rem;color:var(--texte-doux);line-height:1.8;margin-bottom:35px;">
+
+Merci d'avoir partagé ce coucher de soleil avec moi. ♡
+
+</p>
+
+<a
+
+href="calendrier.html"
+
+style="
+
+display:inline-flex;
+
+align-items:center;
+
+justify-content:center;
+
+padding:16px 24px;
+
+border-radius:16px;
+
+background:var(--rose);
+
+color:white;
+
+text-decoration:none;
+
+font-weight:700;
+
+box-shadow:0 12px 28px rgba(230,56,125,.22);
+
+transition:.25s;
+
+"
+
+onmouseover="this.style.transform='translateY(-4px)'"
+
+onmouseout="this.style.transform='translateY(0)'"
+
+>
+
+Retour au calendrier ♡
+
+</a>
+
+</div>
+
+`;
+
+}
+
+function typeText(text){
+
+return new Promise(resolve=>{
+
+story.innerHTML="";
+
+let i=0;
+
+const interval=setInterval(()=>{
+
+story.innerHTML=text.substring(0,i)+'<span class="cursor"></span>';
+
+i++;
+
+if(i>text.length){
+
+clearInterval(interval);
+
+story.innerHTML=text;
+
+resolve();
+
+}
+
+},45);
+
+});
+
+}
+
+function sleep(ms){
+
+return new Promise(resolve=>setTimeout(resolve,ms));
+
+}
+
+/* ========================= */
+/* PARTICULES */
+/* ========================= */
+
+for(let i=0;i<35;i++){
+
+const p=document.createElement("div");
+
+p.style.position="absolute";
+
+p.style.width=(2+Math.random()*4)+"px";
+
+p.style.height=p.style.width;
+
+p.style.borderRadius="50%";
+
+p.style.background="rgba(255,255,255,.55)";
+
+p.style.left=Math.random()*100+"vw";
+
+p.style.top=Math.random()*100+"vh";
+
+p.style.pointerEvents="none";
+
+p.style.animation=`particle ${8+Math.random()*8}s linear infinite`;
+
+p.style.animationDelay=Math.random()*8+"s";
+
+document.body.appendChild(p);
+
+}
+
+const style=document.createElement("style");
+
+style.innerHTML=`
+
+@keyframes particle{
+
+0%{
+
+transform:translateY(20px);
+
+opacity:0;
+
+}
+
+20%{
+
+opacity:1;
+
+}
+
+80%{
+
+opacity:1;
+
+}
+
+100%{
+
+transform:translateY(-120px);
+
+opacity:0;
+
+}
+
+}
+
+`;
+
+document.head.appendChild(style);
+
+</script>
+
+</body>
+
+</html>

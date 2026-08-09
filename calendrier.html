@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Le calendrier de mon amour ♡</title>
+
+  <style>
+    :root {
+      --rose: #ff4f95;
+      --rose-fonce: #e6387d;
+      --texte: #251820;
+      --texte-doux: #806873;
+      --blanc: #ffffff;
+      --carte: rgba(255, 255, 255, 0.7);
+      --bordure: rgba(255, 79, 149, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--texte);
+      background:
+        radial-gradient(circle at 8% 15%, rgba(255, 181, 211, 0.65), transparent 25rem),
+        radial-gradient(circle at 92% 85%, rgba(255, 117, 174, 0.34), transparent 25rem),
+        linear-gradient(135deg, #fffafd 0%, #fff0f6 52%, #ffe0ec 100%);
+    }
+
+    .page {
+      width: min(1380px, 100%);
+      min-height: 100vh;
+      margin: auto;
+      padding: 28px clamp(20px, 5vw, 70px) 46px;
+    }
+
+    nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: clamp(52px, 9vh, 95px);
+    }
+
+    .retour {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      color: var(--texte-doux);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 700;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .retour:hover {
+      color: var(--rose-fonce);
+      transform: translateX(-3px);
+    }
+
+    .signature {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .coeur-logo {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
+      color: var(--blanc);
+      background: var(--rose);
+      box-shadow: 0 9px 20px rgba(255, 79, 149, 0.25);
+      font-size: 1.15rem;
+    }
+
+    .bouton-admin {
+      justify-self: end;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 12px;
+      border: 1px solid var(--bordure);
+      border-radius: 12px;
+      cursor: pointer;
+      color: var(--texte-doux);
+      background: rgba(255, 255, 255, 0.5);
+      font: inherit;
+      font-size: 0.83rem;
+      font-weight: 700;
+    }
+
+    .mise-en-page {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 285px;
+      align-items: start;
+      gap: clamp(22px, 4vw, 54px);
+    }
+
+    .entete {
+      max-width: 760px;
+      margin-bottom: 32px;
+      animation: apparition 0.7s ease-out both;
+    }
+
+    .petit-titre {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 17px;
+      color: var(--rose-fonce);
+      font-size: 0.9rem;
+      font-weight: 750;
+    }
+
+    h1 {
+      font-size: clamp(2.7rem, 6vw, 5rem);
+      line-height: 1;
+      letter-spacing: -0.065em;
+    }
+
+    h1 span {
+      color: var(--rose);
+    }
+
+    .sous-titre {
+      max-width: 620px;
+      margin-top: 20px;
+      color: var(--texte-doux);
+      font-size: 1.05rem;
+      line-height: 1.65;
+    }
+
+    .panneau-infos {
+      display: grid;
+      grid-template-columns: minmax(210px, 0.85fr) minmax(340px, 1.4fr);
+      gap: 16px;
+      margin-bottom: 34px;
+      animation: apparition 0.8s 0.1s ease-out both;
+    }
+
+    .carte-info,
+    .collection {
+      border: 1px solid var(--bordure);
+      border-radius: 24px;
+      background: var(--carte);
+      box-shadow: 0 12px 30px rgba(150, 57, 96, 0.07);
+    }
+
+    .carte-info {
+      padding: 22px;
+    }
+
+    .label-info {
+      display: block;
+      margin-bottom: 9px;
+      color: var(--texte-doux);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .heure {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.07em;
+    }
+
+    .date-actuelle {
+      margin-top: 4px;
+      color: var(--texte-doux);
+      font-size: 0.91rem;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .titre-retrouvailles {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .titre-retrouvailles .label-info {
+      margin: 0;
+    }
+
+    .date-retour {
+      color: var(--rose-fonce);
+      font-size: 0.82rem;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .compte-rebours {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 9px;
+    }
+
+    .unite {
+      padding: 11px 5px 9px;
+      border-radius: 14px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.61);
+    }
+
+    .unite strong {
+      display: block;
+      color: var(--rose-fonce);
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      line-height: 1;
+      letter-spacing: -0.06em;
+    }
+
+    .unite span {
+      display: block;
+      margin-top: 6px;
+      color: var(--texte-doux);
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .statut {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 19px;
+      color: var(--texte-doux);
+      font-size: 0.9rem;
+      font-weight: 650;
+    }
+
+    .point {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--rose);
+      box-shadow: 0 0 0 5px rgba(255, 79, 149, 0.1);
+    }
+
+    .calendrier {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      animation: apparition 0.8s 0.18s ease-out both;
+    }
+
+    .jour {
+      position: relative;
+      min-height: 190px;
+      padding: 21px;
+      border: 1px solid var(--bordure);
+      border-radius: 24px;
+      overflow: hidden;
+      text-align: left;
+      font: inherit;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .jour.ouvert {
+      cursor: pointer;
+      color: var(--texte);
+      background: var(--carte);
+      box-shadow: 0 10px 28px rgba(150, 57, 96, 0.08);
+    }
+
+    .jour.ouvert:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 34px rgba(150, 57, 96, 0.14);
+    }
+
+    .jour.verrouille {
+      cursor: not-allowed;
+      color: #a998a0;
+      background: rgba(255, 255, 255, 0.28);
+    }
+
+    .numero {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .jour h2 {
+      max-width: 140px;
+      font-size: 1.42rem;
+      letter-spacing: -0.045em;
+    }
+
+    .date-jour {
+      display: block;
+      margin-top: 7px;
+      color: var(--texte-doux);
+      font-size: 0.84rem;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .etat {
+      position: absolute;
+      bottom: 19px;
+      left: 21px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.82rem;
+      font-weight: 750;
+    }
+
+    .ouvert .etat {
+      color: var(--rose-fonce);
+    }
+
+    .verrouille .etat {
+      color: #aa98a0;
+    }
+
+    .decoration {
+      position: absolute;
+      right: -25px;
+      bottom: -45px;
+      color: rgba(255, 79, 149, 0.08);
+      font-size: 9rem;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .collection {
+      position: sticky;
+      top: 24px;
+      padding: 20px;
+      animation: apparition 0.8s 0.2s ease-out both;
+    }
+
+    .collection-entete {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .collection h2 {
+      font-size: 1.25rem;
+      letter-spacing: -0.05em;
+    }
+
+    .compteur-bons {
+      padding: 5px 8px;
+      border-radius: 999px;
+      color: var(--rose-fonce);
+      background: rgba(255, 79, 149, 0.11);
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .collection-intro {
+      margin-bottom: 16px;
+      color: var(--texte-doux);
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+
+    .liste-bons {
+      display: grid;
+      gap: 10px;
+    }
+
+    .bon {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-height: 66px;
+      padding: 11px;
+      border: 1px solid rgba(255, 79, 149, 0.1);
+      border-radius: 16px;
+    }
+
+    .bon.verrouille {
+      color: #ab9ba2;
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .bon.gagne {
+      color: var(--texte);
+      background: linear-gradient(135deg, #fff 0%, #ffe7f1 100%);
+      box-shadow: 0 8px 16px rgba(230, 56, 125, 0.09);
+      animation: bon-gagne 0.5s ease-out;
+    }
+
+    .icone-bon {
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      font-size: 1.1rem;
+    }
+
+    .verrouille .icone-bon {
+      background: rgba(139, 120, 129, 0.12);
+      filter: grayscale(1);
+    }
+
+    .gagne .icone-bon {
+      color: white;
+      background: var(--rose);
+      box-shadow: 0 7px 14px rgba(255, 79, 149, 0.22);
+    }
+
+    .bon h3 {
+      font-size: 0.86rem;
+      line-height: 1.25;
+    }
+
+    .bon p {
+      margin-top: 3px;
+      font-size: 0.73rem;
+      line-height: 1.35;
+    }
+
+    .bon.gagne p {
+      color: var(--rose-fonce);
+      font-weight: 650;
+    }
+
+    .modal,
+    .panneau-admin {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      background: rgba(50, 25, 38, 0.3);
+      backdrop-filter: blur(8px);
+    }
+
+    .modal {
+      z-index: 10;
+    }
+
+    .panneau-admin {
+      z-index: 20;
+    }
+
+    .modal.visible,
+    .panneau-admin.visible {
+      display: flex;
+      animation: fond 0.2s ease-out;
+    }
+
+    .contenu-modal,
+    .fenetre-admin {
+      position: relative;
+      width: min(460px, 100%);
+      padding: 42px 32px 34px;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 28px;
+      text-align: center;
+      background: rgba(255, 250, 253, 0.97);
+      box-shadow: 0 25px 70px rgba(73, 27, 51, 0.23);
+      animation: apparition-modal 0.28s ease-out;
+    }
+
+    .fermer {
+      position: absolute;
+      top: 16px;
+      right: 17px;
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 50%;
+      cursor: pointer;
+      color: var(--texte-doux);
+      background: #f9e7ef;
+      font-size: 1.25rem;
+    }
+
+    .grand-coeur {
+      margin-bottom: 16px;
+      color: var(--rose);
+      font-size: 2.4rem;
+    }
+
+    .contenu-modal h2,
+    .fenetre-admin h2 {
+      font-size: 1.7rem;
+      letter-spacing: -0.05em;
+    }
+
+    .texte-modal {
+      margin-top: 14px;
+      color: var(--texte-doux);
+      line-height: 1.7;
+    }
+
+    .contenu-modal.lettre {
+      width: min(760px, 100%);
+      max-height: 84vh;
+      overflow-y: auto;
+      padding: 48px clamp(24px, 6vw, 58px) 42px;
+      text-align: left;
+      background:
+        radial-gradient(circle at 80% 0%, rgba(255, 170, 205, 0.45), transparent 20rem),
+        rgba(255, 250, 253, 0.97);
+    }
+
+    .contenu-modal.lettre .grand-coeur,
+    .contenu-modal.lettre h2 {
+      text-align: center;
+    }
+
+    .contenu-modal.lettre h2 {
+      color: var(--rose-fonce);
+    }
+
+    .lettre-paragraphe {
+      margin: 0 0 20px;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: apparition-lettre 0.8s ease-out forwards;
+    }
+
+    .lettre-paragraphe:first-child {
+      color: var(--rose-fonce);
+      font-size: 1.15rem;
+      font-weight: 750;
+    }
+
+    .contenu-modal.jeu {
+      width: min(560px, 100%);
+    }
+
+    .intro-jeu {
+      margin-bottom: 14px;
+      color: var(--texte-doux);
+      line-height: 1.55;
+    }
+
+    .compteur-jeu {
+      display: inline-block;
+      margin-bottom: 14px;
+      color: var(--rose-fonce);
+      font-size: 0.9rem;
+      font-weight: 800;
+    }
+
+    .zone-jeu {
+      position: relative;
+      height: 300px;
+      overflow: hidden;
+      border: 1px solid var(--bordure);
+      border-radius: 20px;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(255, 179, 210, 0.45), transparent 10rem),
+        #fff7fb;
+    }
+
+    .coeur-jeu {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      width: 54px;
+      height: 54px;
+      border: 0;
+      border-radius: 50%;
+      cursor: pointer;
+      color: white;
+      background: var(--rose);
+      box-shadow: 0 10px 18px rgba(255, 79, 149, 0.26);
+      font-size: 1.55rem;
+      animation: arrivee-coeur 0.35s ease-out, flotte 1.8s ease-in-out infinite alternate;
+    }
+
+    .coeur-jeu.attrape {
+      pointer-events: none;
+      animation: attrape-coeur 0.35s ease-out forwards;
+    }
+
+    .resultat-jeu {
+      min-height: 24px;
+      margin-top: 14px;
+      color: var(--rose-fonce);
+      font-weight: 750;
+      line-height: 1.45;
+    }
+
+    .fenetre-admin {
+      padding: 36px 28px 28px;
+      text-align: left;
+    }
+
+    .fenetre-admin h2 {
+      font-size: 1.5rem;
+    }
+
+    .fenetre-admin p {
+      margin: 10px 0 20px;
+      color: var(--texte-doux);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .formulaire-admin {
+      display: flex;
+      gap: 8px;
+    }
+
+    .formulaire-admin input {
+      min-width: 0;
+      flex: 1;
+      padding: 12px;
+      border: 1px solid var(--bordure);
+      border-radius: 12px;
+      outline: none;
+      color: var(--texte);
+      font: inherit;
+    }
+
+    .formulaire-admin button,
+    .quitter-admin,
+    .reset-bons {
+      padding: 12px 14px;
+      border: 0;
+      border-radius: 12px;
+      cursor: pointer;
+      color: white;
+      background: var(--rose);
+      font: inherit;
+      font-weight: 750;
+    }
+
+    .reset-bons {
+      width: 100%;
+      margin-top: 9px;
+      color: var(--rose-fonce);
+      background: #fbe7ef;
+    }
+
+    .erreur-admin {
+      min-height: 18px;
+      margin-top: 9px;
+      color: var(--rose-fonce);
+      font-size: 0.82rem;
+      font-weight: 650;
+    }
+
+    @keyframes apparition {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes apparition-modal {
+      from {
+        opacity: 0;
+        transform: scale(0.94);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes fond {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes apparition-lettre {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes bon-gagne {
+      from {
+        transform: scale(0.94);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes arrivee-coeur {
+      from {
+        opacity: 0;
+        transform: scale(0.3);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes flotte {
+      to {
+        transform: translateY(-7px) rotate(8deg);
+      }
+    }
+
+    @keyframes attrape-coeur {
+      to {
+        opacity: 0;
+        transform: scale(1.7) rotate(20deg);
+      }
+    }
+
+    @media (max-width: 1050px) {
+      .mise-en-page {
+        grid-template-columns: 1fr;
+      }
+
+      .collection {
+        position: static;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .panneau-infos {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .page {
+        padding: 22px 18px 35px;
+      }
+
+      nav {
+        grid-template-columns: 1fr auto auto;
+        margin-bottom: 52px;
+      }
+
+      .signature {
+        font-size: 0;
+      }
+
+      .bouton-admin span {
+        display: none;
+      }
+
+      .calendrier {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .jour {
+        min-height: 166px;
+        padding: 17px;
+        border-radius: 20px;
+      }
+
+      .etat {
+        bottom: 16px;
+        left: 17px;
+      }
+
+      .compte-rebours {
+        gap: 6px;
+      }
+
+      .unite {
+        padding: 10px 3px 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <nav>
+      <a class="retour" href="index.html">← Retour à l’accueil</a>
+
+      <div class="signature">
+        <div class="coeur-logo">♡</div>
+        Pour mon amour
+      </div>
+
+      <button class="bouton-admin" id="ouvrir-admin" type="button">
+        ⚙ <span>Préparation</span>
+      </button>
+    </nav>
+
+    <main class="mise-en-page">
+      <section>
+        <div class="entete">
+          <p class="petit-titre">✦ Du 7 au 24 août</p>
+
+          <h1>Une petite surprise,<br /><span>chaque jour.</span></h1>
+
+          <p class="sous-titre">
+            Chaque case s’ouvre à minuit, selon l’heure de ton téléphone.
+            Encore un peu de patience, mon amour ♡
+          </p>
+        </div>
+
+        <section class="panneau-infos">
+          <article class="carte-info">
+            <span class="label-info">Il est actuellement</span>
+            <p class="heure" id="heure">--:--:--</p>
+            <p class="date-actuelle" id="date-actuelle">Chargement…</p>
+          </article>
+
+          <article class="carte-info">
+            <div class="titre-retrouvailles">
+              <span class="label-info">Avant qu’on se revoie</span>
+              <span class="date-retour">Le 25 août ♡</span>
+            </div>
+
+            <div class="compte-rebours">
+              <div class="unite">
+                <strong id="jours">--</strong>
+                <span>jours</span>
+              </div>
+
+              <div class="unite">
+                <strong id="heures">--</strong>
+                <span>heures</span>
+              </div>
+
+              <div class="unite">
+                <strong id="minutes">--</strong>
+                <span>minutes</span>
+              </div>
+
+              <div class="unite">
+                <strong id="secondes">--</strong>
+                <span>secondes</span>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <p class="statut">
+          <span class="point"></span>
+          <span id="statut-calendrier">Chargement du calendrier…</span>
+        </p>
+
+        <section class="calendrier" id="calendrier"></section>
+      </section>
+
+      <aside class="collection">
+        <div class="collection-entete">
+          <h2>Ta collection</h2>
+          <span class="compteur-bons" id="compteur-bons">0 / 5</span>
+        </div>
+
+        <p class="collection-intro">
+          Réussis les mini-jeux pour gagner tous tes bons. ♡
+        </p>
+
+        <div class="liste-bons" id="liste-bons"></div>
+      </aside>
+    </main>
+  </div>
+
+  <div class="panneau-admin" id="panneau-admin" aria-hidden="true">
+    <div class="fenetre-admin">
+      <button class="fermer" id="fermer-admin" aria-label="Fermer">×</button>
+
+      <div id="connexion-admin">
+        <h2>Mode préparation</h2>
+        <p>Entre ton code pour voir toutes les cases avant leur ouverture.</p>
+
+        <form class="formulaire-admin" id="formulaire-admin">
+          <input
+            id="mot-de-passe-admin"
+            type="password"
+            placeholder="Ton code secret"
+            autocomplete="off"
+            required
+          />
+
+          <button type="submit">Ouvrir</button>
+        </form>
+
+        <p class="erreur-admin" id="erreur-admin"></p>
+      </div>
+
+      <div id="commandes-admin" hidden>
+        <h2>Mode préparation actif</h2>
+        <p>Toutes les cases sont visibles sur ton navigateur.</p>
+
+        <button class="quitter-admin" id="quitter-admin" type="button">
+          Revenir au calendrier normal
+        </button>
+
+        <button class="reset-bons" id="reset-bons" type="button">
+          Réinitialiser les bons
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="contenu-modal" id="contenu-modal">
+      <button class="fermer" id="fermer-modal" aria-label="Fermer">×</button>
+      <div class="grand-coeur">♡</div>
+      <h2 id="titre-modal">Jour 1</h2>
+      <div class="texte-modal" id="texte-modal"></div>
+    </div>
+  </div>
+
+  <script>
+    const configuration = {
+      dateDebut: "2026-08-07",
+      dateFin: "2026-08-24",
+      dateRetrouvailles: "2026-08-25T00:00:00"
+    };
+
+    /*
+      Change le texte entre guillemets par ton propre mot de passe.
+    */
+    const MOT_DE_PASSE_ADMIN = "123";
+
+    const CLE_MODE_ADMIN = "calendrier-ines-mode-preparation";
+    const CLE_BONS_GAGNES = "calendrier-ines-bons-gagnes";
+
+    const bons = [
+      {
+        id: "doroparty",
+        jour: 2,
+        titre: "Bon pour la DoroParty",
+        description: "Réutilisable ♡"
+      },
+      {
+        id: "massage",
+        jour: 5,
+        titre: "Bon pour un massage",
+        description: "À utiliser quand tu veux ♡"
+      },
+      {
+        id: "tsip",
+        jour: 9,
+        titre: "Bon pour que je regarde Tsip",
+        description: "En éspérant que j'aime bien ♡"
+      },
+      {
+        id: "choix",
+        jour: 13,
+        titre: "Bon à définir par toi",
+        description: "Tu choisis ce que tu veux ♡"
+      },
+      {
+        id: "vie",
+        jour: 17,
+        titre: "Bon pour s’aimer toute notre vie",
+        description: "Le plus beau de tous les bons ♡"
+      }
+    ];
+
+    const calendrier = document.getElementById("calendrier");
+    const statutCalendrier = document.getElementById("statut-calendrier");
+    const listeBons = document.getElementById("liste-bons");
+    const compteurBons = document.getElementById("compteur-bons");
+
+    const modal = document.getElementById("modal");
+    const contenuModal = document.getElementById("contenu-modal");
+    const titreModal = document.getElementById("titre-modal");
+    const texteModal = document.getElementById("texte-modal");
+    const fermerModal = document.getElementById("fermer-modal");
+
+    const boutonAdmin = document.getElementById("ouvrir-admin");
+    const panneauAdmin = document.getElementById("panneau-admin");
+    const fermerAdmin = document.getElementById("fermer-admin");
+    const formulaireAdmin = document.getElementById("formulaire-admin");
+    const champMotDePasse = document.getElementById("mot-de-passe-admin");
+    const erreurAdmin = document.getElementById("erreur-admin");
+    const connexionAdmin = document.getElementById("connexion-admin");
+    const commandesAdmin = document.getElementById("commandes-admin");
+    const quitterAdmin = document.getElementById("quitter-admin");
+    const resetBons = document.getElementById("reset-bons");
+
+    let minuterieMinuit;
+    let jeuActif = false;
+
+    function convertirEnDateLocale(texteDate) {
+      const [annee, mois, jour] = texteDate.split("-").map(Number);
+      return new Date(annee, mois - 1, jour);
+    }
+
+    function ajouterJours(date, nombre) {
+      const copie = new Date(date);
+      copie.setDate(copie.getDate() + nombre);
+      return copie;
+    }
+
+    function nombreDeJoursEntre(dateDebut, dateFin) {
+      const debutUTC = Date.UTC(
+        dateDebut.getFullYear(),
+        dateDebut.getMonth(),
+        dateDebut.getDate()
+      );
+
+      const finUTC = Date.UTC(
+        dateFin.getFullYear(),
+        dateFin.getMonth(),
+        dateFin.getDate()
+      );
+
+      return Math.floor((finUTC - debutUTC) / 86400000);
+    }
+
+    function afficherDateCourte(date) {
+      return new Intl.DateTimeFormat("fr-FR", {
+        day: "numeric",
+        month: "long"
+      }).format(date);
+    }
+
+    function afficherDateLongue(date) {
+      return new Intl.DateTimeFormat("fr-FR", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      }).format(date);
+    }
+
+    function modeAdminActif() {
+      return sessionStorage.getItem(CLE_MODE_ADMIN) === "actif";
+    }
+
+    function obtenirBonsGagnes() {
+      try {
+        return JSON.parse(localStorage.getItem(CLE_BONS_GAGNES)) || [];
+      } catch {
+        return [];
+      }
+    }
+
+    function afficherBons() {
+      const bonsGagnes = obtenirBonsGagnes();
+
+      compteurBons.textContent = `${bonsGagnes.length} / ${bons.length}`;
+
+      listeBons.innerHTML = bons
+        .map((bon) => {
+          const estGagne = bonsGagnes.includes(bon.id);
+
+          return `
+            <article class="bon ${estGagne ? "gagne" : "verrouille"}">
+              <div class="icone-bon">${estGagne ? "♡" : "🔒"}</div>
+
+              <div>
+                <h3>${estGagne ? bon.titre : "Bon à débloquer"}</h3>
+                <p>
+                  ${
+                    estGagne
+                      ? bon.description
+                      : `À gagner dans un mini-jeu du jour ${bon.jour}`
+                  }
+                </p>
+              </div>
+            </article>
+          `;
+        })
+        .join("");
+    }
+
+    function debloquerBon(idBon) {
+      const bonsGagnes = obtenirBonsGagnes();
+
+      if (!bonsGagnes.includes(idBon)) {
+        bonsGagnes.push(idBon);
+        localStorage.setItem(CLE_BONS_GAGNES, JSON.stringify(bonsGagnes));
+      }
+
+      afficherBons();
+    }
+
+    function afficherPanneauAdmin() {
+      const estActif = modeAdminActif();
+
+      connexionAdmin.hidden = estActif;
+      commandesAdmin.hidden = !estActif;
+      erreurAdmin.textContent = "";
+      champMotDePasse.value = "";
+
+      panneauAdmin.classList.add("visible");
+      panneauAdmin.setAttribute("aria-hidden", "false");
+    }
+
+    function fermerPanneauAdmin() {
+      panneauAdmin.classList.remove("visible");
+      panneauAdmin.setAttribute("aria-hidden", "true");
+    }
+
+    function ouvrirLettreJour1() {
+      contenuModal.classList.add("lettre");
+
+      titreModal.textContent = "7 août — Pour toi";
+
+      const lettre = [
+        "Mon amour,",
+
+        "Aujourd’hui n’est pas un jour comme les autres. Aujourd’hui, tu pars en vacances, et pendant dix-huit jours, nous serons séparés.",
+
+        "Dix-huit jours sans pouvoir te voir comme d’habitude, sans pouvoir te prendre dans mes bras dès que j’en ai envie, sans ta présence à côté de moi. Je sais que ces jours seront parfois difficiles, parce que tu vas me manquer énormément. Mais même loin de toi, je veux que tu sentes que je pense à toi, que je suis là, et que je t’aime de tout mon cœur.",
+
+        "J’ai créé ce site rien que pour toi. J’y ai mis du temps, de l’amour et beaucoup de pensées pour toi. Chaque jour, tu découvriras une petite attention : un mot, une surprise, un jeu ou peut-être un souvenir. C’est ma manière d’être un peu avec toi pendant ton voyage.",
+
+        "Il y a un an, tu avais fait tes lettres, et je n’ai jamais oublié cette attention. Alors aujourd’hui, je voulais faire quelque chose à ma façon, quelque chose qui te rappelle chaque jour à quel point tu comptes pour moi.",
+
+        "Ces dix-huit jours passeront, même s’ils peuvent sembler longs. Et pendant chaque seconde de mon existence, tu resteras dans mes pensées. Peu importe la distance, rien ne changera ce que je ressens pour toi. Je t’aimerai toujours autant, peut-être même encore un peu plus chaque jour.",
+
+        "Profite de tes vacances, mon amour. Souris, amuse-toi, découvre de belles choses… et n’oublie jamais que, quelque part, il y a quelqu’un qui t’aime très fort et qui compte les jours avant de te revoir.",
+
+        "Ton Haroun, qui t’aime et qui a déjà hâte de te retrouver. ♡"
+      ];
+
+      texteModal.innerHTML = lettre
+        .map(
+          (paragraphe, index) => `
+            <p
+              class="lettre-paragraphe"
+              style="animation-delay: ${0.25 + index * 0.45}s"
+            >
+              ${paragraphe}
+            </p>
+          `
+        )
+        .join("");
+    }
+
+    function lancerJeuCoeurs() {
+      jeuActif = true;
+
+      const zoneJeu = document.getElementById("zone-jeu");
+      const compteurJeu = document.getElementById("compteur-jeu");
+      const resultatJeu = document.getElementById("resultat-jeu");
+
+      let coeursAttrapes = 0;
+
+      function placerUnCoeur() {
+        if (!jeuActif || coeursAttrapes >= 5) {
+          return;
+        }
+
+        const coeur = document.createElement("button");
+        coeur.className = "coeur-jeu";
+        coeur.type = "button";
+        coeur.textContent = "♡";
+        coeur.setAttribute("aria-label", "Attraper un cœur");
+
+        const largeurMax = Math.max(zoneJeu.clientWidth - 60, 20);
+        const hauteurMax = Math.max(zoneJeu.clientHeight - 60, 20);
+
+        coeur.style.left = `${Math.random() * largeurMax}px`;
+        coeur.style.top = `${Math.random() * hauteurMax}px`;
+
+        coeur.addEventListener("click", () => {
+          if (!jeuActif) {
+            return;
+          }
+
+          coeur.disabled = true;
+          coeur.classList.add("attrape");
+
+          coeursAttrapes += 1;
+          compteurJeu.textContent = `${coeursAttrapes} / 5 cœurs attrapés`;
+
+          setTimeout(() => {
+            coeur.remove();
+
+            if (coeursAttrapes === 5) {
+              debloquerBon("doroparty");
+
+              resultatJeu.innerHTML =
+                "Tu as gagné ton premier bon : <strong>une DoroParty réutilisable !</strong> ♡";
+
+              jeuActif = false;
+            } else {
+              placerUnCoeur();
+            }
+          }, 300);
+        });
+
+        zoneJeu.appendChild(coeur);
+      }
+
+      placerUnCoeur();
+    }
+
+    function ouvrirJeuJour2() {
+      contenuModal.classList.add("jeu");
+      titreModal.textContent = "Jour 2 — Attrape les cœurs";
+
+      texteModal.innerHTML = `
+        <p class="intro-jeu">
+          Attrape les cinq cœurs pour débloquer ton premier bon, mon amour.
+        </p>
+
+        <p class="compteur-jeu" id="compteur-jeu">0 / 5 cœurs attrapés</p>
+
+        <div class="zone-jeu" id="zone-jeu"></div>
+
+        <p class="resultat-jeu" id="resultat-jeu"></p>
+      `;
+    }
+
+    function ouvrirSurprise(numeroJour) {
+
+  // Jour 1 (inchangé)
+  if (numeroJour === 1) {
+    jeuActif = false;
+    contenuModal.scrollTop = 0;
+    contenuModal.classList.remove("lettre", "jeu");
+    ouvrirLettreJour1();
+    modal.classList.add("visible");
+    modal.setAttribute("aria-hidden", "false");
+    return;
+  }
+
+  // Jour 2 (inchangé)
+  if (numeroJour === 2) {
+    jeuActif = false;
+    contenuModal.scrollTop = 0;
+    contenuModal.classList.remove("lettre", "jeu");
+    ouvrirJeuJour2();
+    modal.classList.add("visible");
+    modal.setAttribute("aria-hidden", "false");
+    requestAnimationFrame(lancerJeuCoeurs);
+    return;
+  }
+
+  // Jour 3 à Jour 19
+  if (numeroJour >= 3 && numeroJour <= 19) {
+    window.location.href = `jour${numeroJour}.html`;
+    return;
+  }
+
+}
+
+    function fermerLaModal() {
+      jeuActif = false;
+      modal.classList.remove("visible");
+      modal.setAttribute("aria-hidden", "true");
+    }
+
+    function construireCalendrier() {
+      const debut = convertirEnDateLocale(configuration.dateDebut);
+      const fin = convertirEnDateLocale(configuration.dateFin);
+
+      const maintenant = new Date();
+      const aujourdHui = new Date(
+        maintenant.getFullYear(),
+        maintenant.getMonth(),
+        maintenant.getDate()
+      );
+
+      const joursEcoules = nombreDeJoursEntre(debut, aujourdHui);
+      const nombreDeCases = nombreDeJoursEntre(debut, fin) + 1;
+      const modePreparation = modeAdminActif();
+
+      calendrier.innerHTML = "";
+
+      if (modePreparation) {
+        statutCalendrier.textContent =
+          "Mode préparation actif : toutes les cases sont visibles.";
+      } else if (joursEcoules < 0) {
+        statutCalendrier.textContent =
+          `La première surprise arrivera le ${afficherDateCourte(debut)}.`;
+      } else if (aujourdHui > fin) {
+        statutCalendrier.textContent =
+          "Toutes les surprises sont maintenant disponibles ♡";
+      } else {
+        statutCalendrier.textContent =
+          `Jour ${joursEcoules + 1} disponible aujourd’hui.`;
+      }
+
+      for (let index = 0; index < nombreDeCases; index++) {
+        const numeroJour = index + 1;
+        const dateDuJour = ajouterJours(debut, index);
+
+        const estOuvertNormalement = joursEcoules >= index;
+        const estOuvert = estOuvertNormalement || modePreparation;
+        const estEnApercu = modePreparation && !estOuvertNormalement;
+
+        const caseJour = document.createElement("button");
+        caseJour.className = `jour ${estOuvert ? "ouvert" : "verrouille"}`;
+        caseJour.type = "button";
+        caseJour.disabled = !estOuvert;
+
+        caseJour.innerHTML = `
+          <span class="numero">Jour ${numeroJour}</span>
+          <h2>${estOuvert ? "Ta surprise" : "Encore un peu…"}</h2>
+          <span class="date-jour">${afficherDateCourte(dateDuJour)}</span>
+
+          <span class="etat">
+            <span>${estOuvert ? "♡" : "🔒"}</span>
+            ${
+              estEnApercu
+                ? "Aperçu"
+                : estOuvert
+                  ? "Ouvrir"
+                  : "Verrouillé"
+            }
+          </span>
+
+          <span class="decoration">♡</span>
+        `;
+
+        if (estOuvert) {
+          caseJour.addEventListener("click", () => ouvrirSurprise(numeroJour));
+        }
+
+        calendrier.appendChild(caseJour);
+      }
+    }
+
+    function mettreAJourHeureEtCompteRebours() {
+      const maintenant = new Date();
+
+      document.getElementById("heure").textContent =
+        new Intl.DateTimeFormat("fr-FR", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit"
+        }).format(maintenant);
+
+      document.getElementById("date-actuelle").textContent =
+        afficherDateLongue(maintenant);
+
+      const dateRetrouvailles = new Date(configuration.dateRetrouvailles);
+      let difference = dateRetrouvailles.getTime() - maintenant.getTime();
+
+      if (difference <= 0) {
+        document.getElementById("jours").textContent = "0";
+        document.getElementById("heures").textContent = "00";
+        document.getElementById("minutes").textContent = "00";
+        document.getElementById("secondes").textContent = "00";
+        return;
+      }
+
+      const jours = Math.floor(difference / (1000 * 60 * 60 * 24));
+      difference %= 1000 * 60 * 60 * 24;
+
+      const heures = Math.floor(difference / (1000 * 60 * 60));
+      difference %= 1000 * 60 * 60;
+
+      const minutes = Math.floor(difference / (1000 * 60));
+      const secondes = Math.floor((difference % (1000 * 60)) / 1000);
+
+      document.getElementById("jours").textContent = jours;
+      document.getElementById("heures").textContent =
+        String(heures).padStart(2, "0");
+      document.getElementById("minutes").textContent =
+        String(minutes).padStart(2, "0");
+      document.getElementById("secondes").textContent =
+        String(secondes).padStart(2, "0");
+    }
+
+    function programmerMiseAJourDeMinuit() {
+      clearTimeout(minuterieMinuit);
+
+      const maintenant = new Date();
+      const prochainMinuit = new Date();
+
+      prochainMinuit.setHours(24, 0, 1, 0);
+
+      minuterieMinuit = setTimeout(() => {
+        construireCalendrier();
+        programmerMiseAJourDeMinuit();
+      }, prochainMinuit.getTime() - maintenant.getTime());
+    }
+
+    boutonAdmin.addEventListener("click", afficherPanneauAdmin);
+
+    fermerAdmin.addEventListener("click", fermerPanneauAdmin);
+
+    panneauAdmin.addEventListener("click", (event) => {
+      if (event.target === panneauAdmin) {
+        fermerPanneauAdmin();
+      }
+    });
+
+    formulaireAdmin.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      if (champMotDePasse.value === MOT_DE_PASSE_ADMIN) {
+        sessionStorage.setItem(CLE_MODE_ADMIN, "actif");
+        construireCalendrier();
+        afficherPanneauAdmin();
+      } else {
+        erreurAdmin.textContent = "Le code est incorrect.";
+      }
+    });
+
+    quitterAdmin.addEventListener("click", () => {
+      sessionStorage.removeItem(CLE_MODE_ADMIN);
+      construireCalendrier();
+      fermerPanneauAdmin();
+    });
+
+    resetBons.addEventListener("click", () => {
+      localStorage.removeItem(CLE_BONS_GAGNES);
+      afficherBons();
+    });
+
+    fermerModal.addEventListener("click", fermerLaModal);
+
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        fermerLaModal();
+      }
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+        construireCalendrier();
+        mettreAJourHeureEtCompteRebours();
+        afficherBons();
+      }
+    });
+
+    construireCalendrier();
+    afficherBons();
+    mettreAJourHeureEtCompteRebours();
+    programmerMiseAJourDeMinuit();
+
+    setInterval(mettreAJourHeureEtCompteRebours, 1000);
+  </script>
+</body>
+</html>

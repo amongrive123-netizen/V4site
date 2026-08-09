@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Jour 18 ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins,sans-serif;
+}
+
+html,
+body{
+
+width:100%;
+height:100%;
+
+overflow:hidden;
+
+background:#050505;
+
+color:white;
+
+}
+
+/* ========================= */
+
+#background{
+
+position:fixed;
+
+inset:0;
+
+background:
+
+radial-gradient(circle at center,#181818,#050505 75%);
+
+opacity:1;
+
+transition:2s;
+
+}
+
+/* ========================= */
+
+canvas{
+
+position:fixed;
+
+inset:0;
+
+pointer-events:none;
+
+}
+
+/* ========================= */
+
+#intro{
+
+position:fixed;
+
+inset:0;
+
+display:flex;
+
+justify-content:center;
+align-items:center;
+
+padding:25px;
+
+z-index:50;
+
+background:
+
+rgba(0,0,0,.72);
+
+backdrop-filter:blur(18px);
+
+transition:1.2s;
+
+}
+
+.card{
+
+width:min(450px,92%);
+
+padding:40px;
+
+border-radius:30px;
+
+background:
+
+rgba(255,255,255,.06);
+
+border:1px solid rgba(255,255,255,.08);
+
+backdrop-filter:blur(22px);
+
+text-align:center;
+
+box-shadow:
+
+0 30px 80px rgba(0,0,0,.45);
+
+}
+
+.card h1{
+
+font-size:2rem;
+
+margin-bottom:18px;
+
+}
+
+.card p{
+
+line-height:1.9;
+
+opacity:.9;
+
+margin-bottom:28px;
+
+}
+
+button{
+
+padding:16px 34px;
+
+border:none;
+
+border-radius:999px;
+
+cursor:pointer;
+
+font-size:1rem;
+
+font-weight:700;
+
+background:
+
+linear-gradient(135deg,#ff6ea9,#ffb16b);
+
+color:white;
+
+transition:.25s;
+
+}
+
+button:active{
+
+transform:scale(.96);
+
+}
+
+/* ========================= */
+
+#scene{
+
+position:fixed;
+
+inset:0;
+
+display:none;
+
+}
+
+/* ========================= */
+
+.polaroid{
+    position:absolute;
+
+    width:clamp(78px, 20vw, 170px);
+
+    background:#fff;
+
+    padding:clamp(5px, 1.2vw, 10px);
+    padding-bottom:clamp(18px, 3vw, 40px);
+
+    border-radius:8px;
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.35);
+
+    opacity:0;
+
+    left:0;
+    top:0;
+
+    transform:
+        translate(-50%,-50%)
+        translateY(-250px)
+        scale(.5)
+        rotate(0deg);
+
+    transition:
+        transform 1.2s cubic-bezier(.2,.8,.2,1),
+        opacity .8s;
+
+    z-index:5;
+}
+
+.polaroid img{
+    width:100%;
+    height:auto;
+
+    display:block;
+
+    aspect-ratio:1/1;
+
+    object-fit:cover;
+
+    border-radius:4px;
+}
+
+.polaroid img{
+
+width:100%;
+
+display:block;
+
+border-radius:4px;
+
+aspect-ratio:1/1;
+
+object-fit:cover;
+
+}
+
+/* ========================= */
+
+#message{
+
+position:fixed;
+
+left:50%;
+
+top:50%;
+
+transform:translate(-50%,-50%);
+
+width:min(90%,700px);
+
+text-align:center;
+
+font-size:1.25rem;
+
+line-height:2;
+
+opacity:0;
+
+transition:1s;
+
+z-index:30;
+
+}
+
+#message.show{
+
+opacity:1;
+
+}
+
+/* ========================= */
+
+#final{
+
+position:fixed;
+
+inset:0;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+flex-direction:column;
+
+gap:20px;
+
+background:
+
+rgba(0,0,0,.55);
+
+backdrop-filter:blur(18px);
+
+opacity:0;
+
+pointer-events:none;
+
+transition:1.5s;
+
+z-index:40;
+
+}
+
+#final.show{
+
+opacity:1;
+
+pointer-events:auto;
+
+}
+
+#final h1{
+
+font-size:3rem;
+
+}
+
+#final p{
+
+font-size:1.2rem;
+
+line-height:2;
+
+text-align:center;
+
+}
+
+#restart{
+
+margin-top:15px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="background"></div>
+
+<canvas id="particles"></canvas>
+
+<div id="intro">
+
+<div class="card">
+
+<h1>
+
+❤️ Jour 18
+
+</h1>
+
+<p>
+
+Tu es arrivée jusqu'ici...
+
+<br><br>
+
+Merci d'avoir vécu cette aventure avec moi.
+
+<br><br>
+
+Il reste une dernière chose...
+
+❤️
+
+</p>
+
+<button id="start">
+
+Commencer
+
+</button>
+
+</div>
+
+</div>
+
+<div id="scene"></div>
+
+<div id="message"></div>
+
+<div id="final">
+
+<h1>
+
+❤️ Je t'aime ❤️
+
+</h1>
+
+<p>
+
+Merci d'avoir ouvert chacun de ces 18 jours.
+
+<br><br>
+
+J'espère que cette aventure t'aura donné le sourire.
+
+<br><br>
+
+24 août 2026 ❤️
+
+</p>
+
+<button id="restart">
+
+Revoir le calendrier
+
+</button>
+
+</div><script>
+
+const intro=document.getElementById("intro");
+const scene=document.getElementById("scene");
+const message=document.getElementById("message");
+const finalScreen=document.getElementById("final");
+const restart=document.getElementById("restart");
+
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+
+let w,h,dpr;
+
+function resize(){
+
+dpr=Math.min(window.devicePixelRatio||1,2);
+
+w=window.innerWidth;
+h=window.innerHeight;
+
+canvas.width=w*dpr;
+canvas.height=h*dpr;
+
+canvas.style.width=w+"px";
+canvas.style.height=h+"px";
+
+ctx.setTransform(dpr,0,0,dpr,0,0);
+
+}
+
+resize();
+
+window.addEventListener("resize",resize);
+
+/* =======================
+      MUSIQUE
+======================= */
+
+const music=new Audio("assets/lady.mp3");
+
+music.loop=false;
+
+music.volume=.45;
+
+/* =======================
+      PHOTOS
+======================= */
+
+const photos=[];
+
+for(let i=1;i<=16;i++){
+
+const img=document.createElement("img");
+
+img.src=`assets/photo${String(i).padStart(2,"0")}.jpg`;
+
+photos.push(img);
+
+}
+
+/* =======================
+      ETAT
+======================= */
+
+let state="intro";
+
+let photoIndex=0;
+
+/* =======================
+      MESSAGE
+======================= */
+
+function showMessage(text){
+
+message.innerHTML=text;
+
+message.classList.add("show");
+
+clearTimeout(showMessage.timer);
+
+showMessage.timer=setTimeout(()=>{
+
+message.classList.remove("show");
+
+},2600);
+
+}
+
+/* =======================
+      PARTICULES
+======================= */
+
+const particles=[];
+
+for(let i=0;i<220;i++){
+
+particles.push({
+
+x:Math.random()*w,
+
+y:Math.random()*h,
+
+r:1+Math.random()*2,
+
+vx:(Math.random()-.5)*.35,
+
+vy:(Math.random()-.5)*.35,
+
+a:.15+Math.random()*.55
+
+});
+
+}
+
+/* =======================
+      INTRO
+======================= */
+
+document.getElementById("start").onclick=()=>{
+
+intro.style.opacity="0";
+
+setTimeout(()=>{
+
+intro.remove();
+
+scene.style.display="block";
+
+state="memories";
+
+music.play().catch(()=>{});
+
+showMessage("✨ Chaque souvenir raconte une histoire...");
+
+startPhotos();
+
+},900);
+
+};
+
+/* =======================
+      ANIMATION
+======================= */
+
+function update(){
+
+requestAnimationFrame(update);
+
+ctx.clearRect(0,0,w,h);
+
+ctx.shadowBlur=18;
+
+ctx.shadowColor="#ffffff";
+
+for(const p of particles){
+
+p.x+=p.vx;
+
+p.y+=p.vy;
+
+if(p.x<0)p.x=w;
+if(p.x>w)p.x=0;
+
+if(p.y<0)p.y=h;
+if(p.y>h)p.y=0;
+
+ctx.beginPath();
+
+ctx.fillStyle=`rgba(255,255,255,${p.a})`;
+
+ctx.arc(
+
+p.x,
+
+p.y,
+
+p.r,
+
+0,
+
+Math.PI*2
+
+);
+
+ctx.fill();
+
+}
+
+}
+
+update();/* ===========================
+      ARRIVÉE DES PHOTOS
+=========================== */
+
+/* ===========================
+      POSITIONS ADAPTATIVES
+=========================== */
+
+const positions=[];
+
+/*
+   16 photos = grille 4 x 4
+
+   Les positions sont calculées
+   en pourcentage de l'écran.
+*/
+
+for(let row=0;row<4;row++){
+
+    for(let col=0;col<4;col++){
+
+        positions.push({
+
+            x:12.5 + col*25,
+
+            y:13 + row*25
+
+        });
+
+    }
+
+}
+
+
+/* ===========================
+      CREATION POLAROID
+=========================== */
+
+function createPolaroid(index){
+
+    const card=document.createElement("div");
+
+    card.className="polaroid";
+
+    const img=document.createElement("img");
+
+    img.src=
+        `assets/photo${String(index+1).padStart(2,"0")}.jpg`;
+
+    img.alt=`Souvenir ${index+1}`;
+
+    card.appendChild(img);
+
+    scene.appendChild(card);
+
+    const pos=positions[index];
+
+    const angle=-5+Math.random()*10;
+
+    /*
+       Position centrale.
+       Le translate(-50%,-50%)
+       garantit que toute la carte
+       reste centrée sur son point.
+    */
+
+    card.style.left=pos.x+"%";
+    card.style.top=pos.y+"%";
+
+    requestAnimationFrame(()=>{
+
+        card.style.opacity="1";
+
+        card.style.transform=`
+
+            translate(-50%,-50%)
+
+            rotate(${angle}deg)
+
+            scale(1)
+
+        `;
+
+    });
+
+    return card;
+}
+
+const cards=[];
+
+function startPhotos(){
+
+showMessage("📸 Nos souvenirs...");
+
+let i=0;
+
+const timer=setInterval(()=>{
+
+cards.push(createPolaroid(i));
+
+navigator.vibrate?.(10);
+
+i++;
+
+if(i>=16){
+
+clearInterval(timer);
+
+setTimeout(startFinalStory,1800);
+
+}
+
+},850);
+
+}
+
+/* ===========================
+      TEXTE FINAL
+=========================== */
+
+function startFinalStory(){
+
+message.innerHTML=`
+
+Chaque photo...
+
+<br><br>
+
+me rappelle un moment
+
+que je n'oublierai jamais.
+
+`;
+
+message.classList.add("show");
+
+setTimeout(()=>{
+
+message.innerHTML=`
+
+Merci...
+
+<br><br>
+
+d'avoir vécu ces 18 jours.
+
+❤️
+
+`;
+
+},4200);
+
+setTimeout(()=>{
+
+message.classList.remove("show");
+
+finishJourney();
+
+},8000);
+
+}function finishJourney(){
+
+state="ending";
+
+/* Les Polaroids se rassemblent */
+
+cards.forEach((card,index)=>{
+
+const angle=(Math.PI*2/16)*index;
+
+const radius=Math.min(w,h)*0.28;
+
+const x=w/2+Math.cos(angle)*radius;
+const y=h/2+Math.sin(angle)*radius;
+
+card.style.transition="transform 2.5s cubic-bezier(.2,.8,.2,1)";
+
+card.style.transform=`
+
+translate(${x-85}px,${y-110}px)
+
+rotate(${(-20+index*2)}deg)
+
+scale(.9)
+
+`;
+
+});
+
+/* Texte final */
+
+setTimeout(()=>{
+
+finalScreen.classList.add("show");
+
+},2600);
+
+/* Petits cœurs */
+
+const hearts=[];
+
+for(let i=0;i<120;i++){
+
+hearts.push({
+
+x:Math.random()*w,
+
+y:h+Math.random()*400,
+
+vy:1+Math.random()*2,
+
+size:12+Math.random()*18,
+
+alpha:.3+Math.random()*.7,
+
+drift:(Math.random()-.5)*0.7
+
+});
+
+}
+
+function heartLoop(){
+
+ctx.clearRect(0,0,w,h);
+
+for(const hrt of hearts){
+
+hrt.y-=hrt.vy;
+
+hrt.x+=hrt.drift;
+
+ctx.font=`${hrt.size}px serif`;
+
+ctx.globalAlpha=hrt.alpha;
+
+ctx.fillText("❤️",hrt.x,hrt.y);
+
+}
+
+ctx.globalAlpha=1;
+
+requestAnimationFrame(heartLoop);
+
+}
+
+heartLoop();
+
+}
+
+/* Bouton retour */
+
+restart.onclick=()=>{
+
+document.body.animate([
+
+{opacity:1},
+
+{opacity:0}
+
+],{
+
+duration:1200,
+
+fill:"forwards"
+
+});
+
+setTimeout(()=>{
+
+window.location.href="calendrier.html";
+
+},1200);
+
+};
+
+</script>
+
+</body>
+
+</html>

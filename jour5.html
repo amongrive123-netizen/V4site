@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+>
+
+<title>Jour 5 ❤️</title>
+
+<style>
+
+/* =====================================================
+                    BASE
+===================================================== */
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,
+body{
+
+    width:100%;
+    min-height:100%;
+
+}
+
+body{
+
+    min-height:100vh;
+
+    overflow-x:hidden;
+
+    background:
+        radial-gradient(
+            circle at top,
+            #3a1629 0%,
+            #170914 45%,
+            #080308 100%
+        );
+
+    color:white;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:
+        24px 16px;
+
+}
+
+
+/* =====================================================
+                    CONTENEUR
+===================================================== */
+
+.container{
+
+    width:
+        min(
+            100%,
+            520px
+        );
+
+    text-align:center;
+
+}
+
+
+/* =====================================================
+                    TITRE
+===================================================== */
+
+.emoji{
+
+    font-size:
+        42px;
+
+    margin-bottom:
+        8px;
+
+}
+
+
+h1{
+
+    font-size:
+        clamp(
+            1.7rem,
+            7vw,
+            2.3rem
+        );
+
+    margin-bottom:
+        10px;
+
+}
+
+
+.subtitle{
+
+    font-size:
+        .92rem;
+
+    line-height:
+        1.65;
+
+    color:
+        rgba(
+            255,
+            235,
+            245,
+            .72
+        );
+
+    margin-bottom:
+        24px;
+
+}
+
+
+/* =====================================================
+                    PUZZLE
+===================================================== */
+
+#board{
+
+    width:
+        min(
+            88vw,
+            390px
+        );
+
+    aspect-ratio:
+        1 / 1;
+
+    margin:
+        0 auto;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    grid-template-rows:
+        repeat(3,1fr);
+
+    gap:
+        4px;
+
+    padding:
+        4px;
+
+    border-radius:
+        20px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .08
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            150,
+            200,
+            .18
+        );
+
+    box-shadow:
+
+        0 25px 70px
+        rgba(
+            0,
+            0,
+            0,
+            .45
+        ),
+
+        0 0 40px
+        rgba(
+            255,
+            50,
+            130,
+            .08
+        );
+
+    overflow:hidden;
+
+    transition:
+        transform .4s ease;
+
+    touch-action:
+        manipulation;
+
+}
+
+
+/* =====================================================
+                    PIECES
+===================================================== */
+
+.piece{
+
+    position:relative;
+
+    width:100%;
+    height:100%;
+
+    background-image:
+        url("assets/puzzle-photo.jpg");
+
+    background-repeat:
+        no-repeat;
+
+    background-size:
+        300% 300%;
+
+    border-radius:
+        7px;
+
+    cursor:pointer;
+
+    transition:
+
+        transform .16s ease,
+
+        filter .16s ease,
+
+        box-shadow .16s ease;
+
+    user-select:none;
+
+    -webkit-user-select:none;
+
+}
+
+
+/* =====================================================
+                PIÈCE SÉLECTIONNÉE
+===================================================== */
+
+.piece.selected{
+
+    transform:
+        scale(.92);
+
+    filter:
+        brightness(1.28);
+
+    box-shadow:
+
+        0 0 0 3px
+        rgba(
+            255,
+            105,
+            170,
+            .9
+        ),
+
+        0 0 22px
+        rgba(
+            255,
+            70,
+            150,
+            .45
+        );
+
+    z-index:3;
+
+}
+
+
+/* =====================================================
+                    TEXTE
+===================================================== */
+
+#moves{
+
+    margin-top:
+        18px;
+
+    font-size:
+        .85rem;
+
+    color:
+        rgba(
+            255,
+            220,
+            235,
+            .65
+        );
+
+}
+
+
+/* =====================================================
+                    VICTOIRE
+===================================================== */
+
+#victory{
+
+    display:none;
+
+    margin-top:
+        25px;
+
+    padding:
+        25px 20px;
+
+    border-radius:
+        24px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .055
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            130,
+            180,
+            .16
+        );
+
+    box-shadow:
+        0 25px 70px
+        rgba(
+            0,
+            0,
+            0,
+            .4
+        );
+
+    animation:
+        victoryAppear
+        .7s
+        cubic-bezier(
+            .2,
+            .8,
+            .2,
+            1
+        );
+
+}
+
+
+@keyframes victoryAppear{
+
+    from{
+
+        opacity:0;
+
+        transform:
+            translateY(20px)
+            scale(.95);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+
+#victory h2{
+
+    font-size:
+        1.45rem;
+
+    margin-bottom:
+        10px;
+
+}
+
+
+#victory p{
+
+    font-size:
+        .9rem;
+
+    line-height:
+        1.7;
+
+    opacity:
+        .78;
+
+    margin-bottom:
+        20px;
+
+}
+
+
+#victory a{
+
+    display:
+        inline-block;
+
+    padding:
+        14px 23px;
+
+    border-radius:
+        999px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff4f95,
+            #ff78b8
+        );
+
+    color:white;
+
+    text-decoration:none;
+
+    font-weight:700;
+
+    font-size:
+        .88rem;
+
+}
+
+
+/* =====================================================
+                  CŒURS VICTOIRE
+===================================================== */
+
+.victory-heart{
+
+    position:fixed;
+
+    z-index:999;
+
+    pointer-events:none;
+
+    font-size:
+        20px;
+
+    transform:
+        translate(-50%,-50%);
+
+    opacity:1;
+
+    transition:
+
+        transform
+        1.2s
+        cubic-bezier(
+            .12,
+            .8,
+            .25,
+            1
+        ),
+
+        opacity
+        1.2s ease;
+
+}
+
+
+/* =====================================================
+                    MOBILE
+===================================================== */
+
+@media(max-width:600px){
+
+    body{
+
+        padding:
+            18px 12px;
+
+        align-items:
+            flex-start;
+
+        padding-top:
+            max(
+                25px,
+                env(safe-area-inset-top)
+            );
+
+    }
+
+
+    .emoji{
+
+        font-size:
+            36px;
+
+    }
+
+
+    h1{
+
+        font-size:
+            1.65rem;
+
+    }
+
+
+    .subtitle{
+
+        font-size:
+            .85rem;
+
+        margin-bottom:
+            20px;
+
+    }
+
+
+    #board{
+
+        width:
+            min(
+                92vw,
+                370px
+            );
+
+    }
+
+
+    #victory{
+
+        margin-top:
+            20px;
+
+        padding:
+            22px 17px;
+
+    }
+
+}
+
+
+/* =====================================================
+                PETITS TÉLÉPHONES
+===================================================== */
+
+@media(
+    max-width:600px
+)
+and (
+    max-height:700px
+){
+
+    body{
+
+        padding-top:
+            16px;
+
+    }
+
+
+    .emoji{
+
+        font-size:
+            30px;
+
+    }
+
+
+    h1{
+
+        font-size:
+            1.45rem;
+
+    }
+
+
+    .subtitle{
+
+        margin-bottom:
+            14px;
+
+    }
+
+
+    #board{
+
+        width:
+            min(
+                88vw,
+                320px
+            );
+
+    }
+
+
+    #moves{
+
+        margin-top:
+            12px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <div class="emoji">
+        🧩
+    </div>
+
+
+    <h1>
+        Reconstitue<br>
+        notre photo
+    </h1>
+
+
+    <div class="subtitle">
+
+        Échange les morceaux jusqu'à
+        retrouver notre photo.
+
+        <br><br>
+
+        Quand tu réussiras,
+        tu gagneras ton deuxième bon. ❤️
+
+    </div>
+
+
+    <div id="board"></div>
+
+
+    <div id="moves">
+        Échanges : 0
+    </div>
+
+
+    <div id="victory">
+
+        <h2>
+            🎉 Bravo mon amour !
+        </h2>
+
+        <p>
+
+            Tu as réussi à reconstituer
+            notre photo. ❤️
+
+            <br><br>
+
+            Tu viens de débloquer
+            ton deuxième bon. ❤️
+
+        </p>
+
+        <a href="calendrier.html">
+            Retour au calendrier ♡
+        </a>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+/* =====================================================
+                    ELEMENTS
+===================================================== */
+
+const board =
+    document.getElementById(
+        "board"
+    );
+
+
+const movesText =
+    document.getElementById(
+        "moves"
+    );
+
+
+const victory =
+    document.getElementById(
+        "victory"
+    );
+
+
+/* =====================================================
+                    ETAT
+===================================================== */
+
+let pieces = [];
+
+let selected = null;
+
+let moves = 0;
+
+let finished = false;
+
+
+/* =====================================================
+                AUDIO JAVASCRIPT
+===================================================== */
+
+let audioContext = null;
+
+
+/*
+    Le navigateur autorise
+    l'audio après une interaction
+    avec la page.
+*/
+
+function initAudio(){
+
+    if(
+        !audioContext
+    ){
+
+        audioContext =
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+
+    }
+
+
+    if(
+        audioContext.state ===
+        "suspended"
+    ){
+
+        audioContext.resume();
+
+    }
+
+}
+
+
+/* =====================================================
+                    CLIC
+===================================================== */
+
+function playClick(){
+
+    initAudio();
+
+
+    const now =
+        audioContext.currentTime;
+
+
+    const oscillator =
+        audioContext.createOscillator();
+
+
+    const gain =
+        audioContext.createGain();
+
+
+    oscillator.type =
+        "sine";
+
+
+    oscillator.frequency.setValueAtTime(
+        520,
+        now
+    );
+
+
+    oscillator.frequency.exponentialRampToValueAtTime(
+        370,
+        now + .07
+    );
+
+
+    gain.gain.setValueAtTime(
+        .0001,
+        now
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        .11,
+        now + .008
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        .0001,
+        now + .08
+    );
+
+
+    oscillator.connect(
+        gain
+    );
+
+
+    gain.connect(
+        audioContext.destination
+    );
+
+
+    oscillator.start(
+        now
+    );
+
+
+    oscillator.stop(
+        now + .09
+    );
+
+}
+
+
+/* =====================================================
+                  ÉCHANGE
+===================================================== */
+
+function playSwap(){
+
+    initAudio();
+
+
+    const now =
+        audioContext.currentTime;
+
+
+    const oscillator =
+        audioContext.createOscillator();
+
+
+    const gain =
+        audioContext.createGain();
+
+
+    oscillator.type =
+        "triangle";
+
+
+    oscillator.frequency.setValueAtTime(
+        260,
+        now
+    );
+
+
+    oscillator.frequency.exponentialRampToValueAtTime(
+        520,
+        now + .12
+    );
+
+
+    gain.gain.setValueAtTime(
+        .0001,
+        now
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        .13,
+        now + .012
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        .0001,
+        now + .14
+    );
+
+
+    oscillator.connect(
+        gain
+    );
+
+
+    gain.connect(
+        audioContext.destination
+    );
+
+
+    oscillator.start(
+        now
+    );
+
+
+    oscillator.stop(
+        now + .15
+    );
+
+}
+
+
+/* =====================================================
+                  ANNULATION
+===================================================== */
+
+function playCancel(){
+
+    initAudio();
+
+
+    const now =
+        audioContext.currentTime;
+
+
+    const oscillator =
+        audioContext.createOscillator();
+
+
+    const gain =
+        audioContext.createGain();
+
+
+    oscillator.type =
+        "sine";
+
+
+    oscillator.frequency.setValueAtTime(
+        340,
+        now
+    );
+
+
+    oscillator.frequency.exponentialRampToValueAtTime(
+        230,
+        now + .08
+    );
+
+
+    gain.gain.setValueAtTime(
+        .0001,
+        now
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        .07,
+        now + .008
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        .0001,
+        now + .09
+    );
+
+
+    oscillator.connect(
+        gain
+    );
+
+
+    gain.connect(
+        audioContext.destination
+    );
+
+
+    oscillator.start(
+        now
+    );
+
+
+    oscillator.stop(
+        now + .1
+    );
+
+}
+
+
+/* =====================================================
+              SON DE VICTOIRE
+===================================================== */
+
+function playVictorySound(){
+
+    initAudio();
+
+
+    const now =
+        audioContext.currentTime;
+
+
+    const notes = [
+
+        {
+            frequency:261.63,
+            time:0
+        },
+
+        {
+            frequency:329.63,
+            time:.13
+        },
+
+        {
+            frequency:392,
+            time:.26
+        },
+
+        {
+            frequency:523.25,
+            time:.43
+        }
+
+    ];
+
+
+    notes.forEach(
+        note => {
+
+            const oscillator =
+                audioContext.createOscillator();
+
+
+            const gain =
+                audioContext.createGain();
+
+
+            oscillator.type =
+                "sine";
+
+
+            oscillator.frequency.setValueAtTime(
+                note.frequency,
+                now + note.time
+            );
+
+
+            gain.gain.setValueAtTime(
+                .0001,
+                now + note.time
+            );
+
+
+            gain.gain.exponentialRampToValueAtTime(
+                .15,
+                now + note.time + .025
+            );
+
+
+            gain.gain.exponentialRampToValueAtTime(
+                .0001,
+                now + note.time + .38
+            );
+
+
+            oscillator.connect(
+                gain
+            );
+
+
+            gain.connect(
+                audioContext.destination
+            );
+
+
+            oscillator.start(
+                now + note.time
+            );
+
+
+            oscillator.stop(
+                now + note.time + .4
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+              CREATION DES PIÈCES
+===================================================== */
+
+function createPieces(){
+
+    pieces = [];
+
+    selected = null;
+
+    moves = 0;
+
+    finished = false;
+
+
+    board.innerHTML = "";
+
+
+    movesText.textContent =
+        "Échanges : 0";
+
+
+    for(
+        let i = 0;
+        i < 9;
+        i++
+    ){
+
+        pieces.push(
+            i
+        );
+
+    }
+
+
+    shufflePieces();
+
+    drawBoard();
+
+}
+
+
+/* =====================================================
+                  MÉLANGE
+===================================================== */
+
+function shufflePieces(){
+
+    for(
+        let i = 0;
+        i < 60;
+        i++
+    ){
+
+        const a =
+            Math.floor(
+                Math.random() * 9
+            );
+
+
+        const b =
+            Math.floor(
+                Math.random() * 9
+            );
+
+
+        [
+            pieces[a],
+            pieces[b]
+        ] = [
+            pieces[b],
+            pieces[a]
+        ];
+
+    }
+
+
+    /*
+        On vérifie que le puzzle
+        n'est pas déjà terminé.
+    */
+
+    let solved = true;
+
+
+    for(
+        let i = 0;
+        i < 9;
+        i++
+    ){
+
+        if(
+            pieces[i] !== i
+        ){
+
+            solved = false;
+
+            break;
+
+        }
+
+    }
+
+
+    if(
+        solved
+    ){
+
+        shufflePieces();
+
+    }
+
+}
+
+
+/* =====================================================
+                    AFFICHAGE
+===================================================== */
+
+function drawBoard(){
+
+    board.innerHTML = "";
+
+
+    pieces.forEach(
+        (value,index) => {
+
+            const piece =
+                document.createElement(
+                    "div"
+                );
+
+
+            piece.className =
+                "piece";
+
+
+            if(
+                selected === index
+            ){
+
+                piece.classList.add(
+                    "selected"
+                );
+
+            }
+
+
+            /*
+                Position de la partie
+                dans l'image complète.
+
+                0 1 2
+                3 4 5
+                6 7 8
+            */
+
+            const x =
+                value % 3;
+
+
+            const y =
+                Math.floor(
+                    value / 3
+                );
+
+
+            piece.style.backgroundPosition =
+                `${x * 50}% ${y * 50}%`;
+
+
+            piece.addEventListener(
+                "click",
+                () => {
+
+                    selectPiece(
+                        index
+                    );
+
+                }
+            );
+
+
+            board.appendChild(
+                piece
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+                  SÉLECTION
+===================================================== */
+
+function selectPiece(index){
+
+    if(
+        finished
+    ){
+
+        return;
+
+    }
+
+
+    /*
+        Première pièce.
+    */
+
+    if(
+        selected === null
+    ){
+
+        selected =
+            index;
+
+
+        playClick();
+
+
+        drawBoard();
+
+
+        return;
+
+    }
+
+
+    /*
+        Même pièce :
+        annulation.
+    */
+
+    if(
+        selected === index
+    ){
+
+        selected =
+            null;
+
+
+        playCancel();
+
+
+        drawBoard();
+
+
+        return;
+
+    }
+
+
+    /*
+        Échange.
+    */
+
+    [
+        pieces[selected],
+        pieces[index]
+
+    ] = [
+
+        pieces[index],
+        pieces[selected]
+
+    ];
+
+
+    selected =
+        null;
+
+
+    moves++;
+
+
+    movesText.textContent =
+        "Échanges : " +
+        moves;
+
+
+    playSwap();
+
+
+    drawBoard();
+
+
+    checkVictory();
+
+}
+
+
+/* =====================================================
+              VÉRIFICATION VICTOIRE
+===================================================== */
+
+function checkVictory(){
+
+    for(
+        let i = 0;
+        i < 9;
+        i++
+    ){
+
+        if(
+            pieces[i] !== i
+        ){
+
+            return;
+
+        }
+
+    }
+
+
+    finished =
+        true;
+
+
+    setTimeout(
+        victoryAnimation,
+        350
+    );
+
+}
+
+
+/* =====================================================
+              ANIMATION VICTOIRE
+===================================================== */
+
+function victoryAnimation(){
+
+    board.style.pointerEvents =
+        "none";
+
+
+    playVictorySound();
+
+
+    if(
+        navigator.vibrate
+    ){
+
+        navigator.vibrate(
+            [
+                40,
+                30,
+                70
+            ]
+        );
+
+    }
+
+
+    board.style.transform =
+        "scale(1.045)";
+
+
+    setTimeout(
+        () => {
+
+            board.style.transform =
+                "scale(1)";
+
+        },
+        400
+    );
+
+
+    createVictoryHearts();
+
+
+    /*
+        Déblocage du bon.
+    */
+
+    let bons =
+        JSON.parse(
+            localStorage.getItem(
+                "calendrier-ines-bons-gagnes"
+            )
+        )
+        || [];
+
+
+    if(
+        !bons.includes(
+            "massage"
+        )
+    ){
+
+        bons.push(
+            "massage"
+        );
+
+
+        localStorage.setItem(
+            "calendrier-ines-bons-gagnes",
+            JSON.stringify(
+                bons
+            )
+        );
+
+    }
+
+
+    setTimeout(
+        () => {
+
+            victory.style.display =
+                "block";
+
+        },
+        650
+    );
+
+}
+
+
+/* =====================================================
+              PLUIE DE CŒURS
+===================================================== */
+
+function createVictoryHearts(){
+
+    const total =
+        22;
+
+
+    for(
+        let i = 0;
+        i < total;
+        i++
+    ){
+
+        const heart =
+            document.createElement(
+                "div"
+            );
+
+
+        heart.className =
+            "victory-heart";
+
+
+        heart.textContent =
+            Math.random() > .5
+                ? "❤️"
+                : "💖";
+
+
+        heart.style.left =
+            "50%";
+
+
+        heart.style.top =
+            "50%";
+
+
+        heart.style.fontSize =
+            (
+                14 +
+                Math.random() * 17
+            )
+            + "px";
+
+
+        document.body.appendChild(
+            heart
+        );
+
+
+        const angle =
+            Math.random()
+            *
+            Math.PI
+            *
+            2;
+
+
+        const distance =
+            80 +
+            Math.random() *
+            190;
+
+
+        const x =
+            Math.cos(angle)
+            * distance;
+
+
+        const y =
+            Math.sin(angle)
+            * distance;
+
+
+        requestAnimationFrame(
+            () => {
+
+                heart.style.transform =
+
+                    `translate(
+                        calc(-50% + ${x}px),
+                        calc(-50% + ${y}px)
+                    )
+                    rotate(
+                        ${Math.random()*360}deg
+                    )`;
+
+                heart.style.opacity =
+                    "0";
+
+            }
+        );
+
+
+        setTimeout(
+            () => {
+
+                heart.remove();
+
+            },
+            1400
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+                  DÉMARRAGE
+===================================================== */
+
+createPieces();
+
+</script>
+
+</body>
+
+</html>

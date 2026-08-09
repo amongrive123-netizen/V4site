@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Jour 8 ♡</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Poppins",sans-serif;
+}
+
+body{
+
+min-height:100vh;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+padding:20px;
+
+background:
+radial-gradient(circle at top left,#ffd8ea,transparent 28rem),
+radial-gradient(circle at bottom right,#ffc7df,transparent 24rem),
+linear-gradient(135deg,#fffafd,#ffeef6);
+
+}
+
+.card{
+
+width:100%;
+max-width:450px;
+
+background:white;
+
+border-radius:28px;
+
+padding:30px;
+
+text-align:center;
+
+box-shadow:0 18px 45px rgba(0,0,0,.08);
+
+}
+
+.badge{
+
+display:inline-block;
+
+padding:8px 16px;
+
+border-radius:999px;
+
+background:#ffe4f1;
+
+color:#ff4f95;
+
+font-weight:700;
+
+margin-bottom:18px;
+
+}
+
+h1{
+
+font-size:2.3rem;
+
+line-height:1.1;
+
+margin-bottom:15px;
+
+}
+
+h1 span{
+
+color:#ff4f95;
+
+}
+
+.description{
+
+color:#777;
+
+line-height:1.7;
+
+margin-bottom:30px;
+
+}
+
+.progress{
+
+height:10px;
+
+background:#ffd7ea;
+
+border-radius:999px;
+
+overflow:hidden;
+
+margin-bottom:10px;
+
+}
+
+.bar{
+
+height:100%;
+
+width:0%;
+
+background:#ff4f95;
+
+transition:.35s;
+
+}
+
+.counter{
+
+font-size:.9rem;
+
+color:#888;
+
+margin-bottom:30px;
+
+font-weight:600;
+
+}
+
+.question{
+
+font-size:1.4rem;
+
+font-weight:700;
+
+line-height:1.5;
+
+margin-bottom:25px;
+
+min-height:80px;
+
+}
+
+.answers{
+
+display:grid;
+
+gap:15px;
+
+}
+
+.answer{
+
+padding:17px;
+
+border:none;
+
+border-radius:16px;
+
+background:#fff4f8;
+
+font-size:1rem;
+
+font-weight:700;
+
+cursor:pointer;
+
+transition:.25s;
+
+}
+
+.answer:hover{
+
+background:#ffd8ea;
+
+}
+
+.answer:active{
+
+transform:scale(.98);
+
+}
+
+.feedback{
+
+margin-top:25px;
+
+min-height:70px;
+
+font-size:1rem;
+
+line-height:1.8;
+
+color:#555;
+
+}
+
+.back{
+
+display:none;
+
+margin-top:25px;
+
+padding:16px;
+
+background:#ff4f95;
+
+color:white;
+
+border-radius:16px;
+
+text-decoration:none;
+
+font-weight:700;
+
+}
+
+.good{
+
+outline:3px solid #ff4f95;
+
+background:#ffe0ef !important;
+
+transform:scale(1.02);
+
+}
+
+</style>
+
+<base target="_blank">
+</head>
+
+<body>
+
+<div class="card">
+
+<div class="badge">
+
+😂 Jour 8
+
+</div>
+
+<h1>
+
+Qui de<br>
+
+<span>nous deux ?</span>
+
+</h1>
+
+<p class="description">
+
+Réponds instinctivement... voyons si on est d'accord. 😏❤️
+
+</p>
+
+<div class="progress">
+
+<div class="bar" id="bar"></div>
+
+</div>
+
+<div class="counter" id="counter">
+
+Question 1 / 15
+
+</div>
+
+<div class="question" id="question">
+
+Chargement...
+
+</div>
+
+<div class="answers" id="answers">
+
+</div>
+
+<div class="feedback" id="feedback">
+
+</div>
+
+<a href="calendrier.html" class="back" id="back">
+
+Retour au calendrier ♡
+
+</a>
+
+</div><script>
+/* ===== BRUITAGES ===== */
+const AudioCtx=window.AudioContext||window.webkitAudioContext;
+let audioCtx;
+function initAudio(){if(!audioCtx)audioCtx=new AudioCtx();}
+function playClick(){initAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.setValueAtTime(700,audioCtx.currentTime);o.frequency.exponentialRampToValueAtTime(950,audioCtx.currentTime+0.05);g.gain.setValueAtTime(0.05,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.08);o.start();o.stop(audioCtx.currentTime+0.1);}
+function playCorrect(){initAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.setValueAtTime(523,audioCtx.currentTime);o.frequency.exponentialRampToValueAtTime(784,audioCtx.currentTime+0.12);g.gain.setValueAtTime(0.06,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.2);o.start();o.stop(audioCtx.currentTime+0.25);}
+function playWrong(){initAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='triangle';o.frequency.setValueAtTime(320,audioCtx.currentTime);o.frequency.linearRampToValueAtTime(200,audioCtx.currentTime+0.18);g.gain.setValueAtTime(0.04,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.22);o.start();o.stop(audioCtx.currentTime+0.25);}
+function playSpecial(){initAudio();[440,554,659,880,1109].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,audioCtx.currentTime+i*0.12);g.gain.linearRampToValueAtTime(0.07,audioCtx.currentTime+i*0.12+0.03);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+i*0.12+0.55);o.start(audioCtx.currentTime+i*0.12);o.stop(audioCtx.currentTime+i*0.12+0.65);});}
+function playEnd(){initAudio();[523,659,784,1047].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,audioCtx.currentTime+i*0.1);g.gain.linearRampToValueAtTime(0.08,audioCtx.currentTime+i*0.1+0.02);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+i*0.1+0.5);o.start(audioCtx.currentTime+i*0.1);o.stop(audioCtx.currentTime+i*0.1+0.6);});}
+
+
+
+const questions = [
+
+{
+q:"Qui est le plus jaloux ? 👀",
+answers:["Moi ❤️","Toi ❤️"],
+correct:0,
+comment:"😭 Bon... j'avoue, c'est clairement moi."
+},
+
+{
+q:'Qui dit le plus souvent "Je t\'aime" ? ❤️',
+answers:["Moi ❤️","Toi ❤️"],
+correct:0,
+comment:"Je crois que je te le répète tout le temps. ❤️"
+},
+
+{
+q:"Qui fait le plus de câlins ? 🤗",
+answers:["Moi ❤️","Toi ❤️"],
+correct:0,
+comment:"Je pourrais te faire des câlins toute la journée."
+},
+
+{
+q:"Qui est le plus têtu ? 😂",
+answers:["Moi ❤️","Toi ❤️"],
+correct:1,
+comment:"😂 Désolé mon amour... là c'est toi."
+},
+
+{
+q:"Qui est le plus gourmand ? 🍕",
+answers:["Moi ❤️","Toi ❤️"],
+correct:1,
+comment:"🍦 Impossible de te battre là-dessus."
+},
+
+{
+q:"Qui met le plus de temps à se préparer ? ⏳",
+answers:["Moi ❤️","Toi ❤️"],
+correct:1,
+comment:"Je t'attends toujours un petit peu. 😂"
+},
+
+{
+q:"Qui envoie le plus de messages ? 📱",
+answers:["Moi ❤️","Les deux ❤️"],
+correct:1,
+comment:"❤️ On est tous les deux aussi bavards."
+},
+
+{
+q:"Qui fait le plus rire l'autre ? 😂",
+answers:["Moi ❤️","Toi ❤️"],
+correct:0,
+comment:"😎 Bon... j'abuse peut-être un peu."
+},
+
+{
+q:"Qui est le plus romantique ? 🌹",
+answers:["Moi ❤️","Les deux ❤️"],
+correct:1,
+comment:"❤️ On fait tous les deux de notre mieux."
+},
+
+{
+q:"Qui s'endort le plus facilement ? 😴",
+answers:["Moi ❤️","Toi ❤️"],
+correct:1,
+comment:"😂 Tu gagnes largement celle-là."
+},
+
+{
+q:"Qui est le plus sensible ? 🥹",
+answers:["Moi ❤️","Les deux ❤️"],
+correct:1,
+comment:"❤️ On a tous les deux un grand cœur."
+},
+
+{
+q:"Qui est le plus impatient ? ⌛",
+answers:["Moi ❤️","Toi ❤️"],
+correct:0,
+comment:"😭 Oui... surtout quand il s'agit de te revoir."
+},
+
+{
+q:"Qui ferait le premier pas après une dispute ? ❤️",
+answers:["Moi ❤️","Toi ❤️"],
+correct:0,
+comment:"Parce que je déteste rester fâché avec toi."
+},
+
+{
+q:"Qui manque le plus à l'autre en ce moment ? 🥺",
+answers:["Moi ❤️","Les deux ❤️"],
+correct:1,
+comment:"❤️ On se manque énormément tous les deux."
+},
+
+{
+q:"Qui aime le plus l'autre ? ❤️",
+answers:["Haroun ❤️","Inès ❤️"],
+correct:-1,
+special:true
+}
+
+];
+
+let index = 0;
+
+const question = document.getElementById("question");
+const answers = document.getElementById("answers");
+const feedback = document.getElementById("feedback");
+const counter = document.getElementById("counter");
+const bar = document.getElementById("bar");
+const back = document.getElementById("back");
+
+loadQuestion();
+
+function loadQuestion(){
+
+const q = questions[index];
+
+counter.textContent=`Question ${index+1} / ${questions.length}`;
+
+bar.style.width=((index)/questions.length)*100+"%";
+
+question.textContent=q.q;
+
+feedback.innerHTML="";
+
+answers.innerHTML="";
+
+q.answers.forEach((txt,i)=>{
+
+const btn=document.createElement("button");
+
+btn.className="answer";
+
+btn.textContent=txt;
+
+btn.onclick=()=>{playClick();if(navigator.vibrate)navigator.vibrate(6);answer(i);};
+
+answers.appendChild(btn);
+
+});
+
+}
+
+function answer(choice){
+
+const q=questions[index];
+
+document.querySelectorAll(".answer").forEach(b=>b.disabled=true);
+
+if(q.special){
+
+playSpecial();
+if(navigator.vibrate)navigator.vibrate([40,30,40,30,60]);
+
+feedback.innerHTML=`
+
+<h2 style="color:#ff4f95;margin-bottom:15px;">
+❤️
+</h2>
+
+<p>
+
+Tu sais...
+
+<br><br>
+
+J'ai réfléchi longtemps à cette question.
+
+<br><br>
+
+Et je crois qu'il n'existe aucune bonne réponse.
+
+<br><br>
+
+<strong>
+
+Parce qu'on s'aime autant l'un que l'autre. ❤️
+
+</strong>
+
+<br><br>
+
+Et c'est exactement ce qui rend notre histoire si belle.
+
+<br><br>
+
+Je t'aime énormément, mon amour. ♡
+
+</p>
+
+`;
+
+setTimeout(()=>{
+
+finish();
+
+},6000);
+
+return;
+
+}
+
+document.querySelectorAll(".answer")[q.correct].classList.add("good");
+
+if(choice===q.correct){playCorrect();}else{playWrong();}
+
+feedback.innerHTML=q.comment;
+
+setTimeout(()=>{
+
+index++;
+
+if(index>=questions.length){
+
+finish();
+
+}else{
+
+loadQuestion();
+
+}
+
+},1800);
+
+}
+
+function finish(){
+
+playEnd();
+if(navigator.vibrate)navigator.vibrate([50,30,50,30,100]);
+
+bar.style.width="100%";
+
+answers.innerHTML="";
+
+counter.textContent="Terminé ❤️";
+
+back.style.display="block";
+
+}
+
+</script>
+
+</body>
+</html>

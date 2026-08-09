@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ff4f95">
+
+<title>Jour 7</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Poppins",sans-serif;
+}
+
+body{
+
+background:
+radial-gradient(circle at top left,#ffd6e9,transparent 28rem),
+radial-gradient(circle at bottom right,#ffc7df,transparent 24rem),
+linear-gradient(135deg,#fffafd,#ffeef6);
+
+min-height:100vh;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+padding:20px;
+
+overflow:hidden;
+
+}
+
+/* ---------- ambiance en fond : coeurs qui montent doucement ---------- */
+
+#ambient{
+position:fixed;
+inset:0;
+z-index:-1;
+overflow:hidden;
+pointer-events:none;
+}
+
+.amb-heart{
+position:absolute;
+bottom:-40px;
+color:#ff8fb8;
+--op:.3;
+animation:drift linear infinite;
+}
+
+@keyframes drift{
+0%{ transform:translateY(0) scale(.9); opacity:0; }
+12%{ opacity:var(--op); }
+88%{ opacity:var(--op); }
+100%{ transform:translateY(-115vh) scale(1.05); opacity:0; }
+}
+
+.card{
+
+width:100%;
+max-width:430px;
+
+background:rgba(255,255,255,.82);
+
+backdrop-filter:blur(12px);
+
+border-radius:28px;
+
+padding:28px;
+
+text-align:center;
+
+box-shadow:0 18px 45px rgba(0,0,0,.08);
+
+animation:cardIn .6s cubic-bezier(.22,.8,.22,1);
+
+}
+
+@keyframes cardIn{
+from{ opacity:0; transform:translateY(16px) scale(.97); }
+to{ opacity:1; transform:translateY(0) scale(1); }
+}
+
+.badge{
+
+display:inline-flex;
+align-items:center;
+gap:6px;
+
+padding:8px 16px;
+
+border-radius:999px;
+
+background:#ffe5f2;
+
+color:#ff4f95;
+
+font-weight:700;
+
+margin-bottom:18px;
+
+}
+
+.badge-icon{
+width:15px;
+height:15px;
+}
+
+h1{
+
+font-size:2.4rem;
+
+line-height:1.1;
+
+margin-bottom:15px;
+
+}
+
+h1 span{
+
+color:#ff4f95;
+
+}
+
+.description{
+
+color:#777;
+
+line-height:1.7;
+
+margin-bottom:30px;
+
+}
+
+.inline-heart{
+width:.85em;
+height:.85em;
+color:#ff4f95;
+vertical-align:-.05em;
+}
+
+/* ---------- bocal ---------- */
+
+.jar{
+
+width:170px;
+height:187px;
+
+margin:15px auto;
+
+animation:float 3s ease-in-out infinite alternate;
+
+user-select:none;
+
+}
+
+.jar svg{
+
+width:100%;
+height:100%;
+display:block;
+
+filter:drop-shadow(0 16px 18px rgba(255,79,149,.28));
+
+}
+
+.jar .reflet{
+animation:shimmer 3.2s ease-in-out infinite;
+}
+
+.jar .heart-decal{
+transform-box:fill-box;
+transform-origin:center;
+animation:heartbeat 2.3s ease-in-out infinite;
+}
+
+@keyframes float{
+
+from{
+
+transform:translateY(0) rotate(-1.2deg);
+
+}
+
+to{
+
+transform:translateY(-10px) rotate(1.2deg);
+
+}
+
+}
+
+@keyframes shimmer{
+0%,100%{ opacity:.3; }
+50%{ opacity:.7; }
+}
+
+@keyframes heartbeat{
+0%,100%{ transform:scale(1); }
+50%{ transform:scale(1.1); }
+}
+
+.note{
+
+background:#fff8fb;
+
+border:2px dashed #ffb8d4;
+
+border-radius:18px;
+
+padding:22px;
+
+min-height:140px;
+
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+gap:8px;
+
+text-align:center;
+
+font-size:1.05rem;
+
+line-height:1.8;
+
+color:#444;
+
+margin-bottom:25px;
+
+transition:transform .4s cubic-bezier(.22,.8,.22,1), opacity .4s ease;
+
+}
+
+.note-icon{
+width:26px;
+height:26px;
+color:#ff4f95;
+flex-shrink:0;
+}
+
+.note-text{
+max-width:100%;
+}
+
+button{
+
+width:100%;
+
+padding:16px;
+
+border:none;
+
+border-radius:16px;
+
+background:#ff4f95;
+
+color:white;
+
+font-size:1rem;
+
+font-weight:700;
+
+cursor:pointer;
+
+display:flex;
+align-items:center;
+justify-content:center;
+gap:8px;
+
+transition:.25s;
+
+}
+
+button:active{
+
+transform:scale(.98);
+
+}
+
+button:disabled{
+
+cursor:default;
+
+}
+
+.btn-icon{
+width:18px;
+height:18px;
+flex-shrink:0;
+}
+
+.progress{
+
+width:100%;
+height:8px;
+
+background:#ffe5f2;
+
+border-radius:999px;
+
+overflow:hidden;
+
+margin-top:18px;
+
+}
+
+.progress-fill{
+
+height:100%;
+width:0%;
+
+background:linear-gradient(90deg,#ff8fb8,#ff4f95);
+
+border-radius:999px;
+
+transition:width .5s cubic-bezier(.22,.8,.22,1);
+
+}
+
+.counter{
+
+margin-top:10px;
+
+color:#999;
+
+font-size:.9rem;
+
+font-weight:600;
+
+}
+
+.return{
+
+display:none;
+align-items:center;
+justify-content:center;
+gap:8px;
+
+margin-top:20px;
+
+padding:15px;
+
+border-radius:16px;
+
+background:#ff4f95;
+
+color:white;
+
+font-weight:700;
+
+text-decoration:none;
+
+}
+
+.return:hover{
+
+background:#e6387d;
+
+}
+
+.return-icon{
+width:16px;
+height:16px;
+}
+
+/* ---------- coeurs qui jaillissent quand on pioche ---------- */
+
+.burst-heart{
+position:fixed;
+color:#ff4f95;
+pointer-events:none;
+z-index:60;
+transform:translate(-50%,-50%);
+}
+
+@media(max-width:500px){
+
+.jar{
+
+width:140px;
+height:154px;
+
+}
+
+h1{
+
+font-size:2rem;
+
+}
+
+}
+
+@media (prefers-reduced-motion: reduce){
+
+.amb-heart,
+.jar,
+.jar .reflet,
+.jar .heart-decal,
+.card{
+
+animation:none !important;
+
+}
+
+}
+
+</style>
+
+<base target="_blank">
+</head>
+
+<body>
+
+<!-- sprite d'icones réutilisables, à la place des emojis -->
+<svg style="display:none" aria-hidden="true">
+<defs>
+
+<symbol id="icon-heart" viewBox="0 0 24 24">
+<path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+</symbol>
+
+<symbol id="icon-envelope" viewBox="0 0 24 24">
+<rect x="2.2" y="5" width="19.6" height="14" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/>
+<path d="M3.4 6.6l8.6 6.7 8.6-6.7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+
+</defs>
+</svg>
+
+<div id="ambient"></div>
+
+<div class="card">
+
+<div class="badge">
+<svg viewBox="0 0 24 24" class="badge-icon"><use href="#icon-envelope"></use></svg>
+Jour 7
+</div>
+
+<h1>
+
+Le bocal<br>
+
+<span>de petits mots</span>
+
+</h1>
+
+<p class="description">
+
+Chaque petit papier contient une pensée que j'avais envie de te partager.
+
+<svg viewBox="0 0 24 24" class="inline-heart"><use href="#icon-heart"></use></svg>
+
+</p>
+
+<div class="jar" id="jar">
+<svg viewBox="0 0 200 220" aria-hidden="true">
+<defs>
+<linearGradient id="glassGrad" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#fff5fa"/>
+<stop offset="100%" stop-color="#ffe0ee"/>
+</linearGradient>
+</defs>
+
+<ellipse cx="100" cy="207" rx="54" ry="9" fill="#ff4f95" opacity=".14"/>
+
+<rect x="34" y="70" width="132" height="126" rx="30" fill="url(#glassGrad)" stroke="#ffb8d4" stroke-width="3"/>
+
+<rect x="72" y="42" width="56" height="34" rx="10" fill="url(#glassGrad)" stroke="#ffb8d4" stroke-width="3"/>
+
+<rect x="62" y="26" width="76" height="24" rx="11" fill="#ff8fb8"/>
+<rect x="62" y="26" width="76" height="10" rx="5" fill="#ffabc9"/>
+
+<path class="reflet" d="M53 90q-5 58 0 94" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" opacity=".5"/>
+
+<g opacity=".95">
+<rect x="66" y="150" width="19" height="14" rx="2.5" fill="#ffffff" stroke="#ffcfe1" stroke-width="1.4" transform="rotate(-9 75.5 157)"/>
+<rect x="95" y="161" width="19" height="14" rx="2.5" fill="#fff0f6" stroke="#ffcfe1" stroke-width="1.4" transform="rotate(11 104.5 168)"/>
+<rect x="118" y="147" width="19" height="14" rx="2.5" fill="#ffffff" stroke="#ffcfe1" stroke-width="1.4" transform="rotate(-5 127.5 154)"/>
+</g>
+
+<path class="heart-decal" d="M100 116c-6.5-7.5-18-3-18 5.5 0 7.5 9.5 13 18 20.5 8.5-7.5 18-13 18-20.5 0-8.5-11.5-13-18-5.5z" fill="#ff4f95" opacity=".9"/>
+
+</svg>
+</div>
+
+<div class="note" id="note">
+<svg viewBox="0 0 24 24" class="note-icon"><use href="#icon-envelope"></use></svg>
+<div class="note-text">Appuie sur le bouton pour piocher ton premier petit mot...</div>
+</div>
+
+<button id="draw">
+<svg viewBox="0 0 24 24" class="btn-icon"><use href="#icon-envelope"></use></svg>
+Piocher un petit mot
+</button>
+
+<div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+
+<p class="counter" id="counter">
+
+0 / 50 mots découverts
+
+</p>
+
+<a class="return" id="back" href="calendrier.html">
+<svg viewBox="0 0 24 24" class="return-icon"><use href="#icon-heart"></use></svg>
+Retour au calendrier
+</a>
+
+</div>
+
+<script>
+(() => {
+/* ===== BRUITAGES ===== */
+const AudioCtx=window.AudioContext||window.webkitAudioContext;
+let audioCtx;
+function initAudio(){if(!audioCtx)audioCtx=new AudioCtx();}
+function playClick(){initAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.setValueAtTime(520,audioCtx.currentTime);o.frequency.exponentialRampToValueAtTime(780,audioCtx.currentTime+0.08);g.gain.setValueAtTime(0.05,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.12);o.start();o.stop(audioCtx.currentTime+0.15);}
+function playReveal(){initAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.setValueAtTime(600,audioCtx.currentTime);o.frequency.exponentialRampToValueAtTime(1100,audioCtx.currentTime+0.18);g.gain.setValueAtTime(0.04,audioCtx.currentTime);g.gain.linearRampToValueAtTime(0.07,audioCtx.currentTime+0.06);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.35);o.start();o.stop(audioCtx.currentTime+0.4);}
+function playPop(){initAudio();const b=audioCtx.createBuffer(1,audioCtx.sampleRate*0.02,audioCtx.sampleRate);const d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*0.6;const s=audioCtx.createBufferSource(),f=audioCtx.createBiquadFilter(),g=audioCtx.createGain();s.buffer=b;s.connect(f);f.connect(g);g.connect(audioCtx.destination);f.type='bandpass';f.frequency.value=2800;f.Q.value=6;g.gain.setValueAtTime(0.03,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.018);s.start();s.stop(audioCtx.currentTime+0.02);}
+function playWin(){initAudio();[523,659,784,1047].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,audioCtx.currentTime+i*0.1);g.gain.linearRampToValueAtTime(0.08,audioCtx.currentTime+i*0.1+0.02);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+i*0.1+0.5);o.start(audioCtx.currentTime+i*0.1);o.stop(audioCtx.currentTime+i*0.1+0.6);});}
+function playFinal(){initAudio();[392,523,659,784,1047,1319].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,audioCtx.currentTime+i*0.08);g.gain.linearRampToValueAtTime(0.07,audioCtx.currentTime+i*0.08+0.02);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+i*0.08+0.45);o.start(audioCtx.currentTime+i*0.08);o.stop(audioCtx.currentTime+i*0.08+0.55);});}
+
+
+
+const note = document.getElementById("note");
+const draw = document.getElementById("draw");
+const counter = document.getElementById("counter");
+const back = document.getElementById("back");
+const progressFill = document.getElementById("progressFill");
+const jarWrap = document.getElementById("jar");
+const ambient = document.getElementById("ambient");
+
+const messages = [
+
+"Je t'aime mon amour.",
+"Tu me manques terriblement.",
+"Vivement le 25 août.",
+"J'espère que toi ça va.",
+"J'ai hâte de te reprendre dans mes bras.",
+"Tu es la plus belle chose qui me soit arrivée.",
+"Tu me rends heureux chaque jour.",
+"Je pense très fort à toi.",
+"J'espère que tu profites de tes vacances.",
+"J'ai déjà hâte de te raconter plein de choses.",
+"Ton sourire me manque.",
+"Ton regard me manque.",
+"Ton rire me manque.",
+"J'aimerais tellement être avec toi en ce moment.",
+"Merci d'être entrée dans ma vie.",
+"Tu es mon plus beau cadeau.",
+"Chaque jour avec toi est un bonheur.",
+"Tu rends mes journées meilleures.",
+"Je suis fier d'être avec toi.",
+"Tu es magnifique.",
+"Je suis le plus chanceux de t'avoir.",
+"Je souris dès que je pense à toi.",
+"Tu illumines ma vie.",
+"Tu occupes toutes mes pensées.",
+"Je compte les jours avant de te revoir.",
+"Tu es mon endroit préféré.",
+"J'adore passer du temps avec toi.",
+"J'espère que tu souris en lisant ce petit mot.",
+"Tu es incroyable.",
+"Je t'aimerai toujours.",
+"Je n'échangerais notre histoire pour rien au monde.",
+"Tu es mon bonheur.",
+"Je pense à toi du matin jusqu'au soir.",
+"Tu me fais craquer.",
+"Tu es la personne que je veux retrouver chaque soir.",
+"Merci pour tous nos souvenirs.",
+"J'ai hâte d'en créer encore des centaines.",
+"Tu es mon plus beau rêve devenu réalité.",
+"Tu me fais sentir vivant.",
+"Chaque seconde passée avec toi est précieuse.",
+"Tu es mon rayon de soleil.",
+"Je t'aime un peu plus chaque jour.",
+"Tu es ma personne préférée.",
+"J'espère que cette surprise t'a fait sourire.",
+"Promis, le meilleur est encore à venir.",
+"Je serai toujours là pour toi.",
+"Je veux continuer à te rendre heureuse.",
+"Tu comptes énormément pour moi.",
+"Je t'aime plus que les mots ne peuvent le dire.",
+"Merci d'être toi."
+
+];
+
+let restant = [...messages];
+
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+/* ---------- petit constructeur d'icônes réutilisables ---------- */
+
+function makeIcon(iconId, className){
+  const svg = document.createElementNS(SVG_NS, "svg");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("class", className);
+  const use = document.createElementNS(SVG_NS, "use");
+  use.setAttribute("href", "#" + iconId);
+  svg.appendChild(use);
+  return svg;
+}
+
+/* ---------- coeurs d'ambiance qui montent en fond ---------- */
+
+function spawnAmbientHearts(){
+  const count = window.innerWidth < 480 ? 7 : 11;
+  for (let i = 0; i < count; i++){
+    const s = makeIcon("icon-heart", "amb-heart");
+    const size = 10 + Math.random() * 15;
+    s.style.left = Math.random() * 100 + "vw";
+    s.style.width = size + "px";
+    s.style.height = size + "px";
+    s.style.setProperty("--op", (0.15 + Math.random() * 0.28).toFixed(2));
+    const dur = 16 + Math.random() * 14;
+    s.style.animationDuration = dur + "s";
+    s.style.animationDelay = (-Math.random() * dur) + "s";
+    ambient.appendChild(s);
+  }
+}
+spawnAmbientHearts();
+
+/* ---------- petite pluie de coeurs à un endroit précis ---------- */
+
+function heartBurst(originEl, count){
+  const rect = originEl.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+
+  for (let i = 0; i < count; i++){
+    const s = makeIcon("icon-heart", "burst-heart");
+    const size = 10 + Math.random() * 11;
+    s.style.left = cx + "px";
+    s.style.top = cy + "px";
+    s.style.width = size + "px";
+    s.style.height = size + "px";
+    document.body.appendChild(s);
+
+    const angle = (Math.PI * 2 * i) / count + (Math.random() * 0.5 - 0.25);
+    const dist = 45 + Math.random() * 55;
+    const dx = Math.cos(angle) * dist;
+    const dy = Math.sin(angle) * dist - 26;
+    const rot = Math.random() * 70 - 35;
+
+    const anim = s.animate([
+      { transform:"translate(-50%,-50%) translate(0,0) rotate(0deg) scale(.3)", opacity:1 },
+      { transform:`translate(-50%,-50%) translate(${dx}px,${dy}px) rotate(${rot}deg) scale(1)`, opacity:0 }
+    ], { duration:700 + Math.random() * 400, easing:"cubic-bezier(.2,.8,.3,1)" });
+
+    anim.onfinish = () => s.remove();
+    anim.oncancel = () => s.remove();
+  }
+}
+
+/* ---------- tirage d'un mot ---------- */
+
+draw.addEventListener("click", () => {
+
+  if (restant.length === 0 || draw.disabled) return;
+
+  draw.disabled = true;
+  playClick();
+  if(navigator.vibrate)navigator.vibrate(8);
+
+  const index = Math.floor(Math.random() * restant.length);
+  const texte = restant.splice(index, 1)[0];
+
+  note.style.transform = "scale(.92) rotate(-2deg)";
+  note.style.opacity = "0";
+
+  draw.animate([
+    { boxShadow:"0 0 0 0 rgba(255,79,149,.45)" },
+    { boxShadow:"0 0 0 20px rgba(255,79,149,0)" }
+  ], { duration:550, easing:"ease-out" });
+
+  setTimeout(() => {
+/* ===== BRUITAGES ===== */
+const AudioCtx=window.AudioContext||window.webkitAudioContext;
+let audioCtx;
+function initAudio(){if(!audioCtx)audioCtx=new AudioCtx();}
+function playClick(){initAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.setValueAtTime(520,audioCtx.currentTime);o.frequency.exponentialRampToValueAtTime(780,audioCtx.currentTime+0.08);g.gain.setValueAtTime(0.05,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.12);o.start();o.stop(audioCtx.currentTime+0.15);}
+function playReveal(){initAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.setValueAtTime(600,audioCtx.currentTime);o.frequency.exponentialRampToValueAtTime(1100,audioCtx.currentTime+0.18);g.gain.setValueAtTime(0.04,audioCtx.currentTime);g.gain.linearRampToValueAtTime(0.07,audioCtx.currentTime+0.06);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.35);o.start();o.stop(audioCtx.currentTime+0.4);}
+function playPop(){initAudio();const b=audioCtx.createBuffer(1,audioCtx.sampleRate*0.02,audioCtx.sampleRate);const d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*0.6;const s=audioCtx.createBufferSource(),f=audioCtx.createBiquadFilter(),g=audioCtx.createGain();s.buffer=b;s.connect(f);f.connect(g);g.connect(audioCtx.destination);f.type='bandpass';f.frequency.value=2800;f.Q.value=6;g.gain.setValueAtTime(0.03,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.018);s.start();s.stop(audioCtx.currentTime+0.02);}
+function playWin(){initAudio();[523,659,784,1047].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,audioCtx.currentTime+i*0.1);g.gain.linearRampToValueAtTime(0.08,audioCtx.currentTime+i*0.1+0.02);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+i*0.1+0.5);o.start(audioCtx.currentTime+i*0.1);o.stop(audioCtx.currentTime+i*0.1+0.6);});}
+function playFinal(){initAudio();[392,523,659,784,1047,1319].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,audioCtx.currentTime+i*0.08);g.gain.linearRampToValueAtTime(0.07,audioCtx.currentTime+i*0.08+0.02);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+i*0.08+0.45);o.start(audioCtx.currentTime+i*0.08);o.stop(audioCtx.currentTime+i*0.08+0.55);});}
+
+
+
+    note.innerHTML = "";
+    note.appendChild(makeIcon("icon-envelope", "note-icon"));
+
+    const textDiv = document.createElement("div");
+    textDiv.className = "note-text";
+    textDiv.textContent = texte;
+    note.appendChild(textDiv);
+
+    note.style.transform = "scale(1) rotate(0deg)";
+
+    playReveal();
+    note.style.opacity = "1";
+
+    heartBurst(note, 8);
+    playPop();
+
+    const trouves = messages.length - restant.length;
+
+    counter.textContent = `${trouves} / ${messages.length} mots découverts`;
+    counter.animate(
+      [{ transform:"scale(1.18)" }, { transform:"scale(1)" }],
+      { duration:300, easing:"ease-out" }
+    );
+
+    progressFill.style.width = (trouves / messages.length * 100) + "%";
+
+    if (restant.length === 0){
+
+      playFinal();
+      if(navigator.vibrate)navigator.vibrate([60,40,60,40,100]);
+
+      draw.innerHTML = "";
+      draw.appendChild(makeIcon("icon-heart", "btn-icon"));
+      draw.appendChild(document.createTextNode("Tous les mots ont été découverts"));
+      draw.style.background = "#d98aad";
+
+      back.style.display = "flex";
+
+      heartBurst(jarWrap, 18);
+      playWin();
+
+      jarWrap.animate([
+        { transform:"scale(1) rotate(0deg)" },
+        { transform:"scale(1.15) rotate(-6deg)" },
+        { transform:"scale(1.04) rotate(4deg)" },
+        { transform:"scale(1) rotate(0deg)" }
+      ], { duration:900, easing:"ease-out" });
+
+    } else {
+
+      draw.disabled = false;
+
+    }
+
+  }, 200);
+
+});
+
+})();
+</script>
+
+</body>
+</html>

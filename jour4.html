@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Jour 4 ♡</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+
+--rose:#ff4f95;
+--rose-fonce:#e6387d;
+--texte:#251820;
+--texte-doux:#806873;
+--blanc:#ffffff;
+--carte:rgba(255,255,255,.72);
+--bordure:rgba(255,79,149,.15);
+
+}
+
+*{
+
+margin:0;
+padding:0;
+box-sizing:border-box;
+
+}
+
+body{
+
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+
+min-height:100vh;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+overflow:hidden;
+
+background:
+
+radial-gradient(circle at 8% 15%, rgba(255,181,211,.65), transparent 25rem),
+
+radial-gradient(circle at 92% 85%, rgba(255,117,174,.34), transparent 25rem),
+
+linear-gradient(135deg,#fffafd 0%,#fff0f6 52%,#ffe0ec 100%);
+
+}
+
+.card{
+
+width:min(760px,92%);
+
+padding:50px;
+
+border-radius:30px;
+
+background:var(--carte);
+
+backdrop-filter:blur(16px);
+
+border:1px solid var(--bordure);
+
+box-shadow:0 20px 55px rgba(150,57,96,.10);
+
+animation:fade .7s;
+
+}
+
+@keyframes fade{
+
+from{
+
+opacity:0;
+
+transform:translateY(20px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:none;
+
+}
+
+}
+
+.badge{
+
+display:inline-flex;
+
+padding:8px 15px;
+
+border-radius:999px;
+
+background:rgba(255,255,255,.7);
+
+color:var(--rose-fonce);
+
+font-size:.85rem;
+
+font-weight:700;
+
+margin-bottom:22px;
+
+}
+
+h1{
+
+font-size:clamp(2.8rem,6vw,4.7rem);
+
+line-height:1;
+
+letter-spacing:-.06em;
+
+margin-bottom:18px;
+
+}
+
+h1 span{
+
+color:var(--rose);
+
+}
+
+.description{
+
+color:var(--texte-doux);
+
+line-height:1.7;
+
+font-size:1.05rem;
+
+max-width:540px;
+
+margin-bottom:40px;
+
+}
+
+.progress{
+
+height:10px;
+
+border-radius:999px;
+
+overflow:hidden;
+
+background:#f5dbe7;
+
+margin-bottom:12px;
+
+}
+
+.progress-bar{
+
+height:100%;
+
+width:10%;
+
+background:linear-gradient(90deg,#ff4f95,#ff82b7);
+
+transition:.4s;
+
+}
+
+.progress-text{
+
+font-size:.9rem;
+
+font-weight:700;
+
+color:var(--rose-fonce);
+
+margin-bottom:28px;
+
+}
+
+.question{
+
+font-size:1.55rem;
+
+font-weight:700;
+
+margin-bottom:25px;
+
+line-height:1.4;
+
+}
+
+.answers{
+
+display:grid;
+
+gap:14px;
+
+}
+
+.answer{
+
+padding:18px;
+
+border-radius:18px;
+
+border:1px solid var(--bordure);
+
+background:white;
+
+cursor:pointer;
+
+font-size:1rem;
+
+font-weight:600;
+
+transition:.25s;
+
+text-align:left;
+
+}
+
+.answer:hover{
+
+transform:translateY(-3px);
+
+border-color:var(--rose);
+
+box-shadow:0 10px 24px rgba(230,56,125,.12);
+
+}
+
+.feedback{
+
+margin-top:22px;
+
+min-height:28px;
+
+font-weight:700;
+
+color:var(--rose-fonce);
+
+}
+
+@media(max-width:600px){
+
+.card{
+
+padding:30px 22px;
+
+}
+
+.question{
+
+font-size:1.25rem;
+
+}
+
+}
+
+</style>
+
+<base target="_blank">
+</head>
+
+<body>
+
+<div class="card">
+
+<div class="badge">
+
+🎮 Jour 4
+
+</div>
+
+<h1>
+
+Tu me connais<br>
+
+<span>vraiment ?</span>
+
+</h1>
+
+<p class="description">
+
+Voyons voir si tu me connais aussi bien que tu le prétends... 😏❤️
+
+</p>
+
+<div class="progress">
+
+<div class="progress-bar" id="progressBar"></div>
+
+</div>
+
+<div class="progress-text" id="progressText">
+
+Question 1 / 10
+
+</div>
+
+<div class="question" id="question">
+
+Chargement...
+
+</div>
+
+<div class="answers" id="answers">
+
+</div>
+
+<div class="feedback" id="feedback"></div>
+
+</div><script>
+/* ===== BRUITAGES ===== */
+const AudioCtx=window.AudioContext||window.webkitAudioContext;
+let audioCtx;
+function initAudio(){if(!audioCtx)audioCtx=new AudioCtx();}
+function playClick(){initAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.setValueAtTime(900,audioCtx.currentTime);o.frequency.exponentialRampToValueAtTime(1300,audioCtx.currentTime+0.04);g.gain.setValueAtTime(0.06,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.06);o.start();o.stop(audioCtx.currentTime+0.07);}
+function playCorrect(){initAudio();[523,659,784].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,audioCtx.currentTime+i*0.07);g.gain.linearRampToValueAtTime(0.08,audioCtx.currentTime+i*0.07+0.02);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+i*0.07+0.25);o.start(audioCtx.currentTime+i*0.07);o.stop(audioCtx.currentTime+i*0.07+0.3);});}
+function playWrong(){initAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='triangle';o.frequency.setValueAtTime(280,audioCtx.currentTime);o.frequency.linearRampToValueAtTime(140,audioCtx.currentTime+0.22);g.gain.setValueAtTime(0.06,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.28);o.start();o.stop(audioCtx.currentTime+0.3);}
+function playWin(){initAudio();[523,659,784,1047].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,audioCtx.currentTime+i*0.1);g.gain.linearRampToValueAtTime(0.1,audioCtx.currentTime+i*0.1+0.02);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+i*0.1+0.45);o.start(audioCtx.currentTime+i*0.1);o.stop(audioCtx.currentTime+i*0.1+0.55);});}
+function playLose(){initAudio();[280,220].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,audioCtx.currentTime+i*0.18);g.gain.linearRampToValueAtTime(0.08,audioCtx.currentTime+i*0.18+0.02);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+i*0.18+0.35);o.start(audioCtx.currentTime+i*0.18);o.stop(audioCtx.currentTime+i*0.18+0.45);});}
+
+
+
+const questions = [
+
+{
+question:"Quel est mon plat préféré ?",
+answers:["Pizza","Lasagnes","Tacos","Sushi"],
+correct:1
+},
+
+{
+question:"À quel jeu je pourrais jouer pendant des heures ?",
+answers:["Minecraft","Roblox","Geometry Dash","Valorant"],
+correct:2
+},
+
+{
+question:"Quel est mon artiste préféré ?",
+answers:["Gims","Jul","SCH","Ninho"],
+correct:1
+},
+
+{
+question:"Quelle est ma couleur préférée ?",
+answers:["Rouge","Noir","Bleu turquoise","Violet"],
+correct:2
+},
+
+{
+question:"Où est-ce qu'on s'est rencontrés ?",
+answers:["Au lycée","Au collège","En vacances","Sur Internet"],
+correct:1
+},
+
+{
+question:"Comment je t'appelle le plus souvent ?",
+answers:["Bébé","Ma princesse","Mon amour","Mon cœur"],
+correct:2
+},
+
+{
+question:"Quel est mon plus grand rêve ?",
+answers:[
+"Faire le tour du monde",
+"Devenir riche",
+"Finir ma vie à tes côtés",
+"Avoir une Ferrari"
+],
+correct:2
+},
+
+{
+question:"Quel est mon animal préféré ?",
+answers:["Chat","Chien","Panda","Loup"],
+correct:1
+},
+
+{
+question:"Quel est mon parfum de glace préféré ?",
+answers:["Vanille","Chocolat","Caramel","Fraise"],
+correct:2
+},
+
+{
+question:"Quelle phrase je dis souvent ?",
+answers:[
+"Bah alors ?",
+"Hein ?",
+"T'sais quoi ?",
+"C'est pas faux"
+],
+correct:2
+}
+
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+const question = document.getElementById("question");
+const answers = document.getElementById("answers");
+const feedback = document.getElementById("feedback");
+const progressBar = document.getElementById("progressBar");
+const progressText = document.getElementById("progressText");
+
+loadQuestion();
+
+function loadQuestion(){
+
+const q = questions[currentQuestion];
+
+progressText.textContent =
+`Question ${currentQuestion+1} / ${questions.length}`;
+
+progressBar.style.width =
+((currentQuestion)/questions.length)*100+"%";
+
+question.textContent = q.question;
+
+answers.innerHTML="";
+
+feedback.textContent="";
+
+q.answers.forEach((answer,index)=>{
+
+const button=document.createElement("button");
+
+button.className="answer";
+
+button.textContent=answer;
+
+button.onclick=()=>{playClick();checkAnswer(index);};
+
+answers.appendChild(button);
+
+});
+
+}
+
+function checkAnswer(choice){
+
+const q=questions[currentQuestion];
+
+document.querySelectorAll(".answer").forEach(btn=>{
+
+btn.disabled=true;
+
+});
+
+if(choice===q.correct){
+
+score++;
+
+playCorrect();
+
+feedback.textContent="❤️ Bonne réponse !";
+
+}else{
+
+playWrong();
+
+feedback.innerHTML=
+
+`❌ Dommage...<br><br>
+
+La bonne réponse était :
+
+<strong>${q.answers[q.correct]}</strong>`;
+
+}
+
+setTimeout(()=>{
+
+currentQuestion++;
+
+if(currentQuestion>=questions.length){
+
+finishQuiz();
+
+}else{
+
+loadQuestion();
+
+}
+
+},1800);
+
+}
+
+function finishQuiz(){
+
+progressBar.style.width="100%";
+
+let message="";
+
+if(score===10){
+
+playWin();
+
+message="Tu me connais vraiment par cœur... ❤️";
+
+}else if(score>=8){
+
+playWin();
+
+message="Franchement... tu me connais super bien 😭❤️";
+
+}else if(score>=6){
+
+message="Pas mal... mais il va falloir réviser un peu 😏";
+
+}else{
+
+playLose();
+
+message="Je crois qu'on doit passer encore plus de temps ensemble 😂❤️";
+
+}
+
+question.innerHTML=`
+${score} / 10 ❤️
+`;
+
+answers.innerHTML="";
+
+feedback.innerHTML=`
+
+<p style="font-size:1.1rem;line-height:1.8;">
+
+${message}
+
+</p>
+
+<br>
+
+<a href="calendrier.html"
+
+style="
+
+display:inline-block;
+
+padding:16px 26px;
+
+border-radius:16px;
+
+background:#ff4f95;
+
+color:white;
+
+font-weight:700;
+
+text-decoration:none;
+
+">
+
+Retour au calendrier ♡
+
+</a>
+
+`;
+
+if(score===10){
+
+launchHearts();
+
+}
+
+}
+
+function launchHearts(){
+
+for(let i=0;i<40;i++){
+
+const heart=document.createElement("div");
+
+heart.innerHTML="❤️";
+
+heart.style.position="fixed";
+
+heart.style.left=Math.random()*100+"vw";
+
+heart.style.top="-40px";
+
+heart.style.fontSize=(20+Math.random()*20)+"px";
+
+heart.style.pointerEvents="none";
+
+heart.style.transition="4s linear";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>{
+
+heart.style.transform=
+`translateY(${window.innerHeight+120}px)
+rotate(${Math.random()*360}deg)`;
+
+heart.style.opacity="0";
+
+},50);
+
+setTimeout(()=>{
+
+heart.remove();
+
+},4500);
+
+}
+
+}
+
+</script>
+
+</body>
+
+</html>

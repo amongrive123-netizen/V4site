@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jour 17 ❤️</title>
+<link rel="preconnect" href="[fonts.googleapis.com](https://fonts.googleapis.com)">
+<link rel="preconnect" href="[fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
+<link href="[fonts.googleapis.com](https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@500;700&display=swap)" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+  width:100%; height:100%; overflow:hidden;
+  background: radial-gradient(ellipse at center, #1a0d08 0%, #050201 70%);
+  touch-action:none; font-family:Poppins,sans-serif;
+}
+
+/* CANVAS PARTICULES */
+#particles {
+  position:fixed; inset:0; display:block; z-index:2; pointer-events:none;
+}
+
+/* VIGNETTE */
+body::after {
+  content:""; position:fixed; inset:0;
+  background: radial-gradient(circle at center, transparent 35%, rgba(0,0,0,.55) 100%);
+  pointer-events:none; z-index:3;
+}
+
+/* ============ ORBITES 3D CSS ============ */
+#orbit-system {
+  position:fixed; inset:0;
+  perspective: 1400px;
+  transform-style: preserve-3d;
+  pointer-events: none;
+  z-index: 4;
+  display: none;
+}
+#orbit-system.active { display: block; }
+
+.orbit-ring {
+  position: absolute; left: 50%; top: 50%;
+  width: 0; height: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.orbit-obj {
+  position: absolute;
+  transform-style: preserve-3d;
+  will-change: transform;
+  backface-visibility: visible;
+}
+
+.orbit-obj svg {
+  display: block;
+  animation: objFloat 3s ease-in-out infinite;
+}
+
+@keyframes objFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-14px) rotate(5deg); }
+}
+
+/* Anneaux avec inclinaisons et vitesses différentes */
+.ring1 { animation: spin1 18s linear infinite; }
+@keyframes spin1 { from { transform: rotateX(25deg) rotateY(0deg); } to { transform: rotateX(25deg) rotateY(360deg); } }
+.ring1 .o1 { transform: translate3d(170px, -30px, 0); animation-delay: 0s; }
+.ring1 .o2 { transform: translate3d(-85px, 20px, 147px); animation-delay: .7s; }
+.ring1 .o3 { transform: translate3d(-85px, 10px, -147px); animation-delay: 1.4s; }
+
+.ring2 { animation: spin2 24s linear infinite; }
+@keyframes spin2 { from { transform: rotateX(-20deg) rotateY(60deg); } to { transform: rotateX(-20deg) rotateY(420deg); } }
+.ring2 .o1 { transform: translate3d(200px, 40px, 0); animation-delay: .3s; }
+.ring2 .o2 { transform: translate3d(-100px, -20px, 173px); animation-delay: 1s; }
+.ring2 .o3 { transform: translate3d(-100px, 0, -173px); animation-delay: 1.7s; }
+
+.ring3 { animation: spin3 20s linear infinite; }
+@keyframes spin3 { from { transform: rotateY(35deg) rotateX(0deg); } to { transform: rotateY(35deg) rotateX(360deg); } }
+.ring3 .o1 { transform: translate3d(0, 150px, 130px); animation-delay: .5s; }
+.ring3 .o2 { transform: translate3d(0, -120px, -130px); animation-delay: 1.2s; }
+
+.ring4 { animation: spin4 28s linear infinite; }
+@keyframes spin4 { from { transform: rotateX(45deg) rotateY(120deg); } to { transform: rotateX(45deg) rotateY(480deg); } }
+.ring4 .o1 { transform: translate3d(140px, 0, 100px); animation-delay: .2s; }
+.ring4 .o2 { transform: translate3d(-140px, 0, -100px); animation-delay: .9s; }
+
+.ring5 { animation: spin5 22s linear infinite; }
+@keyframes spin5 { from { transform: rotateY(-25deg) rotateX(10deg); } to { transform: rotateY(-25deg) rotateX(370deg); } }
+.ring5 .o1 { transform: translate3d(180px, 60px, 0); animation-delay: .4s; }
+.ring5 .o2 { transform: translate3d(-90px, -40px, 156px); animation-delay: 1.1s; }
+.ring5 .o3 { transform: translate3d(-90px, 30px, -156px); animation-delay: 1.8s; }
+
+/* Paillettes dorées flottantes CSS */
+.sparkle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff4c8, #ffd700);
+  box-shadow: 0 0 5px 1px rgba(255,215,0,.55);
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation: sparkleFloat linear infinite;
+}
+@keyframes sparkleFloat {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  10% { opacity: 1; transform: translateY(90vh) scale(1); }
+  90% { opacity: .8; }
+  100% { transform: translateY(-10vh) scale(.3); opacity: 0; }
+}
+
+/* ============ INTRO ============ */
+#intro {
+  position:fixed; inset:0;
+  display:flex; justify-content:center; align-items:center;
+  background: linear-gradient(180deg, rgba(5,2,3,.98), rgba(10,5,5,.99));
+  z-index:50; transition:opacity 1.2s ease;
+}
+.card {
+  width:min(460px,92%);
+  padding:44px 38px;
+  border-radius:34px;
+  background: rgba(255,255,255,.04);
+  backdrop-filter:blur(26px);
+  border:1px solid rgba(255,200,100,.1);
+  text-align:center; color:white;
+  box-shadow: 0 45px 110px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.06);
+  animation: cardFloat 5s ease-in-out infinite;
+}
+@keyframes cardFloat {
+  0%,100%{ transform: translateY(0) rotateX(0deg); }
+  50%{ transform: translateY(-10px) rotateX(1.5deg); }
+}
+.card h1 {
+  font-size:2.15rem; margin-bottom:22px;
+  background: linear-gradient(135deg,#ffd89b,#ff9e44);
+  
+}
+.card p { line-height:2; opacity:.87; margin-bottom:34px; font-size:1.06rem; }
+
+button {
+  padding:18px 44px; border:none; border-radius:999px;
+  font-size:1.08rem; font-weight:700; cursor:pointer; letter-spacing:.6px;
+  background: linear-gradient(135deg,#ffc35c,#ff8d34);
+  color:white;
+  box-shadow: 0 14px 42px rgba(255,150,40,.45), 0 0 0 1px rgba(255,200,100,.25);
+  transition:.3s; position:relative; overflow:hidden;
+}
+button::before {
+  content:""; position:absolute; inset:0;
+  background: linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
+  transform:translateX(-100%); transition:.7s;
+}
+button:hover::before { transform:translateX(100%); }
+button:hover { transform:translateY(-2px); box-shadow: 0 18px 55px rgba(255,150,40,.6); }
+button:active { transform:scale(.96); }
+
+/* ============ SCENE ============ */
+#scene {
+  position:fixed; left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  width:min(540px,96vw); height:min(540px,96vw);
+  display:none; justify-content:center; align-items:center;
+  perspective:2000px; z-index:5;
+}
+
+/* ============ COFFRE ============ */
+#chest {
+  position:relative; width:300px; height:220px;
+  transform-style:preserve-3d;
+  will-change: transform;
+  filter:drop-shadow(0 55px 70px rgba(0,0,0,.65));
+}
+
+.base {
+  position:absolute; bottom:0; width:300px; height:140px;
+  border-radius:0 0 28px 28px;
+  background:linear-gradient(180deg,#9e6835,#4a220c);
+  box-shadow: inset 0 -10px 25px rgba(0,0,0,.5), inset 0 5px 12px rgba(255,200,100,.12);
+  transform-style:preserve-3d;
+}
+.base::before {
+  content:""; position:absolute; inset:0; border-radius:inherit;
+  background:linear-gradient(135deg, rgba(255,220,150,.12), transparent 65%);
+  pointer-events:none;
+}
+
+.lid {
+  position:absolute; top:0; width:300px; height:92px;
+  border-radius:24px 24px 10px 10px;
+  background:linear-gradient(180deg,#bf7d43,#553015);
+  transform-origin:bottom; transform-style:preserve-3d;
+  box-shadow: inset 0 8px 18px rgba(255,220,150,.15);
+}
+.lid::before {
+  content:""; position:absolute; inset:0; border-radius:inherit;
+  background:linear-gradient(135deg, rgba(255,230,170,.18), transparent 55%);
+  pointer-events:none;
+}
+
+.band {
+  position:absolute; top:0; width:26px; height:100%;
+  background:linear-gradient(180deg,#f5d47a,#856422);
+  box-shadow: inset 2px 0 5px rgba(255,255,255,.18), inset -2px 0 5px rgba(0,0,0,.25);
+}
+.band.left { left:50px; }
+.band.right { right:50px; }
+
+.lock {
+  position:absolute; left:50%; top:72px;
+  transform:translateX(-50%);
+  width:50px; height:64px; border-radius:16px;
+  display:flex; justify-content:center; align-items:center;
+  font-size:28px;
+  background:linear-gradient(180deg,#ffe89b,#b07d28);
+  box-shadow: 0 14px 30px rgba(0,0,0,.35), inset 0 2px 5px rgba(255,255,255,.35);
+  z-index:30; cursor:pointer;
+  transition:filter .3s;
+  animation: lockPulse 2.5s ease-in-out infinite;
+}
+@keyframes lockPulse {
+  0%,100%{ box-shadow: 0 14px 30px rgba(0,0,0,.35), 0 0 0 0 rgba(255,200,80,.4); }
+  50%{ box-shadow: 0 14px 30px rgba(0,0,0,.35), 0 0 25px 10px rgba(255,200,80,.12); }
+}
+.lock:hover { filter:brightness(1.2); }
+
+#light {
+  position:absolute; left:50%; top:75px; transform:translateX(-50%);
+  width:12px; height:12px; border-radius:50%;
+  background:#fff8dc; opacity:0; pointer-events:none;
+  box-shadow: 0 0 50px 25px rgba(255,220,120,.55), 0 0 100px 50px rgba(255,180,60,.15);
+}
+
+.chest-shadow {
+  position:absolute; bottom:-35px; left:50%; transform:translateX(-50%);
+  width:250px; height:45px; border-radius:50%;
+  background:rgba(0,0,0,.5); filter:blur(24px);
+  pointer-events:none; z-index:-1;
+}
+
+#shine {
+  position:absolute; top:-130px; left:-190px;
+  width:130px; height:540px;
+  background:rgba(255,255,255,.12);
+  filter:blur(16px);
+  transform:rotate(28deg) translateX(-270px);
+  pointer-events:none; z-index:40;
+  animation: shineMove 7s linear infinite;
+}
+@keyframes shineMove {
+  0%{ transform:rotate(28deg) translateX(-270px); }
+  100%{ transform:rotate(28deg) translateX(720px); }
+}
+
+.lockShake { animation:lockShake .55s; }
+@keyframes lockShake {
+  0%  { transform:translateX(-50%) rotate(0deg); }
+  15% { transform:translateX(-50%) rotate(-11deg); }
+  30% { transform:translateX(-50%) rotate(11deg); }
+  45% { transform:translateX(-50%) rotate(-7deg); }
+  60% { transform:translateX(-50%) rotate(7deg); }
+  75% { transform:translateX(-50%) rotate(-3deg); }
+  100%{ transform:translateX(-50%) rotate(0deg); }
+}
+
+/* ============ DIALOGUE ============ */
+#dialog {
+  position:fixed; left:50%; bottom:75px; transform:translateX(-50%);
+  width:min(460px,90%);
+  padding:22px 30px; border-radius:22px;
+  background:rgba(0,0,0,.48); backdrop-filter:blur(20px);
+  border:1px solid rgba(255,200,100,.08);
+  color:white; line-height:1.9; text-align:center;
+  opacity:0; transition:.5s; z-index:100;
+  box-shadow:0 25px 70px rgba(0,0,0,.45);
+}
+#dialog.show { opacity:1; }
+
+/* ============ LETTRE ============ */
+#letter {
+  position:absolute; left:50%; top:125px;
+  width:300px; height:400px;
+  transform:translateX(-50%) translateY(170px) scale(.18) rotate(-14deg);
+  opacity:0; pointer-events:none; z-index:80;
+  will-change: transform, opacity;
+  transition:transform 2.4s cubic-bezier(.22,.8,.22,1), opacity 1.6s;
+  transform-style:preserve-3d;
+}
+.paper {
+  width:100%; height:100%; border-radius:20px;
+  background:linear-gradient(180deg,#fffdf5,#efe6d0);
+  box-shadow: 0 45px 90px rgba(0,0,0,.55), 0 0 0 1px rgba(139,90,43,.12);
+  overflow:hidden; position:relative;
+  transform-style:preserve-3d;
+}
+.paper::before {
+  content:""; position:absolute; left:0; right:0; top:0; height:90px;
+  background:linear-gradient(180deg,rgba(255,255,255,.95),transparent);
+  pointer-events:none;
+}
+.paper::after {
+  content:""; position:absolute; inset:0;
+  background: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='[w3.org](http://www.w3.org/2000/svg)'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none;
+}
+.paperInner {
+  height:100%; padding:34px 30px;
+  overflow-y:auto; text-align:center; color:#3d2b1a;
+  position:relative; z-index:2;
+}
+.paperInner h2 {
+  margin-bottom:20px; font-family:'Dancing Script',cursive;
+  font-size:2.1rem; color:#8b4513;
+  text-shadow: 0 2px 5px rgba(139,69,19,.08);
+}
+.paperInner .prompt {
+  font-size:.95rem; opacity:.65; margin-bottom:10px;
+  transition:opacity .5s ease, height .5s ease, margin .5s ease;
+}
+.paperInner .prompt.hidden { opacity:0; height:0; margin:0; overflow:hidden; }
+.letterBody {
+  margin-top:10px; font-size:15.5px; line-height:1.95;
+  text-align:left; opacity:0; transition:opacity .7s ease;
+}
+.letterBody.show { opacity:1; }
+.cursor {
+  display:inline-block; width:2.5px; height:1.15em;
+  margin-left:3px; background:#5c3a1e; vertical-align:middle;
+  animation:blink 1s step-end infinite; border-radius:1px;
+}
+@keyframes blink { 50%{ opacity:0; } }
+
+.wax-seal {
+  position:absolute; bottom:22px; right:26px;
+  width:48px; height:48px; border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, #ff6b6b, #8b0000);
+  box-shadow: 0 5px 15px rgba(139,0,0,.35), inset -2px -2px 8px rgba(0,0,0,.25);
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px; z-index:5; transform:rotate(-12deg);
+}
+
+
+#touchHint{
+  position:fixed;
+  left:50%;
+  bottom:35px;
+  transform:translateX(-50%);
+
+  padding:12px 20px;
+
+  border-radius:999px;
+
+  background:rgba(0,0,0,.45);
+
+  backdrop-filter:blur(12px);
+
+  color:white;
+
+  font-size:.85rem;
+
+  opacity:.75;
+
+  pointer-events:none;
+
+  z-index:200;
+
+  animation:hintPulse 2s ease-in-out infinite;
+}
+
+@keyframes hintPulse{
+
+  0%,100%{
+    transform:translateX(-50%) translateY(0);
+  }
+
+  50%{
+    transform:translateX(-50%) translateY(-5px);
+  }
+
+}
+
+
+
+
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:480px) {
+  #chest { transform:scale(.82); }
+  #letter { width:270px; height:380px; top:110px; }
+  .card h1 { font-size:1.7rem; }
+}
+</style>
+<base target="_blank">
+</head>
+
+<body>
+<canvas id="particles"></canvas>
+
+<!-- Système d'orbites 3D CSS -->
+<div id="orbit-system">
+  <div class="orbit-ring ring1">
+    <div class="orbit-obj o1"><svg width="38" height="38" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#ff6b9d"/></svg></div>
+    <div class="orbit-obj o2"><svg width="34" height="34" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#ffd700"/></svg></div>
+    <div class="orbit-obj o3"><svg width="30" height="30" viewBox="0 0 24 24"><path d="M12.65 10A5.99 5.99 0 007 6c-3.31 0-6 2.69-6 6s2.69 6 6 6a5.99 5.99 0 005.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" fill="#cd7f32"/></svg></div>
+  </div>
+  <div class="orbit-ring ring2">
+    <div class="orbit-obj o1"><svg width="36" height="36" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#ffec8b"/></svg></div>
+    <div class="orbit-obj o2"><svg width="40" height="40" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#ff85a2"/></svg></div>
+    <div class="orbit-obj o3"><svg width="32" height="32" viewBox="0 0 24 24"><path d="M12 2L2 9l10 13 10-13L12 2z" fill="#b87333"/></svg></div>
+  </div>
+  <div class="orbit-ring ring3">
+    <div class="orbit-obj o1"><svg width="28" height="28" viewBox="0 0 24 24"><path d="M12.65 10A5.99 5.99 0 007 6c-3.31 0-6 2.69-6 6s2.69 6 6 6a5.99 5.99 0 005.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" fill="#daa520"/></svg></div>
+    <div class="orbit-obj o2"><svg width="36" height="36" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#ffe066"/></svg></div>
+  </div>
+  <div class="orbit-ring ring4">
+    <div class="orbit-obj o1"><svg width="42" height="42" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#ff99bb"/></svg></div>
+    <div class="orbit-obj o2"><svg width="30" height="30" viewBox="0 0 24 24"><path d="M12 2L2 9l10 13 10-13L12 2z" fill="#cd853f"/></svg></div>
+  </div>
+  <div class="orbit-ring ring5">
+    <div class="orbit-obj o1"><svg width="34" height="34" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#ffd700"/></svg></div>
+    <div class="orbit-obj o2"><svg width="38" height="38" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#ff77a9"/></svg></div>
+    <div class="orbit-obj o3"><svg width="28" height="28" viewBox="0 0 24 24"><path d="M12.65 10A5.99 5.99 0 007 6c-3.31 0-6 2.69-6 6s2.69 6 6 6a5.99 5.99 0 005.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" fill="#d4af37"/></svg></div>
+  </div>
+</div>
+
+<div id="intro">
+  <div class="card">
+    <h1>📦 Le coffre aux souvenirs</h1>
+    <p>Avant demain...<br><br>J'ai gardé quelque chose rien que pour toi.<br><br>Ouvre doucement ce coffre... ❤️</p>
+    <button id="start">Commencer</button>
+  </div>
+</div>
+
+
+
+
+<div id="scene">
+  <div id="chest">
+    <div class="lid">
+      <div class="band left"></div>
+      <div class="band right"></div>
+    </div>
+    <div class="base">
+      <div class="band left"></div>
+      <div class="band right"></div>
+    </div>
+    <div class="lock" role="button" tabindex="0">🔒</div>
+    <div id="light"></div>
+    <div class="chest-shadow"></div>
+  </div>
+  <div id="shine"></div>
+</div>
+
+<div id="dialog"></div>
+
+<script>
+(() => {
+
+/* ============ RÉFÉRENCES DOM ============ */
+const intro   = document.getElementById("intro");
+const scene   = document.getElementById("scene");
+const chest   = document.getElementById("chest");
+const lock    = document.querySelector(".lock");
+const lid     = document.querySelector(".lid");
+const light   = document.getElementById("light");
+const dialog  = document.getElementById("dialog");
+const canvas  = document.getElementById("particles");
+const ctx     = canvas.getContext("2d");
+const orbitSys = document.getElementById("orbit-system");
+
+/* ============ PAILLETTES CSS ============ */
+function spawnSparkles() {
+  const frag = document.createDocumentFragment();
+  for (let i = 0; i < 15; i++) {
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.style.left = Math.random() * 100 + 'vw';
+    s.style.width = s.style.height = (2 + Math.random() * 4) + 'px';
+    s.style.animationDuration = (6 + Math.random() * 10) + 's';
+    s.style.animationDelay = (Math.random() * 8) + 's';
+    frag.appendChild(s);
+  }
+  document.body.appendChild(frag);
+}
+spawnSparkles();
+
+/* ============ SPRITES DE HALO (pré-rendus, remplacent shadowBlur) ============ */
+function makeGlowSprite(color, size) {
+  const off = document.createElement('canvas');
+  off.width = off.height = size;
+  const octx = off.getContext('2d');
+  const grd = octx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
+  grd.addColorStop(0, color);
+  grd.addColorStop(1, 'rgba(0,0,0,0)');
+  octx.fillStyle = grd;
+  octx.beginPath();
+  octx.arc(size/2, size/2, size/2, 0, Math.PI*2);
+  octx.fill();
+  return off;
+}
+const dustSprite = makeGlowSprite('rgba(255,220,120,1)', 32);
+const burstPalette = [0, 8, 16, 24, 32].map(h =>
+  makeGlowSprite(`hsla(${30+h},100%,65%,1)`, 32)
+);
+
+/* ============ CANVAS 2D ============ */
+let w, h, dpr;
+function resize(){
+  dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+  w = window.innerWidth; h = window.innerHeight;
+  canvas.width = w * dpr; canvas.height = h * dpr;
+  canvas.style.width = w + "px"; canvas.style.height = h + "px";
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+resize();
+window.addEventListener("resize", resize);
+
+const particles = [];
+for (let i = 0; i < 90; i++){
+  particles.push({
+    angle: Math.random() * Math.PI * 2,
+    radius: 90 + Math.random() * 240,
+    speed: .0012 + Math.random() * .003,
+    size: 1 + Math.random() * 3.5,
+    alpha: .15 + Math.random() * .85,
+    twinkle: Math.random() * Math.PI * 2
+  });
+}
+
+let burstParticles = [];
+function spawnBurst() {
+  const cx = w / 2, cy = h / 2;
+  for (let i = 0; i < 40; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 2 + Math.random() * 7;
+    burstParticles.push({
+      x: cx, y: cy,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 4,
+      life: 1, decay: 0.007 + Math.random() * 0.011,
+      size: 2 + Math.random() * 6,
+      sprite: burstPalette[(Math.random() * burstPalette.length) | 0]
+    });
+  }
+}
+
+function drawParticles(){
+  const cx = w / 2, cy = h / 2;
+  ctx.globalCompositeOperation = 'screen';
+
+  for (const p of particles){
+    p.angle += p.speed;
+    p.twinkle += 0.022;
+    const x = cx + Math.cos(p.angle) * p.radius;
+    const y = cy + Math.sin(p.angle) * p.radius * 0.55;
+    const a = p.alpha * (0.5 + 0.5 * Math.sin(p.twinkle));
+    const s = p.size * 6;
+    ctx.globalAlpha = a;
+    ctx.drawImage(dustSprite, x - s/2, y - s/2, s, s);
+  }
+
+  ctx.globalAlpha = 1;
+  for (let i = burstParticles.length - 1; i >= 0; i--) {
+    const p = burstParticles[i];
+    p.x += p.vx; p.y += p.vy;
+    p.vy += 0.09;
+    p.life -= p.decay;
+    if (p.life <= 0) { burstParticles.splice(i, 1); continue; }
+    const s = p.size * 6 * p.life;
+    ctx.globalAlpha = p.life;
+    ctx.drawImage(p.sprite, p.x - s/2, p.y - s/2, s, s);
+  }
+
+  ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = 'source-over';
+}
+
+/* ============ ÉTAT ============ */
+const STATE = { INTRO:0, IDLE:1, OPENING:2, LETTER:3, ENDING:4 };
+let state = STATE.INTRO;
+
+function showDialog(text, duration = 3600){
+  dialog.innerHTML = text;
+  dialog.classList.add("show");
+  clearTimeout(showDialog.timer);
+  showDialog.timer = setTimeout(() => dialog.classList.remove("show"), duration);
+}
+
+/* ============ INTERACTION POINTER ============ */
+let rx = 0, ry = 0;
+let targetRX = 0, targetRY = 0;
+let velX = 0, velY = 0;
+let floatTime = 0, breathe = 0;
+
+function pointerTo(x, y){
+  const newRY = (x - w / 2) / 16;
+  const newRX = -(y - h / 2) / 20;
+  velX = newRX - targetRX;
+  velY = newRY - targetRY;
+  targetRX = newRX;
+  targetRY = newRY;
+}
+
+/* ============ SOURIS + TACTILE ============ */
+
+let touchActive = false;
+let lastTouchX = 0;
+let lastTouchY = 0;
+
+window.addEventListener("mousemove", e => {
+
+  if (touchActive) return;
+
+  pointerTo(e.clientX, e.clientY);
+
+});
+
+
+window.addEventListener("touchstart", e => {
+
+  if (state !== STATE.IDLE) return;
+
+  const t = e.touches[0];
+
+  if (!t) return;
+
+  touchActive = true;
+
+  lastTouchX = t.clientX;
+  lastTouchY = t.clientY;
+
+}, { passive:true });
+
+
+window.addEventListener("touchmove", e => {
+
+  if (state !== STATE.IDLE) return;
+
+  const t = e.touches[0];
+
+  if (!t) return;
+
+  const dx = t.clientX - lastTouchX;
+  const dy = t.clientY - lastTouchY;
+
+  /*
+    Le doigt déplace réellement
+    la rotation du coffre.
+  */
+
+  targetRY += dx * 0.35;
+  targetRX -= dy * 0.25;
+
+  /*
+    Limite l'inclinaison verticale
+    pour éviter de retourner complètement
+    le coffre.
+  */
+
+  targetRX = Math.max(-35, Math.min(35, targetRX));
+
+  lastTouchX = t.clientX;
+  lastTouchY = t.clientY;
+
+}, { passive:true });
+
+
+window.addEventListener("touchend", () => {
+
+  touchActive = false;
+
+});
+
+/* ============ BOUCLE ANIMATION ============ */
+function animate(){
+  if (state === STATE.ENDING) return;
+  requestAnimationFrame(animate);
+  ctx.clearRect(0, 0, w, h);
+
+  if (state === STATE.IDLE){
+    breathe += 0.02;
+    floatTime += 0.016;
+    rx += (targetRX - rx) * 0.07;
+    ry += (targetRY - ry) * 0.07;
+    rx += velX * 0.018;
+    ry += velY * 0.018;
+    velX *= 0.93;
+    velY *= 0.93;
+    const floatY = Math.sin(floatTime) * 12;
+    const scale = 1 + Math.sin(breathe) * 0.012;
+    chest.style.transform = `translateY(${floatY}px) rotateX(${rx}deg) rotateY(${ry}deg) scale(${scale})`;
+    light.style.opacity = 0.05 + 0.04 * Math.sin(breathe * 2);
+  }
+  drawParticles();
+}
+animate();
+
+/* ============ INTRO ============ */
+document.getElementById("start").onclick = () => {
+  intro.style.opacity = "0";
+  setTimeout(() => {
+    intro.remove();
+    scene.style.display = "flex";
+    orbitSys.classList.add("active");
+    state = STATE.IDLE;
+    showDialog("✨ Fais doucement tourner le coffre.");
+  }, 1100);
+};
+
+/* ============ SERRURE ============ */
+let lockAttempts = 0;
+let chestOpened = false;
+let lockFlyAnim = null;
+
+function shakeLock(){
+  navigator.vibrate?.(30);
+  lock.classList.remove("lockShake");
+  void lock.offsetWidth;
+  lock.classList.add("lockShake");
+}
+
+function handleLockActivate(){
+  if (state !== STATE.IDLE || chestOpened) return;
+  lockAttempts++;
+  if (lockAttempts < 2){
+    shakeLock();
+    showDialog("🔒 On dirait qu'elle résiste...");
+    setTimeout(() => showDialog("✨ Réessaie une fois..."), 1000);
+    return;
+  }
+  openChest();
+}
+
+lock.addEventListener("click", handleLockActivate);
+lock.setAttribute("role", "button");
+lock.setAttribute("tabindex", "0");
+lock.addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " "){
+    e.preventDefault();
+    handleLockActivate();
+  }
+});
+
+function openChest(){
+  chestOpened = true;
+  state = STATE.OPENING;
+  chest.style.transition = "transform .9s cubic-bezier(.22,.8,.22,1)";
+  chest.style.transform = "translateY(0px) rotateX(0deg) rotateY(0deg) scale(1)";
+  showDialog("✨ Le coffre s'ouvre...");
+  navigator.vibrate?.([50,50,100]);
+  spawnBurst();
+
+  lockFlyAnim = lock.animate([
+    { transform:"translateX(-50%) scale(1) rotate(0deg)", opacity:1 },
+    { transform:"translateX(-50%) translateY(30px) rotate(20deg)", opacity:.85 },
+    { transform:"translateX(-50%) translateY(220px) rotate(260deg)", opacity:0 }
+  ], { duration:1000, fill:"forwards", easing:"ease-in" });
+
+  setTimeout(() => {
+    lid.style.transition = "transform 1.8s cubic-bezier(.2,.8,.2,1)";
+    lid.style.transform = "rotateX(-130deg)";
+  }, 400);
+
+  setTimeout(() => {
+    light.style.transition = "all 1.8s ease";
+    light.style.opacity = "1";
+    light.style.width = "400px";
+    light.style.height = "400px";
+    light.style.filter = "blur(110px)";
+  }, 800);
+
+  setTimeout(() => {
+    state = STATE.LETTER;
+    showDialog("💛 Quelque chose apparaît...");
+    showLetter();
+  }, 2600);
+}
+
+/* ============ LETTRE ============ */
+const letter = document.createElement("div");
+letter.id = "letter";
+letter.innerHTML = `
+  <div class="paper">
+    <div class="paperInner">
+      <h2>❤️ Mon amour ❤️</h2>
+      <p class="prompt">Touche la lettre...</p>
+      <div class="letterBody"></div>
+    </div>
+    <div class="wax-seal">💋</div>
+  </div>
+`;
+scene.appendChild(letter);
+
+const paperInner = letter.querySelector(".paperInner");
+const prompt = letter.querySelector(".prompt");
+const letterBody = letter.querySelector(".letterBody");
+
+function showLetter(){
+  letter.style.opacity = "1";
+  letter.style.transform = "translateX(-50%) translateY(-50px) scale(1) rotate(0deg)";
+  navigator.vibrate?.(40);
+  let t = 0;
+  function floatLetter(){
+    if (state !== STATE.LETTER) return;
+    t += 0.022;
+    letter.style.transform = `translateX(-50%) translateY(${-50 + Math.sin(t) * 10}px) rotate(${Math.sin(t * .55) * 2.5}deg) scale(1)`;
+    requestAnimationFrame(floatLetter);
+  }
+  floatLetter();
+  setTimeout(() => {
+    showDialog("📜 Touche la lettre ❤️");
+    letter.style.pointerEvents = "auto";
+  }, 2200);
+}
+
+letter.addEventListener("click", openLetter);
+
+function openLetter(){
+  if (state !== STATE.LETTER) return;
+  letter.style.pointerEvents = "none";
+  navigator.vibrate?.([50,50,50]);
+  showDialog("❤️ Lis-la doucement...");
+  letter.animate([
+    { transform:"translateX(-50%) translateY(-50px) scale(1) rotate(0deg)" },
+    { transform:"translateX(-50%) translateY(-50px) scale(1.22) rotate(0deg)" }
+  ], { duration:1000, fill:"forwards", easing:"ease" });
+  setTimeout(() => {
+    prompt.classList.add("hidden");
+    letterBody.classList.add("show");
+    writeLetter();
+  }, 800);
+}
+
+const fullLetter =
+`Avant demain...
+
+Je voulais simplement te dire merci.
+
+Merci d'être entrée dans ma vie.
+
+Merci pour tous les moments que nous avons passés ensemble.
+
+Merci pour chacun de nos fous rires.
+
+Merci pour chacun de nos appels.
+
+Merci pour chacun de nos messages.
+
+Merci d'être toi.
+
+Et demain...
+
+Il restera une toute dernière surprise...
+
+Je t'aime énormément. ❤️`;
+
+function writeLetter(){
+  let i = 0;
+  const baseSpeed = 55;
+
+  function type(){
+    if (i >= fullLetter.length){
+      letterBody.innerHTML = fullLetter.replace(/\n/g, "<br>");
+      state = STATE.ENDING;
+      setTimeout(finishJourney, 3000);
+      return;
+    }
+    const char = fullLetter[i];
+    let delay = baseSpeed;
+    if ('.!?'.includes(char)) delay = 500;
+    else if (',;:/'.includes(char)) delay = 240;
+    else if (char === '\n') delay = 380;
+
+    letterBody.innerHTML = fullLetter.substring(0, i+1).replace(/\n/g, "<br>") + '<span class="cursor"></span>';
+    if (i % 3 === 0) paperInner.scrollTop = paperInner.scrollHeight;
+    i++;
+    setTimeout(type, delay);
+  }
+  type();
+}
+
+/* ============ FINAL ============ */
+function finishJourney(){
+  showDialog("❤️ Merci d'avoir ouvert ce coffre...");
+  navigator.vibrate?.([100,50,100]);
+
+  const rain = [];
+  for (let i = 0; i < 150; i++){
+    rain.push({
+      x: Math.random() * w,
+      y: -Math.random() * h * 1.5,
+      vy: 1.5 + Math.random() * 4,
+      size: 1.5 + Math.random() * 4.5,
+      alpha: .2 + Math.random() * .8,
+      wobble: Math.random() * Math.PI * 2,
+      wobbleSpeed: 0.02 + Math.random() * 0.04
+    });
+  }
+
+  function rainLoop(){
+    ctx.clearRect(0, 0, w, h);
+    ctx.globalCompositeOperation = 'screen';
+    let alive = 0;
+    for (const p of rain){
+      p.y += p.vy;
+      p.wobble += p.wobbleSpeed;
+      p.x += Math.sin(p.wobble) * 0.6;
+      const s = p.size * 6;
+      ctx.globalAlpha = p.alpha;
+      ctx.drawImage(dustSprite, p.x - s/2, p.y - s/2, s, s);
+      if (p.y < h + 40) alive++;
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+    if (alive) requestAnimationFrame(rainLoop);
+  }
+  rainLoop();
+
+  setTimeout(() => {
+    letter.animate([
+      { transform:"translateX(-50%) translateY(-50px) scale(1.22)" },
+      { transform:"translateX(-50%) translateY(55px) scale(.3)" }
+    ], { duration:1600, fill:"forwards", easing:"ease" });
+  }, 2400);
+
+  setTimeout(() => {
+    lid.style.transition = "transform 1.8s ease";
+    lid.style.transform = "rotateX(0deg)";
+    light.style.opacity = "0";
+    light.style.width = "20px";
+    light.style.height = "20px";
+  }, 4000);
+
+  setTimeout(() => {
+    lockFlyAnim?.cancel();
+    lock.style.transition = "1s";
+    lock.style.opacity = "1";
+    lock.style.transform = "translateX(-50%)";
+  }, 5400);
+
+  setTimeout(() => {
+    dialog.innerHTML = `
+      <h2 style="margin-bottom:14px; font-family:'Dancing Script',cursive; font-size:1.9rem;">À demain... ❤️</h2>
+      <p style="opacity:.9;">Il reste encore une dernière surprise.</p>
+    `;
+    dialog.classList.add("show");
+  }, 6600);
+
+  setTimeout(() => {
+    document.body.animate([{ opacity:1 }, { opacity:0 }], { duration:2000, fill:"forwards" });
+  }, 10500);
+
+  setTimeout(() => {
+    window.location.href = "calendrier.html";
+  }, 12500);
+}
+
+})();
+</script>
+</body>
+</html>

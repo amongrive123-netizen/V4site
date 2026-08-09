@@ -1,0 +1,3824 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width,
+    initial-scale=1,
+    maximum-scale=1,
+    user-scalable=no"
+>
+
+<title>Jour 13 ❤️</title>
+
+<style>
+
+/* =========================================================
+                        RESET
+========================================================= */
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+
+    -webkit-tap-highlight-color:transparent;
+    -webkit-user-select:none;
+    user-select:none;
+}
+
+html,
+body{
+
+    width:100%;
+    height:100%;
+
+    overflow:hidden;
+
+    background:#050207;
+
+    color:white;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    touch-action:none;
+}
+
+
+/* =========================================================
+                        GAME
+========================================================= */
+
+#game{
+
+    position:fixed;
+
+    inset:0;
+
+    overflow:hidden;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 18%,
+            rgba(255,45,130,.13),
+            transparent 28%
+        ),
+
+        radial-gradient(
+            circle at 50% 70%,
+            rgba(150,20,100,.08),
+            transparent 45%
+        ),
+
+        linear-gradient(
+            180deg,
+            #16040f 0%,
+            #09030a 48%,
+            #040207 100%
+        );
+}
+
+
+/* =========================================================
+                    PARTICLES CANVAS
+========================================================= */
+
+#fx{
+
+    position:absolute;
+
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    pointer-events:none;
+
+    z-index:100;
+}
+
+
+/* =========================================================
+                        INTRO
+========================================================= */
+
+#intro{
+
+    position:absolute;
+
+    inset:0;
+
+    z-index:300;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+
+    background:
+
+        radial-gradient(
+            circle at center,
+            rgba(40,7,28,.97),
+            rgba(4,1,7,.995)
+        );
+
+    transition:
+        opacity .8s ease,
+        transform .8s ease;
+}
+
+
+.introCard{
+
+    width:
+        min(
+            430px,
+            92vw
+        );
+
+    padding:
+        32px 24px;
+
+    text-align:center;
+
+    border-radius:
+        30px;
+
+    background:
+        rgba(255,255,255,.045);
+
+    border:
+        1px solid
+        rgba(255,120,180,.16);
+
+    box-shadow:
+
+        0 30px 100px
+        rgba(0,0,0,.7),
+
+        0 0 80px
+        rgba(255,40,130,.06);
+
+    backdrop-filter:
+        blur(20px);
+
+    -webkit-backdrop-filter:
+        blur(20px);
+}
+
+
+.introHeart{
+
+    font-size:
+        64px;
+
+    margin-bottom:
+        14px;
+
+    filter:
+        drop-shadow(
+            0 0 28px
+            rgba(255,50,130,.7)
+        );
+
+    animation:
+        introBeat
+        1.5s
+        ease-in-out
+        infinite;
+}
+
+
+@keyframes introBeat{
+
+    0%,
+    100%{
+
+        transform:
+            scale(1);
+
+    }
+
+    50%{
+
+        transform:
+            scale(1.1);
+
+    }
+
+}
+
+
+.introCard h1{
+
+    font-size:
+        clamp(
+            1.5rem,
+            7vw,
+            2rem
+        );
+
+    margin-bottom:
+        14px;
+}
+
+
+.introCard p{
+
+    font-size:
+        .9rem;
+
+    line-height:
+        1.75;
+
+    opacity:
+        .78;
+
+    margin-bottom:
+        25px;
+}
+
+
+#start{
+
+    border:0;
+
+    padding:
+        15px 31px;
+
+    border-radius:
+        999px;
+
+    color:white;
+
+    font-size:
+        .95rem;
+
+    font-weight:700;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #ff438e,
+            #ff73b5
+        );
+
+    box-shadow:
+
+        0 12px 35px
+        rgba(255,50,130,.3);
+
+    cursor:pointer;
+}
+
+
+/* =========================================================
+                        HUD
+========================================================= */
+
+#hud{
+
+    position:absolute;
+
+    top:
+        max(
+            14px,
+            env(safe-area-inset-top)
+        );
+
+    left:0;
+    right:0;
+
+    z-index:80;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:
+        0 17px;
+
+    pointer-events:none;
+}
+
+
+#lives{
+
+    font-size:
+        18px;
+
+    letter-spacing:
+        1px;
+}
+
+
+#combo{
+
+    padding:
+        7px 13px;
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(255,255,255,.055);
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    font-size:
+        .76rem;
+
+    transition:
+        transform .12s ease;
+}
+
+
+#combo.pop{
+
+    transform:
+        scale(1.12);
+
+}
+
+
+#score{
+
+    font-size:
+        .76rem;
+
+    opacity:
+        .7;
+}
+
+
+/* =========================================================
+                    GRAND COEUR
+========================================================= */
+
+#heart{
+
+    position:absolute;
+
+    left:50%;
+
+    top:22%;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
+
+    z-index:50;
+
+    font-size:
+        clamp(
+            72px,
+            21vw,
+            110px
+        );
+
+    line-height:1;
+
+    pointer-events:none;
+
+    filter:
+        drop-shadow(
+            0 0 28px
+            rgba(255,50,135,.65)
+        );
+}
+
+
+#heart.beat{
+
+    animation:
+        heartBeat
+        .18s
+        ease-out;
+}
+
+
+@keyframes heartBeat{
+
+    0%{
+
+        transform:
+            translate(
+                -50%,
+                -50%
+            )
+            scale(1);
+
+    }
+
+    45%{
+
+        transform:
+            translate(
+                -50%,
+                -50%
+            )
+            scale(1.13);
+
+    }
+
+    100%{
+
+        transform:
+            translate(
+                -50%,
+                -50%
+            )
+            scale(1);
+
+    }
+
+}
+
+
+#heart.damage{
+
+    animation:
+        heartDamage
+        .35s
+        ease;
+}
+
+
+@keyframes heartDamage{
+
+    0%{
+
+        transform:
+            translate(
+                -50%,
+                -50%
+            )
+            scale(1);
+
+    }
+
+    20%{
+
+        transform:
+            translate(
+                calc(-50% - 9px),
+                -50%
+            )
+            scale(.9);
+
+    }
+
+    40%{
+
+        transform:
+            translate(
+                calc(-50% + 9px),
+                -50%
+            )
+            scale(.94);
+
+    }
+
+    60%{
+
+        transform:
+            translate(
+                calc(-50% - 4px),
+                -50%
+            )
+            scale(.97);
+
+    }
+
+    100%{
+
+        transform:
+            translate(
+                -50%,
+                -50%
+            )
+            scale(1);
+
+    }
+
+}
+
+
+/* =========================================================
+                        LANES
+========================================================= */
+
+#lanes{
+
+    position:absolute;
+
+    left:50%;
+
+    bottom:0;
+
+    transform:
+        translateX(-50%);
+
+    width:
+        min(
+            560px,
+            100vw
+        );
+
+    height:
+        68%;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    z-index:20;
+
+    border-left:
+        1px solid
+        rgba(255,255,255,.04);
+
+    border-right:
+        1px solid
+        rgba(255,255,255,.04);
+}
+
+
+.lane{
+
+    position:relative;
+
+    height:100%;
+
+    overflow:visible;
+
+    border-right:
+        1px solid
+        rgba(255,255,255,.055);
+
+    touch-action:none;
+}
+
+
+.lane:last-child{
+
+    border-right:0;
+}
+
+
+.lane::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+
+        linear-gradient(
+            to top,
+            rgba(255,60,140,.045),
+            transparent 75%
+        );
+
+    pointer-events:none;
+}
+
+
+/* =========================================================
+                    HIT ZONES
+========================================================= */
+
+.hitZone{
+
+    position:absolute;
+
+    left:8%;
+
+    right:8%;
+
+    bottom:7%;
+
+    height:
+        clamp(
+            52px,
+            11vw,
+            64px
+        );
+
+    border-radius:
+        18px;
+
+    border:
+        2px solid
+        rgba(255,120,180,.25);
+
+    background:
+        rgba(255,70,140,.035);
+
+    box-shadow:
+
+        inset 0 0 18px
+        rgba(255,50,130,.035);
+
+    pointer-events:none;
+
+    transition:
+
+        background .05s ease,
+
+        border-color .05s ease,
+
+        box-shadow .05s ease,
+
+        transform .05s ease;
+}
+
+
+.hitZone.active{
+
+    border-color:
+        rgba(255,175,215,.9);
+
+    background:
+        rgba(255,75,145,.13);
+
+    box-shadow:
+
+        0 0 22px
+        rgba(255,70,150,.25),
+
+        inset 0 0 20px
+        rgba(255,70,150,.1);
+}
+
+
+.hitZone.press{
+
+    transform:
+        scale(.91);
+
+    background:
+        rgba(255,70,150,.2);
+
+}
+
+
+/* =========================================================
+                        NOTES
+========================================================= */
+
+.note{
+
+    position:absolute;
+
+    left:50%;
+
+    width:
+        clamp(
+            48px,
+            12vw,
+            62px
+        );
+
+    height:
+        clamp(
+            48px,
+            12vw,
+            62px
+        );
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:
+        clamp(
+            30px,
+            7vw,
+            40px
+        );
+
+    line-height:1;
+
+    z-index:70;
+
+    cursor:pointer;
+
+    pointer-events:auto;
+
+    touch-action:
+        manipulation;
+
+    will-change:
+        top,
+        transform;
+
+    filter:
+        drop-shadow(
+            0 0 13px
+            rgba(255,70,150,.7)
+        );
+}
+
+
+.note:active{
+
+    transform:
+        translateX(-50%)
+        scale(.85);
+
+}
+
+
+.note.hit{
+
+    pointer-events:none;
+
+    animation:
+        noteHit
+        .25s
+        ease-out
+        forwards;
+}
+
+
+@keyframes noteHit{
+
+    0%{
+
+        opacity:1;
+
+        transform:
+            translateX(-50%)
+            scale(1);
+
+    }
+
+    100%{
+
+        opacity:0;
+
+        transform:
+            translateX(-50%)
+            scale(1.8);
+
+    }
+
+}
+
+
+/* =========================================================
+                        FEEDBACK
+========================================================= */
+
+#feedback{
+
+    position:absolute;
+
+    left:50%;
+
+    top:45%;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
+
+    z-index:120;
+
+    font-size:
+        clamp(
+            1rem,
+            5vw,
+            1.5rem
+        );
+
+    font-weight:800;
+
+    opacity:0;
+
+    pointer-events:none;
+}
+
+
+#feedback.show{
+
+    animation:
+        feedback
+        .55s
+        ease
+        forwards;
+}
+
+
+@keyframes feedback{
+
+    0%{
+
+        opacity:0;
+
+        transform:
+            translate(
+                -50%,
+                -50%
+            )
+            scale(.7);
+
+    }
+
+    20%{
+
+        opacity:1;
+
+        transform:
+            translate(
+                -50%,
+                -50%
+            )
+            scale(1.12);
+
+    }
+
+    100%{
+
+        opacity:0;
+
+        transform:
+            translate(
+                -50%,
+                calc(-50% - 25px)
+            )
+            scale(1);
+
+    }
+
+}
+
+
+/* =========================================================
+                    END SCREENS
+========================================================= */
+
+#gameOver,
+#victory{
+
+    position:absolute;
+
+    inset:0;
+
+    z-index:250;
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:22px;
+
+    background:
+        rgba(5,1,7,.8);
+
+    backdrop-filter:
+        blur(16px);
+
+    -webkit-backdrop-filter:
+        blur(16px);
+}
+
+
+.overCard,
+.victoryCard{
+
+    width:
+        min(
+            420px,
+            91vw
+        );
+
+    padding:
+        32px 24px;
+
+    text-align:center;
+
+    border-radius:
+        30px;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(35,8,25,.97),
+            rgba(13,3,11,.98)
+        );
+
+    border:
+        1px solid
+        rgba(255,120,180,.2);
+
+    box-shadow:
+
+        0 35px 100px
+        rgba(0,0,0,.65);
+}
+
+
+.overHeart,
+.victoryHeart{
+
+    font-size:
+        65px;
+
+    margin-bottom:
+        12px;
+}
+
+
+.overCard h2,
+.victoryCard h2{
+
+    font-size:
+        clamp(
+            1.4rem,
+            6vw,
+            1.8rem
+        );
+
+    margin-bottom:
+        12px;
+}
+
+
+.overCard p,
+.victoryCard p{
+
+    font-size:
+        .9rem;
+
+    line-height:
+        1.75;
+
+    opacity:
+        .78;
+
+    margin-bottom:
+        22px;
+}
+
+
+#retry,
+#calendar{
+
+    border:0;
+
+    padding:
+        14px 28px;
+
+    border-radius:
+        999px;
+
+    color:white;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #ff438f,
+            #ff76b6
+        );
+
+    font-weight:700;
+
+    font-size:
+        .9rem;
+
+    cursor:pointer;
+}
+
+
+#calendar{
+
+    width:100%;
+}
+
+
+.bon{
+
+    display:inline-block;
+
+    margin-bottom:
+        22px;
+
+    padding:
+        9px 14px;
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(255,80,150,.09);
+
+    border:
+        1px solid
+        rgba(255,100,170,.15);
+
+    font-size:
+        .78rem;
+}
+
+
+/* =========================================================
+                        MOBILE
+========================================================= */
+
+@media(max-width:600px){
+
+    #heart{
+
+        top:22%;
+
+    }
+
+    #lanes{
+
+        height:68%;
+
+    }
+
+}
+
+
+@media(max-height:680px){
+
+    #heart{
+
+        top:19%;
+
+        font-size:
+            74px;
+
+    }
+
+    #lanes{
+
+        height:71%;
+
+    }
+
+    .hitZone{
+
+        height:
+            48px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div id="game">
+
+
+<canvas id="fx"></canvas>
+
+
+<!-- =====================================================
+                        INTRO
+===================================================== -->
+
+<div id="intro">
+
+    <div class="introCard">
+
+        <div class="introHeart">
+            ❤️
+        </div>
+
+        <h1>
+            Protège mon cœur
+        </h1>
+
+        <p>
+
+            Les cœurs arrivent
+            au rythme de la musique.
+
+            <br><br>
+
+            Touche les ❤️
+            lorsqu'ils arrivent
+            dans les ronds.
+
+            <br><br>
+
+            Chaque erreur abîme
+            mon cœur...
+
+        </p>
+
+        <button id="start">
+            Commencer ❤️
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+                        HUD
+===================================================== -->
+
+<div id="hud">
+
+    <div id="lives">
+        ❤️❤️❤️❤️❤️
+    </div>
+
+    <div id="combo">
+        Combo ×0
+    </div>
+
+    <div id="score">
+        0
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+                    GRAND COEUR
+===================================================== -->
+
+<div id="heart">
+    ❤️
+</div>
+
+
+<!-- =====================================================
+                        LANES
+===================================================== -->
+
+<div id="lanes">
+
+    <div
+        class="lane"
+        data-lane="0"
+    >
+
+        <div class="hitZone"></div>
+
+    </div>
+
+
+    <div
+        class="lane"
+        data-lane="1"
+    >
+
+        <div class="hitZone"></div>
+
+    </div>
+
+
+    <div
+        class="lane"
+        data-lane="2"
+    >
+
+        <div class="hitZone"></div>
+
+    </div>
+
+
+    <div
+        class="lane"
+        data-lane="3"
+    >
+
+        <div class="hitZone"></div>
+
+    </div>
+
+</div>
+
+
+<div id="feedback">
+    PERFECT ❤️
+</div>
+
+
+<!-- =====================================================
+                        GAME OVER
+===================================================== -->
+
+<div id="gameOver">
+
+    <div class="overCard">
+
+        <div class="overHeart">
+            💔
+        </div>
+
+        <h2>
+            Mon cœur...
+        </h2>
+
+        <p>
+
+            Tu l'as laissé se briser. ❤️
+
+            <br><br>
+
+            Mais tu peux toujours
+            réessayer.
+
+        </p>
+
+        <button id="retry">
+            Réessayer ❤️
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+                        VICTOIRE
+===================================================== -->
+
+<div id="victory">
+
+    <div class="victoryCard">
+
+        <div class="victoryHeart">
+            ❤️
+        </div>
+
+        <h2>
+            Tu as protégé mon cœur.
+        </h2>
+
+        <p>
+
+            Tu as réussi. ❤️
+
+            <br><br>
+
+            Tu as suivi le rythme
+            jusqu'au bout.
+
+            <br><br>
+
+            Et finalement...
+
+            <br>
+
+            <strong>
+                mon cœur est toujours
+                entre tes mains.
+            </strong>
+
+        </p>
+
+        <div class="bon">
+            🎁 Bon n°4 débloqué
+        </div>
+
+        <button id="calendar">
+            Retour au calendrier ♡
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+                        AUDIO
+========================================================= */
+
+const music =
+    new Audio(
+        "assets/musique2.mp3"
+    );
+
+
+music.preload =
+    "auto";
+
+music.volume =
+    0.55;
+
+music.loop =
+    false;
+
+
+/* =========================================================
+                        DOM
+========================================================= */
+
+const intro =
+    document.getElementById(
+        "intro"
+    );
+
+const startButton =
+    document.getElementById(
+        "start"
+    );
+
+const heart =
+    document.getElementById(
+        "heart"
+    );
+
+const livesText =
+    document.getElementById(
+        "lives"
+    );
+
+const comboText =
+    document.getElementById(
+        "combo"
+    );
+
+const scoreText =
+    document.getElementById(
+        "score"
+    );
+
+const feedback =
+    document.getElementById(
+        "feedback"
+    );
+
+const lanes =
+    Array.from(
+        document.querySelectorAll(
+            ".lane"
+        )
+    );
+
+const hitZones =
+    Array.from(
+        document.querySelectorAll(
+            ".hitZone"
+        )
+    );
+
+const gameOver =
+    document.getElementById(
+        "gameOver"
+    );
+
+const victory =
+    document.getElementById(
+        "victory"
+    );
+
+const retry =
+    document.getElementById(
+        "retry"
+    );
+
+const calendar =
+    document.getElementById(
+        "calendar"
+    );
+
+const fx =
+    document.getElementById(
+        "fx"
+    );
+
+const ctx =
+    fx.getContext(
+        "2d"
+    );
+
+
+/* =========================================================
+                    CANVAS
+========================================================= */
+
+let W =
+    window.innerWidth;
+
+let H =
+    window.innerHeight;
+
+let DPR =
+    Math.min(
+        window.devicePixelRatio || 1,
+        2
+    );
+
+
+function resize(){
+
+    W =
+        window.innerWidth;
+
+    H =
+        window.innerHeight;
+
+    DPR =
+        Math.min(
+            window.devicePixelRatio || 1,
+            2
+        );
+
+    fx.width =
+        W * DPR;
+
+    fx.height =
+        H * DPR;
+
+    fx.style.width =
+        W + "px";
+
+    fx.style.height =
+        H + "px";
+
+    ctx.setTransform(
+        DPR,
+        0,
+        0,
+        DPR,
+        0,
+        0
+    );
+
+}
+
+
+resize();
+
+
+window.addEventListener(
+    "resize",
+    resize
+);
+
+
+/* =========================================================
+                        GAME STATE
+========================================================= */
+
+let playing =
+    false;
+
+let ended =
+    false;
+
+let lives =
+    5;
+
+let combo =
+    0;
+
+let score =
+    0;
+
+
+/* =========================================================
+                        BPM
+========================================================= */
+
+const BPM =
+    67;
+
+
+/*
+    67 BPM :
+
+    60000 / 67
+    ≈ 895.5 ms par beat
+*/
+
+const BEAT =
+    60000 / BPM;
+
+
+/*
+    Temps de descente
+*/
+
+const TRAVEL_TIME =
+    1800;
+
+
+/*
+    Fenêtre de frappe.
+
+    230 ms = assez permissif
+    pour téléphone.
+*/
+
+const HIT_WINDOW =
+    230;
+
+
+/*
+    Distance visuelle
+    pour activer le rond.
+*/
+
+const ACTIVE_DISTANCE =
+    34;
+
+
+/*
+    Permet d'empêcher
+    plusieurs fins simultanées.
+*/
+
+let finishTimerStarted =
+    false;
+
+
+/* =========================================================
+                        NOTES
+========================================================= */
+
+let notes =
+    [];
+
+
+function addNote(
+    beat,
+    lane
+){
+
+    notes.push({
+
+        time:
+            beat * BEAT,
+
+        lane:
+            lane,
+
+        hit:
+            false,
+
+        missed:
+            false,
+
+        element:
+            null
+
+    });
+
+}
+
+
+/* =========================================================
+                    CHART MUSICAL
+========================================================= */
+
+/*
+    INTRO
+*/
+
+addNote(3,0);
+addNote(4.5,1);
+addNote(6,2);
+addNote(7.5,3);
+
+
+/*
+    PARTIE 1
+*/
+
+[
+    [10,0],
+    [11,2],
+    [12,1],
+    [13,3],
+
+    [15,3],
+    [16,1],
+    [17,2],
+    [18,0]
+]
+.forEach(
+    pair => {
+
+        addNote(
+            pair[0],
+            pair[1]
+        );
+
+    }
+);
+
+
+/*
+    PARTIE 2
+*/
+
+[
+    [21,0],
+    [21.5,1],
+    [22,2],
+    [22.5,3],
+
+    [24,3],
+    [24.5,2],
+    [25,1],
+    [25.5,0]
+]
+.forEach(
+    pair => {
+
+        addNote(
+            pair[0],
+            pair[1]
+        );
+
+    }
+);
+
+
+/*
+    DOUBLES
+*/
+
+[
+    [29,0],
+    [29,2],
+
+    [30,1],
+    [30,3],
+
+    [32,0],
+    [32,3],
+
+    [33,1],
+    [33,2]
+]
+.forEach(
+    pair => {
+
+        addNote(
+            pair[0],
+            pair[1]
+        );
+
+    }
+);
+
+
+/*
+    PARTIE 3
+*/
+
+[
+    [36,0],
+    [36.5,2],
+    [37,1],
+    [37.5,3],
+
+    [40,3],
+    [40.5,1],
+    [41,2],
+    [41.5,0],
+
+    [44,0],
+    [45,1],
+    [46,2],
+    [47,3]
+]
+.forEach(
+    pair => {
+
+        addNote(
+            pair[0],
+            pair[1]
+        );
+
+    }
+);
+
+
+/*
+    PETIT PASSAGE CALME
+*/
+
+addNote(51,1);
+addNote(53,2);
+
+
+/*
+    FINALE
+*/
+
+[
+    [57,0],
+    [57.5,1],
+    [58,2],
+    [58.5,3],
+
+    [60,3],
+    [60.5,2],
+    [61,1],
+    [61.5,0],
+
+    [64,0],
+    [64.5,2],
+    [65,1],
+    [65.5,3],
+
+    [68,3],
+    [68.5,1],
+    [69,2],
+    [69.5,0],
+
+    [73,0],
+    [74.5,2],
+    [76,1],
+    [77.5,3],
+
+    [80,1]
+]
+.forEach(
+    pair => {
+
+        addNote(
+            pair[0],
+            pair[1]
+        );
+
+    }
+);
+
+
+/*
+    Sécurité :
+    toujours dans l'ordre.
+*/
+
+notes.sort(
+    (
+        a,
+        b
+    ) =>
+        a.time -
+        b.time
+);
+
+
+/* =========================================================
+                    WEB AUDIO
+========================================================= */
+
+let audioContext =
+    null;
+
+
+function initAudio(){
+
+    if(
+        !audioContext
+    ){
+
+        audioContext =
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+
+    }
+
+
+    if(
+        audioContext.state ===
+        "suspended"
+    ){
+
+        audioContext.resume();
+
+    }
+
+}
+
+
+/* =========================================================
+                        HIT SOUND
+========================================================= */
+
+function playHitSound(){
+
+    initAudio();
+
+
+    const now =
+        audioContext.currentTime;
+
+
+    const oscillator =
+        audioContext.createOscillator();
+
+
+    const gain =
+        audioContext.createGain();
+
+
+    oscillator.type =
+        "sine";
+
+
+    oscillator.frequency.setValueAtTime(
+        620,
+        now
+    );
+
+
+    oscillator.frequency.exponentialRampToValueAtTime(
+        880,
+        now + .08
+    );
+
+
+    gain.gain.setValueAtTime(
+        .0001,
+        now
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        .055,
+        now + .01
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        .0001,
+        now + .1
+    );
+
+
+    oscillator.connect(
+        gain
+    );
+
+
+    gain.connect(
+        audioContext.destination
+    );
+
+
+    oscillator.start(
+        now
+    );
+
+
+    oscillator.stop(
+        now + .11
+    );
+
+}
+
+
+/* =========================================================
+                        MISS SOUND
+========================================================= */
+
+function playMissSound(){
+
+    initAudio();
+
+
+    const now =
+        audioContext.currentTime;
+
+
+    const oscillator =
+        audioContext.createOscillator();
+
+
+    const gain =
+        audioContext.createGain();
+
+
+    oscillator.type =
+        "sawtooth";
+
+
+    oscillator.frequency.setValueAtTime(
+        160,
+        now
+    );
+
+
+    oscillator.frequency.exponentialRampToValueAtTime(
+        65,
+        now + .18
+    );
+
+
+    gain.gain.setValueAtTime(
+        .0001,
+        now
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        .07,
+        now + .01
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        .0001,
+        now + .2
+    );
+
+
+    oscillator.connect(
+        gain
+    );
+
+
+    gain.connect(
+        audioContext.destination
+    );
+
+
+    oscillator.start(
+        now
+    );
+
+
+    oscillator.stop(
+        now + .21
+    );
+
+}
+
+
+/* =========================================================
+                    VICTORY SOUND
+========================================================= */
+
+function playVictorySound(){
+
+    initAudio();
+
+
+    const now =
+        audioContext.currentTime;
+
+
+    const melody = [
+
+        [261.63,0],
+
+        [329.63,.15],
+
+        [392,.30],
+
+        [523.25,.48],
+
+        [659.25,.72]
+
+    ];
+
+
+    melody.forEach(
+        item => {
+
+            const oscillator =
+                audioContext.createOscillator();
+
+
+            const gain =
+                audioContext.createGain();
+
+
+            oscillator.type =
+                "sine";
+
+
+            oscillator.frequency.value =
+                item[0];
+
+
+            const start =
+                now +
+                item[1];
+
+
+            gain.gain.setValueAtTime(
+                .0001,
+                start
+            );
+
+
+            gain.gain.exponentialRampToValueAtTime(
+                .12,
+                start + .025
+            );
+
+
+            gain.gain.exponentialRampToValueAtTime(
+                .0001,
+                start + .35
+            );
+
+
+            oscillator.connect(
+                gain
+            );
+
+
+            gain.connect(
+                audioContext.destination
+            );
+
+
+            oscillator.start(
+                start
+            );
+
+
+            oscillator.stop(
+                start + .4
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+                    CREATE NOTE
+========================================================= */
+
+function createNote(
+    note
+){
+
+    if(
+        note.element
+    ){
+
+        return;
+    }
+
+
+    const element =
+        document.createElement(
+            "div"
+        );
+
+
+    element.className =
+        "note";
+
+
+    element.textContent =
+        "❤️";
+
+
+    /*
+        TACTILE :
+        on peut directement toucher
+        le cœur.
+    */
+
+    element.addEventListener(
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            attemptHit(
+                note
+            );
+
+        },
+        {
+            passive:false
+        }
+    );
+
+
+    /*
+        SOURIS.
+    */
+
+    element.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            attemptHit(
+                note
+            );
+
+        }
+    );
+
+
+    lanes[
+        note.lane
+    ].appendChild(
+        element
+    );
+
+
+    note.element =
+        element;
+
+}
+
+
+/* =========================================================
+                POSITION DE LA NOTE
+========================================================= */
+
+function updateNotePosition(
+    note,
+    currentTime
+){
+
+    if(
+        note.hit ||
+        note.missed
+    ){
+
+        return;
+    }
+
+
+    createNote(
+        note
+    );
+
+
+    const lane =
+        lanes[
+            note.lane
+        ];
+
+
+    const zone =
+        hitZones[
+            note.lane
+        ];
+
+
+    const laneRect =
+        lane.getBoundingClientRect();
+
+
+    const zoneRect =
+        zone.getBoundingClientRect();
+
+
+    /*
+        Position cible :
+        centre EXACT du rond.
+    */
+
+    const targetY =
+        (
+            zoneRect.top -
+            laneRect.top
+        )
+        +
+        (
+            zoneRect.height /
+            2
+        );
+
+
+    /*
+        Position de départ.
+    */
+
+    const startY =
+        -80;
+
+
+    /*
+        Temps restant.
+    */
+
+    const remaining =
+        note.time -
+        currentTime;
+
+
+    /*
+        Progression.
+    */
+
+    let progress =
+        1 -
+        (
+            remaining /
+            TRAVEL_TIME
+        );
+
+
+    progress =
+        Math.max(
+            0,
+            Math.min(
+                1,
+                progress
+            )
+        );
+
+
+    /*
+        Position verticale.
+    */
+
+    const y =
+        startY
+        +
+        (
+            targetY -
+            startY
+        )
+        *
+        progress;
+
+
+    const noteHeight =
+        note.element.offsetHeight;
+
+
+    note.element.style.top =
+        (
+            y -
+            noteHeight / 2
+        )
+        +
+        "px";
+
+
+    note.element.style.transform =
+        "translateX(-50%)";
+
+
+    /*
+        Position ACTUELLE réelle
+        du coeur à l'écran.
+    */
+
+    const noteRect =
+        note.element.getBoundingClientRect();
+
+
+    const noteCenter =
+        noteRect.top +
+        noteRect.height / 2;
+
+
+    const zoneCenter =
+        zoneRect.top +
+        zoneRect.height / 2;
+
+
+    const distance =
+        Math.abs(
+            noteCenter -
+            zoneCenter
+        );
+
+
+    /*
+        Le rond devient rose
+        uniquement lorsque le coeur
+        est réellement dessus.
+    */
+
+    if(
+        distance <=
+        ACTIVE_DISTANCE
+    ){
+
+        zone.classList.add(
+            "active"
+        );
+
+    }
+    else{
+
+        zone.classList.remove(
+            "active"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+                HIT DIRECT SUR COEUR
+========================================================= */
+
+function attemptHit(
+    note
+){
+
+    if(
+        !playing ||
+        ended ||
+        note.hit ||
+        note.missed
+    ){
+
+        return;
+    }
+
+
+    const currentTime =
+        music.currentTime *
+        1000;
+
+
+    const difference =
+        Math.abs(
+            currentTime -
+            note.time
+        );
+
+
+    /*
+        Trop tôt ou trop tard :
+        on ne valide pas.
+    */
+
+    if(
+        difference >
+        HIT_WINDOW
+    ){
+
+        return;
+    }
+
+
+    /*
+        VALIDATION IMMÉDIATE.
+    */
+
+    note.hit =
+        true;
+
+
+    hitZones[
+        note.lane
+    ].classList.remove(
+        "active"
+    );
+
+
+    if(
+        note.element
+    ){
+
+        note.element.classList.add(
+            "hit"
+        );
+
+    }
+
+
+    const perfect =
+        difference <=
+        110;
+
+
+    score +=
+        perfect
+            ? 100
+            : 50;
+
+
+    combo++;
+
+
+    showFeedback(
+        perfect
+            ? "PERFECT ❤️"
+            : "GOOD ❤️"
+    );
+
+
+    playHitSound();
+
+
+    pulseHeart();
+
+
+    pressZone(
+        note.lane
+    );
+
+
+    spawnParticles(
+        note.lane
+    );
+
+
+    updateHUD();
+
+}
+
+
+/* =========================================================
+                    CLICK SUR PISTE
+========================================================= */
+
+lanes.forEach(
+    (
+        lane,
+        index
+    ) => {
+
+        lane.addEventListener(
+            "pointerdown",
+            event => {
+
+                event.preventDefault();
+
+
+                if(
+                    event.target.closest(
+                        ".note"
+                    )
+                ){
+
+                    return;
+                }
+
+
+                attemptLane(
+                    index
+                );
+
+            },
+            {
+                passive:false
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
+                    HIT PISTE
+========================================================= */
+
+function attemptLane(
+    laneIndex
+){
+
+    if(
+        !playing ||
+        ended
+    ){
+
+        return;
+    }
+
+
+    const currentTime =
+        music.currentTime *
+        1000;
+
+
+    let best =
+        null;
+
+
+    let bestDifference =
+        Infinity;
+
+
+    for(
+        const note of notes
+    ){
+
+        if(
+            note.hit ||
+            note.missed
+        ){
+
+            continue;
+        }
+
+
+        if(
+            note.lane !==
+            laneIndex
+        ){
+
+            continue;
+        }
+
+
+        const difference =
+            Math.abs(
+                currentTime -
+                note.time
+            );
+
+
+        if(
+            difference <
+            bestDifference
+        ){
+
+            bestDifference =
+                difference;
+
+            best =
+                note;
+
+        }
+
+    }
+
+
+    if(
+        best &&
+        bestDifference <=
+        HIT_WINDOW
+    ){
+
+        attemptHit(
+            best
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+                        CLAVIER
+========================================================= */
+
+window.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.repeat
+        ){
+
+            return;
+        }
+
+
+        if(
+            event.key === "d" ||
+            event.key === "ArrowLeft"
+        ){
+
+            attemptLane(0);
+
+        }
+
+
+        else if(
+            event.key === "f" ||
+            event.key === "ArrowDown"
+        ){
+
+            attemptLane(1);
+
+        }
+
+
+        else if(
+            event.key === "j" ||
+            event.key === "ArrowUp"
+        ){
+
+            attemptLane(2);
+
+        }
+
+
+        else if(
+            event.key === "k" ||
+            event.key === "ArrowRight"
+        ){
+
+            attemptLane(3);
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+                        HUD
+========================================================= */
+
+function updateHUD(){
+
+    livesText.textContent =
+        "❤️".repeat(
+            lives
+        )
+        +
+        "🖤".repeat(
+            5 -
+            lives
+        );
+
+
+    comboText.textContent =
+        "Combo ×" +
+        combo;
+
+
+    scoreText.textContent =
+        score;
+
+
+    comboText.classList.add(
+        "pop"
+    );
+
+
+    setTimeout(
+        () => {
+
+            comboText.classList.remove(
+                "pop"
+            );
+
+        },
+        120
+    );
+
+}
+
+
+/* =========================================================
+                    FEEDBACK
+========================================================= */
+
+function showFeedback(
+    text
+){
+
+    feedback.textContent =
+        text;
+
+
+    feedback.classList.remove(
+        "show"
+    );
+
+
+    void feedback.offsetWidth;
+
+
+    feedback.classList.add(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+                    HEART BEAT
+========================================================= */
+
+function pulseHeart(){
+
+    heart.classList.remove(
+        "beat"
+    );
+
+
+    void heart.offsetWidth;
+
+
+    heart.classList.add(
+        "beat"
+    );
+
+}
+
+
+/* =========================================================
+                    ZONE PRESS
+========================================================= */
+
+function pressZone(
+    index
+){
+
+    const zone =
+        hitZones[
+            index
+        ];
+
+
+    zone.classList.add(
+        "press"
+    );
+
+
+    setTimeout(
+        () => {
+
+            zone.classList.remove(
+                "press"
+            );
+
+        },
+        90
+    );
+
+}
+
+
+/* =========================================================
+                    PARTICLES
+========================================================= */
+
+const particles =
+    [];
+
+
+function spawnParticles(
+    laneIndex
+){
+
+    const zone =
+        hitZones[
+            laneIndex
+        ];
+
+
+    const rect =
+        zone.getBoundingClientRect();
+
+
+    const centerX =
+        rect.left +
+        rect.width / 2;
+
+
+    const centerY =
+        rect.top +
+        rect.height / 2;
+
+
+    for(
+        let i = 0;
+        i < 8;
+        i++
+    ){
+
+        particles.push({
+
+            x:centerX,
+
+            y:centerY,
+
+            vx:
+                (
+                    Math.random() -
+                    .5
+                )
+                *
+                3.5,
+
+            vy:
+                -(
+                    1 +
+                    Math.random() *
+                    3
+                ),
+
+            life:1,
+
+            size:
+                2 +
+                Math.random() *
+                3
+
+        });
+
+    }
+
+}
+
+
+/* =========================================================
+                PARTICLES LOOP
+========================================================= */
+
+function particleLoop(){
+
+    requestAnimationFrame(
+        particleLoop
+    );
+
+
+    ctx.clearRect(
+        0,
+        0,
+        W,
+        H
+    );
+
+
+    for(
+        let i =
+            particles.length - 1;
+
+        i >= 0;
+
+        i--
+    ){
+
+        const particle =
+            particles[i];
+
+
+        particle.x +=
+            particle.vx;
+
+
+        particle.y +=
+            particle.vy;
+
+
+        particle.vy +=
+            .04;
+
+
+        particle.life -=
+            .025;
+
+
+        if(
+            particle.life <=
+            0
+        ){
+
+            particles.splice(
+                i,
+                1
+            );
+
+            continue;
+
+        }
+
+
+        ctx.beginPath();
+
+
+        ctx.fillStyle =
+            `rgba(
+                255,
+                110,
+                180,
+                ${particle.life}
+            )`;
+
+
+        ctx.arc(
+            particle.x,
+            particle.y,
+            particle.size,
+            0,
+            Math.PI * 2
+        );
+
+
+        ctx.fill();
+
+    }
+
+}
+
+
+particleLoop();
+
+
+/* =========================================================
+                        MISS
+========================================================= */
+
+function missNote(
+    note
+){
+
+    if(
+        note.hit ||
+        note.missed
+    ){
+
+        return;
+    }
+
+
+    note.missed =
+        true;
+
+
+    if(
+        note.element
+    ){
+
+        note.element.remove();
+
+        note.element =
+            null;
+
+    }
+
+
+    hitZones[
+        note.lane
+    ].classList.remove(
+        "active"
+    );
+
+
+    lives--;
+
+
+    combo =
+        0;
+
+
+    playMissSound();
+
+
+    heart.classList.remove(
+        "damage"
+    );
+
+
+    void heart.offsetWidth;
+
+
+    heart.classList.add(
+        "damage"
+    );
+
+
+    updateHUD();
+
+
+    if(
+        navigator.vibrate
+    ){
+
+        navigator.vibrate(
+            45
+        );
+
+    }
+
+
+    if(
+        lives <=
+        0
+    ){
+
+        lose();
+
+    }
+
+}
+
+
+/* =========================================================
+                    GAME LOOP
+========================================================= */
+
+function gameLoop(){
+
+    requestAnimationFrame(
+        gameLoop
+    );
+
+
+    if(
+        !playing ||
+        ended
+    ){
+
+        return;
+    }
+
+
+    /*
+        IMPORTANT :
+
+        currentTime de l'audio =
+        horloge du jeu.
+    */
+
+    const currentTime =
+        music.currentTime *
+        1000;
+
+
+    /*
+        Mise à jour des notes.
+    */
+
+    for(
+        const note of notes
+    ){
+
+        if(
+            note.hit ||
+            note.missed
+        ){
+
+            continue;
+        }
+
+
+        const remaining =
+            note.time -
+            currentTime;
+
+
+        /*
+            La note entre à l'écran.
+        */
+
+        if(
+            remaining <=
+            TRAVEL_TIME
+            &&
+            remaining >=
+            -HIT_WINDOW
+        ){
+
+            updateNotePosition(
+                note,
+                currentTime
+            );
+
+        }
+
+
+        /*
+            Elle est réellement
+            passée derrière la zone.
+        */
+
+        if(
+            remaining <
+            -HIT_WINDOW
+        ){
+
+            missNote(
+                note
+            );
+
+        }
+
+    }
+
+
+    /*
+        =================================================
+                    FIN DU NIVEAU
+        =================================================
+
+        On ne dépend PAS de l'événement
+        "ended" de l'audio.
+
+        On regarde la dernière note.
+    */
+
+    if(
+        !finishTimerStarted &&
+        notes.length > 0
+    ){
+
+        const lastNote =
+            notes[
+                notes.length - 1
+            ];
+
+
+        /*
+            La dernière note doit
+            avoir été résolue.
+        */
+
+        const allResolved =
+            notes.every(
+                note =>
+                    note.hit ||
+                    note.missed
+            );
+
+
+        /*
+            On attend 1 seconde
+            après son timing.
+        */
+
+        const afterLastNote =
+            currentTime >
+            (
+                lastNote.time +
+                1000
+            );
+
+
+        if(
+            allResolved &&
+            afterLastNote
+        ){
+
+            finishTimerStarted =
+                true;
+
+
+            setTimeout(
+                () => {
+
+                    if(
+                        !ended
+                    ){
+
+                        /*
+                            Si elle a encore
+                            au moins une vie,
+                            victoire.
+                        */
+
+                        if(
+                            lives > 0
+                        ){
+
+                            win();
+
+                        }
+                        else{
+
+                            lose();
+
+                        }
+
+                    }
+
+                },
+                500
+            );
+
+        }
+
+    }
+
+}
+
+
+gameLoop();
+
+
+/* =========================================================
+                    START GAME
+========================================================= */
+
+startButton.addEventListener(
+    "click",
+    async () => {
+
+        if(
+            playing
+        ){
+
+            return;
+        }
+
+
+        initAudio();
+
+
+        /*
+            RESET.
+        */
+
+        lives =
+            5;
+
+        combo =
+            0;
+
+        score =
+            0;
+
+        ended =
+            false;
+
+        finishTimerStarted =
+            false;
+
+
+        notes.forEach(
+            note => {
+
+                note.hit =
+                    false;
+
+                note.missed =
+                    false;
+
+                note.element =
+                    null;
+
+            }
+        );
+
+
+        /*
+            Nettoyage DOM
+            au cas où.
+        */
+
+        document
+            .querySelectorAll(
+                ".note"
+            )
+            .forEach(
+                element => {
+
+                    element.remove();
+
+                }
+            );
+
+
+        hitZones.forEach(
+            zone => {
+
+                zone.classList.remove(
+                    "active"
+                );
+
+                zone.classList.remove(
+                    "press"
+                );
+
+            }
+        );
+
+
+        heart.textContent =
+            "❤️";
+
+
+        heart.style.filter =
+            `
+            drop-shadow(
+                0 0 28px
+                rgba(
+                    255,
+                    50,
+                    135,
+                    .65
+                )
+            )
+            `;
+
+
+        music.currentTime =
+            0;
+
+
+        /*
+            Le play est lancé directement
+            depuis le clic utilisateur.
+
+            Important sur téléphone.
+        */
+
+        try{
+
+            await music.play();
+
+        }
+        catch(error){
+
+            console.error(
+                error
+            );
+
+
+            alert(
+                "Impossible de lancer musique2.mp3. Vérifie qu'il est bien dans le dossier assets."
+            );
+
+
+            return;
+
+        }
+
+
+        playing =
+            true;
+
+
+        intro.style.opacity =
+            "0";
+
+
+        intro.style.transform =
+            "scale(1.03)";
+
+
+        setTimeout(
+            () => {
+
+                intro.remove();
+
+            },
+            800
+        );
+
+
+        updateHUD();
+
+    }
+);
+
+
+/* =========================================================
+                AUDIO FIN DE FICHIER
+========================================================= */
+
+/*
+    Sécurité supplémentaire.
+
+    Si le MP3 termine avant le niveau,
+    on ne laisse jamais l'écran bloqué.
+*/
+
+music.addEventListener(
+    "ended",
+    () => {
+
+        if(
+            ended
+        ){
+
+            return;
+        }
+
+
+        /*
+            Si toutes les notes sont terminées :
+            victoire immédiate.
+        */
+
+        const allResolved =
+            notes.every(
+                note =>
+                    note.hit ||
+                    note.missed
+            );
+
+
+        if(
+            allResolved &&
+            lives > 0
+        ){
+
+            win();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+                        DEFAITE
+========================================================= */
+
+function lose(){
+
+    if(
+        ended
+    ){
+
+        return;
+    }
+
+
+    ended =
+        true;
+
+
+    playing =
+        false;
+
+
+    music.pause();
+
+
+    /*
+        Nettoyage.
+    */
+
+    notes.forEach(
+        note => {
+
+            if(
+                note.element
+            ){
+
+                note.element.remove();
+
+                note.element =
+                    null;
+
+            }
+
+        }
+    );
+
+
+    hitZones.forEach(
+        zone => {
+
+            zone.classList.remove(
+                "active"
+            );
+
+        }
+    );
+
+
+    /*
+        Coeur cassé.
+    */
+
+    heart.textContent =
+        "💔";
+
+
+    heart.style.filter =
+        `
+        drop-shadow(
+            0 0 30px
+            rgba(
+                255,
+                30,
+                90,
+                .75
+            )
+        )
+        `;
+
+
+    setTimeout(
+        () => {
+
+            gameOver.style.display =
+                "flex";
+
+        },
+        500
+    );
+
+}
+
+
+/* =========================================================
+                        VICTOIRE
+========================================================= */
+
+function win(){
+
+    if(
+        ended
+    ){
+
+        return;
+    }
+
+
+    ended =
+        true;
+
+
+    playing =
+        false;
+
+
+    music.pause();
+
+
+    /*
+        Supprime toutes les notes.
+    */
+
+    notes.forEach(
+        note => {
+
+            if(
+                note.element
+            ){
+
+                note.element.remove();
+
+                note.element =
+                    null;
+
+            }
+
+        }
+    );
+
+
+    /*
+        Nettoyage.
+    */
+
+    hitZones.forEach(
+        zone => {
+
+            zone.classList.remove(
+                "active"
+            );
+
+        }
+    );
+
+
+    /*
+        Grand coeur.
+    */
+
+    heart.textContent =
+        "❤️";
+
+
+    heart.classList.add(
+        "beat"
+    );
+
+
+    heart.style.filter =
+        `
+        drop-shadow(
+            0 0 65px
+            rgba(
+                255,
+                70,
+                160,
+                .95
+            )
+        )
+        `;
+
+
+    playVictorySound();
+
+
+    createVictoryParticles();
+
+
+    if(
+        navigator.vibrate
+    ){
+
+        navigator.vibrate(
+            [
+                50,
+                40,
+                100
+            ]
+        );
+
+    }
+
+
+    /*
+        =================================================
+                    SAUVEGARDE DU BON
+        =================================================
+    */
+
+    let bons =
+        JSON.parse(
+            localStorage.getItem(
+                "calendrier-ines-bons-gagnes"
+            )
+        )
+        ||
+        [];
+
+
+    if(
+        !bons.includes(
+            "choix"
+        )
+    ){
+
+        bons.push(
+            "choix"
+        );
+
+
+        localStorage.setItem(
+            "calendrier-ines-bons-gagnes",
+            JSON.stringify(
+                bons
+            )
+        );
+
+    }
+
+
+    /*
+        Affichage de la fin.
+    */
+
+    setTimeout(
+        () => {
+
+            victory.style.display =
+                "flex";
+
+        },
+        1000
+    );
+
+}
+
+
+/* =========================================================
+                PARTICULES VICTOIRE
+========================================================= */
+
+function createVictoryParticles(){
+
+    const rect =
+        heart.getBoundingClientRect();
+
+
+    const centerX =
+        rect.left +
+        rect.width / 2;
+
+
+    const centerY =
+        rect.top +
+        rect.height / 2;
+
+
+    for(
+        let i = 0;
+        i < 80;
+        i++
+    ){
+
+        const angle =
+            Math.random()
+            *
+            Math.PI
+            *
+            2;
+
+
+        const speed =
+            2 +
+            Math.random() *
+            6;
+
+
+        particles.push({
+
+            x:centerX,
+
+            y:centerY,
+
+            vx:
+                Math.cos(
+                    angle
+                )
+                *
+                speed,
+
+            vy:
+                Math.sin(
+                    angle
+                )
+                *
+                speed,
+
+            life:1,
+
+            size:
+                2 +
+                Math.random() *
+                4
+
+        });
+
+    }
+
+}
+
+
+/* =========================================================
+                        RETRY
+========================================================= */
+
+retry.addEventListener(
+    "click",
+    () => {
+
+        location.reload();
+
+    }
+);
+
+
+/* =========================================================
+                    RETOUR CALENDRIER
+========================================================= */
+
+calendar.addEventListener(
+    "click",
+    () => {
+
+        window.location.href =
+            "calendrier.html";
+
+    }
+);
+
+
+/* =========================================================
+                        INIT
+========================================================= */
+
+updateHUD();
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Jour 6 ♡</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Poppins",sans-serif;
+}
+
+body{
+
+background:
+linear-gradient(135deg,#fffafd,#ffeef6);
+
+min-height:100vh;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+padding:20px;
+
+}
+
+.card{
+
+width:100%;
+max-width:430px;
+
+background:white;
+
+border-radius:25px;
+
+padding:25px;
+
+box-shadow:0 15px 40px rgba(0,0,0,.08);
+
+text-align:center;
+
+}
+
+.badge{
+
+display:inline-block;
+
+padding:8px 16px;
+
+background:#ffe4f1;
+
+border-radius:999px;
+
+color:#ff4f95;
+
+font-weight:700;
+
+margin-bottom:20px;
+
+}
+
+h1{
+
+font-size:2.3rem;
+
+line-height:1.1;
+
+margin-bottom:15px;
+
+}
+
+h1 span{
+
+color:#ff4f95;
+
+}
+
+.description{
+
+color:#777;
+
+line-height:1.7;
+
+margin-bottom:25px;
+
+}
+
+.photo{
+
+width:100%;
+
+aspect-ratio:10/13;
+
+border-radius:20px;
+
+overflow:hidden;
+
+margin-bottom:25px;
+
+}
+
+.photo img{
+
+width:100%;
+
+height:100%;
+
+object-fit:cover;
+
+filter:blur(25px) grayscale(100%);
+
+transition:2s;
+
+}
+
+.photo.show img{
+
+filter:none;
+
+transform:scale(1.03);
+
+}
+
+#story{
+
+min-height:120px;
+
+line-height:1.8;
+
+font-size:1rem;
+
+margin-bottom:20px;
+
+color:#444;
+
+}
+
+button{
+
+width:100%;
+
+padding:16px;
+
+border:none;
+
+border-radius:16px;
+
+background:#ff4f95;
+
+color:white;
+
+font-size:1rem;
+
+font-weight:700;
+
+cursor:pointer;
+
+}
+
+button:active{
+
+transform:scale(.98);
+
+}
+
+#back{
+
+display:none;
+
+margin-top:18px;
+
+padding:15px;
+
+background:#ff4f95;
+
+color:white;
+
+text-decoration:none;
+
+border-radius:16px;
+
+font-weight:700;
+
+display:none;
+
+}
+
+.cursor{
+
+display:inline-block;
+
+width:2px;
+
+height:18px;
+
+background:#ff4f95;
+
+margin-left:3px;
+
+animation:blink .8s infinite;
+
+}
+
+@keyframes blink{
+
+50%{
+
+opacity:0;
+
+}
+
+}
+
+</style>
+
+<base target="_blank">
+</head>
+
+<body>
+
+<div class="card">
+
+<div class="badge">
+
+📸 Jour 6
+
+</div>
+
+<h1>
+
+Notre<br>
+
+<span>souvenir ❤️</span>
+
+</h1>
+
+<p class="description">
+
+J'avais envie de te rappeler un moment que je n'oublierai jamais...
+
+</p>
+
+<div class="photo" id="photo">
+
+<img src="assets/plage.jpg">
+
+</div>
+
+<div id="story">
+
+Appuie sur le bouton pour revivre ce moment avec moi. ❤️
+
+</div>
+
+<button id="start">
+
+✨ Révéler notre souvenir
+
+</button>
+
+<a id="back" href="calendrier.html">
+
+Retour au calendrier ♡
+
+</a>
+
+<audio id="music">
+
+<source src="assets/beach-music.mp3" type="audio/mpeg">
+
+</audio>
+
+</div><script>
+/* ===== BRUITAGES ===== */
+const AudioCtx=window.AudioContext||window.webkitAudioContext;
+let audioCtx;
+function initAudio(){if(!audioCtx)audioCtx=new AudioCtx();}
+function playStart(){initAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.setValueAtTime(440,audioCtx.currentTime);o.frequency.exponentialRampToValueAtTime(880,audioCtx.currentTime+0.15);g.gain.setValueAtTime(0.06,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.25);o.start();o.stop(audioCtx.currentTime+0.3);}
+function playType(){initAudio();const b=audioCtx.createBuffer(1,audioCtx.sampleRate*0.015,audioCtx.sampleRate);const d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*0.5;const s=audioCtx.createBufferSource(),f=audioCtx.createBiquadFilter(),g=audioCtx.createGain();s.buffer=b;s.connect(f);f.connect(g);g.connect(audioCtx.destination);f.type='bandpass';f.frequency.value=3500;f.Q.value=8;g.gain.setValueAtTime(0.04,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.012);s.start();s.stop(audioCtx.currentTime+0.015);}
+function playPhotoReveal(){initAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.setValueAtTime(600,audioCtx.currentTime);o.frequency.exponentialRampToValueAtTime(1200,audioCtx.currentTime+0.4);g.gain.setValueAtTime(0.04,audioCtx.currentTime);g.gain.linearRampToValueAtTime(0.06,audioCtx.currentTime+0.1);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.6);o.start();o.stop(audioCtx.currentTime+0.65);}
+function playEnd(){initAudio();[523,659,784,1047].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,audioCtx.currentTime+i*0.12);g.gain.linearRampToValueAtTime(0.07,audioCtx.currentTime+i*0.12+0.03);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+i*0.12+0.5);o.start(audioCtx.currentTime+i*0.12);o.stop(audioCtx.currentTime+i*0.12+0.6);});}
+
+
+
+const start = document.getElementById("start");
+const story = document.getElementById("story");
+const photo = document.getElementById("photo");
+const back = document.getElementById("back");
+const music = document.getElementById("music");
+
+const phrases = [
+
+"Je me souviens encore de cette journée à la plage... 🌊",
+
+"On était tous les deux, tout simplement.",
+
+"Je n'oublierai jamais ce moment où nos regards se sont croisés.",
+
+"Je pourrais revivre cette journée encore et encore.",
+
+"Chaque souvenir avec toi est précieux pour moi. ❤️",
+
+"J'ai tellement hâte d'en créer encore plein d'autres avec toi.",
+
+"Je t'aime plus que tout, mon amour. ♡"
+
+];
+
+start.addEventListener("click", async()=>{
+
+start.style.display="none";
+
+playStart();
+playPhotoReveal();
+
+photo.classList.add("show");
+
+music.volume=0.4;
+
+music.play().catch(()=>{});
+
+await attendre(1000);
+
+for(const phrase of phrases){
+
+await ecrire(phrase);
+
+await attendre(1700);
+
+}
+
+story.innerHTML=`
+
+<div style="animation:fade .5s;">
+
+<p style="line-height:1.8;">
+
+Merci de rendre ma vie aussi belle. ❤️
+
+</p>
+
+<p style="margin-top:15px;color:#ff4f95;font-weight:700;">
+
+Je t'aime énormément.
+
+</p>
+
+</div>
+
+`;
+
+back.style.display="block";
+
+playEnd();
+
+});
+
+function ecrire(texte){
+
+return new Promise(resolve=>{
+
+story.innerHTML="";
+
+let i=0;
+
+const timer=setInterval(()=>{
+
+story.innerHTML=texte.substring(0,i)+"<span class='cursor'></span>";
+
+i++;
+
+if(i%3===0&&i<texte.length)playType();
+
+if(i>texte.length){
+
+clearInterval(timer);
+
+story.innerHTML=texte;
+
+resolve();
+
+}
+
+},40);
+
+});
+
+}
+
+function attendre(ms){
+
+return new Promise(resolve=>setTimeout(resolve,ms));
+
+}
+
+</script>
+
+</body>
+</html>

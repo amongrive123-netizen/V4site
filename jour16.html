@@ -1,0 +1,2768 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Jour 16 ❤️</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet">
+
+<style>
+
+/* =====================================================
+                    BASE
+===================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,
+body{
+
+    width:100%;
+    height:100%;
+
+    overflow:hidden;
+
+    background:#05050d;
+
+    touch-action:none;
+
+    font-family:Poppins,sans-serif;
+
+    color:white;
+}
+
+
+/* =====================================================
+                    CANVAS
+===================================================== */
+
+#canvas{
+
+    position:fixed;
+
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    display:block;
+
+    pointer-events:none;
+
+    z-index:1;
+}
+
+
+/* =====================================================
+                    FOND
+===================================================== */
+
+#background{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 50%,
+            rgba(255,40,110,.09),
+            transparent 35%
+        ),
+
+        radial-gradient(
+            circle at 50% 50%,
+            #121326 0%,
+            #05050d 72%
+        );
+
+    z-index:0;
+
+    transition:opacity 2s ease;
+}
+
+
+/* =====================================================
+                    VIGNETTE
+===================================================== */
+
+#vignette{
+
+    position:fixed;
+
+    inset:0;
+
+    pointer-events:none;
+
+    z-index:4;
+
+    background:
+
+        radial-gradient(
+            circle at center,
+            transparent 30%,
+            rgba(0,0,0,.5) 100%
+        );
+
+}
+
+
+/* =====================================================
+                    INTRO
+===================================================== */
+
+#intro{
+
+    position:fixed;
+
+    inset:0;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:24px;
+
+    background:
+
+        radial-gradient(
+            circle at center,
+            rgba(25,20,40,.96),
+            rgba(3,3,9,.99)
+        );
+
+    z-index:20;
+
+    transition:
+        opacity 1.2s ease,
+        transform 1.2s ease;
+
+}
+
+
+.intro-card{
+
+    width:min(440px,94vw);
+
+    padding:40px 32px;
+
+    border-radius:30px;
+
+    text-align:center;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.075),
+            rgba(255,255,255,.025)
+        );
+
+    border:
+
+        1px solid
+        rgba(255,120,160,.14);
+
+    box-shadow:
+
+        0 35px 100px
+        rgba(0,0,0,.55),
+
+        inset 0 1px 0
+        rgba(255,255,255,.08);
+
+    backdrop-filter:blur(25px);
+
+    animation:
+        introFloat 5s ease-in-out infinite;
+
+}
+
+
+@keyframes introFloat{
+
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-8px);
+    }
+
+}
+
+
+.intro-heart{
+
+    font-size:54px;
+
+    margin-bottom:18px;
+
+    filter:
+
+        drop-shadow(
+            0 0 20px
+            rgba(255,60,120,.65)
+        );
+
+}
+
+
+.intro-card h1{
+
+    font-size:2rem;
+
+    margin-bottom:18px;
+
+}
+
+
+.intro-card p{
+
+    font-size:.98rem;
+
+    line-height:1.9;
+
+    opacity:.86;
+
+    margin-bottom:30px;
+
+}
+
+
+#start{
+
+    border:0;
+
+    padding:16px 34px;
+
+    border-radius:999px;
+
+    color:white;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #ff5b98,
+            #ff356f
+        );
+
+    font-family:inherit;
+
+    font-size:1rem;
+
+    font-weight:700;
+
+    box-shadow:
+
+        0 12px 35px
+        rgba(255,50,110,.35);
+
+    cursor:pointer;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+
+}
+
+
+#start:active{
+
+    transform:scale(.95);
+
+}
+
+
+/* =====================================================
+                PETITE INDICATION
+===================================================== */
+
+#gesture{
+
+    position:fixed;
+
+    left:50%;
+
+    bottom:30px;
+
+    transform:translateX(-50%);
+
+    z-index:8;
+
+    padding:11px 18px;
+
+    border-radius:999px;
+
+    background:
+
+        rgba(0,0,0,.35);
+
+    border:
+
+        1px solid
+        rgba(255,255,255,.08);
+
+    backdrop-filter:blur(14px);
+
+    font-size:.78rem;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:opacity 1s ease;
+
+}
+
+
+#gesture.show{
+
+    opacity:.72;
+
+}
+
+
+/* =====================================================
+              FIN DU STYLE PARTIE 1
+===================================================== */
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div id="background"></div>
+
+<canvas id="canvas"></canvas>
+
+<div id="vignette"></div>
+
+
+<!-- =================================================
+                    INTRO
+================================================= -->
+
+<div id="intro">
+
+    <div class="intro-card">
+
+        <div class="intro-heart">
+            ❤️
+        </div>
+
+        <h1>
+            Le fil rouge
+        </h1>
+
+        <p>
+
+            On raconte que certaines personnes
+            sont reliées par un fil invisible.
+
+            <br><br>
+
+            Un fil qui peut se tendre...
+
+            <br>
+
+            se perdre...
+
+            <br>
+
+            mais jamais vraiment disparaître.
+
+            <br><br>
+
+            Aujourd'hui,
+            tu vas pouvoir le découvrir.
+
+        </p>
+
+        <button id="start">
+            Commencer ❤️
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =================================================
+                  INDICATION
+================================================= -->
+
+<div id="gesture">
+
+    👆 Fais glisser ton doigt
+
+</div>
+
+
+<script>
+
+
+/* =====================================================
+                    DOM
+===================================================== */
+
+const canvas =
+    document.getElementById("canvas");
+
+const ctx =
+    canvas.getContext("2d");
+
+const intro =
+    document.getElementById("intro");
+
+const start =
+    document.getElementById("start");
+
+const gesture =
+    document.getElementById("gesture");
+
+
+
+/* =====================================================
+                    MUSIQUE
+===================================================== */
+
+const music = new Audio(
+    "assets/romantic-homicide.mp3"
+);
+
+music.loop = true;
+
+music.volume = 0;
+
+
+
+
+
+/* =====================================================
+                  RESOLUTION
+===================================================== */
+
+let width = 0;
+let height = 0;
+let dpr = 1;
+
+
+function resize(){
+
+    dpr =
+        Math.min(
+            window.devicePixelRatio || 1,
+            2
+        );
+
+    width =
+        window.innerWidth;
+
+    height =
+        window.innerHeight;
+
+    canvas.width =
+        width * dpr;
+
+    canvas.height =
+        height * dpr;
+
+    canvas.style.width =
+        width + "px";
+
+    canvas.style.height =
+        height + "px";
+
+    ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+    );
+
+}
+
+
+resize();
+
+
+window.addEventListener(
+    "resize",
+    resize
+);
+
+
+/* =====================================================
+                    ETAT
+===================================================== */
+
+const STATE = {
+
+    INTRO:0,
+
+    FOLLOW:1,
+
+    CINEMATIC:2,
+
+    HEART:3,
+
+    FINAL:4
+
+};
+
+
+let state =
+    STATE.INTRO;
+
+
+/* =====================================================
+                    FIL
+===================================================== */
+
+const SEGMENTS = 280;
+
+const rope = [];
+
+
+for(
+    let i=0;
+    i<SEGMENTS;
+    i++
+){
+
+    rope.push({
+
+        x:width/2,
+
+        y:height/2,
+
+        vx:0,
+
+        vy:0,
+
+        size:
+            1 -
+            i / SEGMENTS
+
+    });
+
+}
+
+
+/* =====================================================
+              POSITION DU DOIGT
+===================================================== */
+
+let pointerX =
+    width/2;
+
+let pointerY =
+    height/2;
+
+
+let targetX =
+    width/2;
+
+let targetY =
+    height/2;
+
+
+/* =====================================================
+              SOURIS
+===================================================== */
+
+window.addEventListener(
+    "mousemove",
+    event => {
+
+        if(
+            state !== STATE.FOLLOW
+        ) return;
+
+        targetX =
+            event.clientX;
+
+        targetY =
+            event.clientY;
+
+    }
+);
+
+
+/* =====================================================
+              TACTILE
+===================================================== */
+
+let touching = false;
+
+
+window.addEventListener(
+    "touchstart",
+    event => {
+
+        if(
+            state !== STATE.FOLLOW
+        ) return;
+
+        const touch =
+            event.touches[0];
+
+        if(!touch) return;
+
+        touching = true;
+
+        targetX =
+            touch.clientX;
+
+        targetY =
+            touch.clientY;
+
+    },
+    {passive:true}
+);
+
+
+window.addEventListener(
+    "touchmove",
+    event => {
+
+        if(
+            state !== STATE.FOLLOW
+        ) return;
+
+        const touch =
+            event.touches[0];
+
+        if(!touch) return;
+
+        targetX =
+            touch.clientX;
+
+        targetY =
+            touch.clientY;
+
+    },
+    {passive:true}
+);
+
+
+window.addEventListener(
+    "touchend",
+    () => {
+
+        touching = false;
+
+    }
+);
+
+
+/* =====================================================
+                  PARTICULES
+===================================================== */
+
+const particles = [];
+
+
+function createParticle(
+    x,
+    y
+){
+
+    particles.push({
+
+        x:x,
+
+        y:y,
+
+        vx:
+            (Math.random()-.5)
+            * 1.2,
+
+        vy:
+            (Math.random()-.5)
+            * 1.2,
+
+        life:1,
+
+        size:
+            1.5 +
+            Math.random()*3
+
+    });
+
+}
+
+
+/* =====================================================
+                  DEPART
+===================================================== */
+
+start.addEventListener(
+    "click",
+    begin
+);
+
+
+function begin(){
+
+    if(
+        state !== STATE.INTRO
+    ) return;
+
+    state =
+        STATE.FOLLOW;
+        music.currentTime = 0;
+
+        music.play().catch(() => {});
+    intro.style.opacity =
+        "0";
+
+    intro.style.transform =
+        "scale(1.04)";
+
+    setTimeout(
+        () => {
+
+            intro.remove();
+
+            gesture.classList.add(
+                "show"
+            );
+
+            setTimeout(
+                () => {
+
+                    gesture.style.opacity =
+                        "0";
+
+                },
+                4500
+            );
+
+        },
+        1100
+    );
+
+}
+
+
+/* =====================================================
+                  FIL PRINCIPAL
+===================================================== */
+
+function updateRope(){
+
+    rope[0].x +=
+        (targetX - rope[0].x)
+        * .16;
+
+    rope[0].y +=
+        (targetY - rope[0].y)
+        * .16;
+
+
+    for(
+        let i=1;
+        i<rope.length;
+        i++
+    ){
+
+        const previous =
+            rope[i-1];
+
+        const current =
+            rope[i];
+
+        current.x +=
+            (previous.x-current.x)
+            * .30;
+
+        current.y +=
+            (previous.y-current.y)
+            * .30;
+
+    }
+
+}
+
+
+/* =====================================================
+                  DESSIN DU FIL
+===================================================== */
+
+function drawRope(){
+
+    ctx.lineCap =
+        "round";
+
+    ctx.lineJoin =
+        "round";
+
+
+    for(
+        let i=rope.length-1;
+        i>0;
+        i--
+    ){
+
+        const current =
+            rope[i];
+
+        const previous =
+            rope[i-1];
+
+
+        const progress =
+            i / rope.length;
+
+
+        ctx.beginPath();
+
+
+        ctx.moveTo(
+            previous.x,
+            previous.y
+        );
+
+
+        ctx.lineTo(
+            current.x,
+            current.y
+        );
+
+
+        ctx.strokeStyle =
+
+            `rgba(
+                255,
+                ${55 + progress*55},
+                ${105 + progress*55},
+                ${.25 + progress*.75}
+            )`;
+
+
+        ctx.lineWidth =
+
+            2.2 +
+            progress * 7;
+
+
+        ctx.shadowBlur =
+            18;
+
+
+        ctx.shadowColor =
+            "rgba(255,50,120,.8)";
+
+
+        ctx.stroke();
+
+    }
+
+
+    ctx.shadowBlur = 0;
+
+
+    /* tête lumineuse */
+
+    const glow =
+        ctx.createRadialGradient(
+            rope[0].x,
+            rope[0].y,
+            0,
+            rope[0].x,
+            rope[0].y,
+            65
+        );
+
+
+    glow.addColorStop(
+        0,
+        "rgba(255,100,160,.9)"
+    );
+
+    glow.addColorStop(
+        .35,
+        "rgba(255,60,130,.35)"
+    );
+
+    glow.addColorStop(
+        1,
+        "rgba(255,40,100,0)"
+    );
+
+
+    ctx.beginPath();
+
+    ctx.fillStyle =
+        glow;
+
+    ctx.arc(
+        rope[0].x,
+        rope[0].y,
+        65,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.beginPath();
+
+    ctx.fillStyle =
+        "#ff4f95";
+
+    ctx.arc(
+        rope[0].x,
+        rope[0].y,
+        8,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+}
+
+
+/* =====================================================
+                PARTICULES
+===================================================== */
+
+function drawParticles(){
+
+    for(
+        let i=particles.length-1;
+        i>=0;
+        i--
+    ){
+
+        const p =
+            particles[i];
+
+
+        p.x += p.vx;
+
+        p.y += p.vy;
+
+        p.life -= .018;
+
+
+        if(
+            p.life <= 0
+        ){
+
+            particles.splice(
+                i,
+                1
+            );
+
+            continue;
+
+        }
+
+
+        ctx.beginPath();
+
+        ctx.fillStyle =
+
+            `rgba(
+                255,
+                100,
+                150,
+                ${p.life}
+            )`;
+
+
+        ctx.arc(
+            p.x,
+            p.y,
+            p.size*p.life,
+            0,
+            Math.PI*2
+        );
+
+
+        ctx.fill();
+
+    }
+
+}
+
+
+/* =====================================================
+                  BOUCLE
+===================================================== */
+
+function animate(){
+
+    requestAnimationFrame(
+        animate
+    );
+
+
+    ctx.clearRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    if(
+        state === STATE.FOLLOW
+    ){
+
+        updateRope();
+
+
+        pointerX +=
+            (targetX-pointerX)
+            * .12;
+
+        pointerY +=
+            (targetY-pointerY)
+            * .12;
+
+
+        if(
+            Math.random() < .7
+        ){
+
+            createParticle(
+                rope[0].x,
+                rope[0].y
+            );
+
+        }
+
+    }
+
+
+    drawRope();
+
+    drawParticles();
+
+}
+
+
+animate();
+
+</script><script>
+
+/* =====================================================
+          PARTIE 2 — LE FIL PREND VIE
+===================================================== */
+
+/*
+    Temps écoulé depuis le début de l'expérience
+*/
+let experienceTime = 0;
+
+
+/*
+    Position naturelle du fil
+*/
+let cinematicX = width / 2;
+let cinematicY = height / 2;
+
+
+/*
+    Intensité de l'autonomie du fil
+
+    0 = suit complètement le doigt
+    1 = contrôle totalement autonome
+*/
+let autonomy = 0;
+
+
+/*
+    Petit compteur pour les mouvements
+*/
+let movementTime = 0;
+
+
+/* =====================================================
+              CALCUL DU MOUVEMENT CINÉMATIQUE
+===================================================== */
+
+function cinematicMovement(){
+
+    movementTime += 0.018;
+
+
+    /*
+        Plusieurs vagues sont mélangées.
+
+        Cela donne un mouvement beaucoup
+        moins mécanique qu'un simple cercle.
+    */
+
+    const waveX =
+        Math.sin(movementTime * 1.15) * width * 0.23;
+
+    const waveY =
+        Math.sin(movementTime * 1.73 + 1.5)
+        * height * 0.20;
+
+
+    const circleX =
+        Math.cos(movementTime * .72)
+        * width * 0.17;
+
+    const circleY =
+        Math.sin(movementTime * .72)
+        * height * 0.15;
+
+
+    const targetCX =
+        width / 2
+        + waveX
+        + circleX;
+
+
+    const targetCY =
+        height / 2
+        + waveY
+        + circleY;
+
+
+    /*
+        Le fil rejoint progressivement
+        son nouveau point.
+    */
+
+    cinematicX +=
+        (targetCX - cinematicX) * .035;
+
+    cinematicY +=
+        (targetCY - cinematicY) * .035;
+
+
+    /*
+        Mélange entre le doigt et le mouvement autonome.
+    */
+
+    const desiredX =
+        targetX * (1 - autonomy)
+        + cinematicX * autonomy;
+
+    const desiredY =
+        targetY * (1 - autonomy)
+        + cinematicY * autonomy;
+
+
+    rope[0].x +=
+        (desiredX - rope[0].x) * .16;
+
+    rope[0].y +=
+        (desiredY - rope[0].y) * .16;
+
+
+    /*
+        Les segments arrière suivent avec
+        un petit retard supplémentaire.
+    */
+
+    for(
+        let i = 1;
+        i < rope.length;
+        i++
+    ){
+
+        const previous =
+            rope[i - 1];
+
+        const current =
+            rope[i];
+
+
+        const followStrength =
+            .24 + (1 - i / rope.length) * .08;
+
+
+        current.x +=
+            (previous.x - current.x)
+            * followStrength;
+
+        current.y +=
+            (previous.y - current.y)
+            * followStrength;
+
+    }
+
+}
+
+
+/* =====================================================
+              TRAÎNÉE LUMINEUSE
+===================================================== */
+
+function cinematicParticles(){
+
+    /*
+        Beaucoup plus de particules lorsque
+        le fil commence à devenir autonome.
+    */
+
+    const amount =
+        autonomy > .5 ? .95 : .55;
+
+
+    if(
+        Math.random() < amount
+    ){
+
+        const index =
+            2 + Math.floor(
+                Math.random() *
+                Math.min(
+                    rope.length - 2,
+                    30
+                )
+            );
+
+
+        createParticle(
+            rope[index].x,
+            rope[index].y
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+             ANIMATION DU FIL
+===================================================== */
+
+/*
+    On mémorise l'ancienne fonction animate
+    de la Partie 1 et on ajoute simplement
+    notre nouvelle logique par-dessus.
+*/
+
+const originalAnimate =
+    animate;
+
+
+/*
+    On ne relance PAS une deuxième boucle.
+    Cette fonction prend le relais.
+*/
+
+function animatePart2(){
+
+    requestAnimationFrame(
+        animatePart2
+    );
+
+
+    ctx.clearRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    if(
+        state === STATE.FOLLOW
+    ){
+
+        experienceTime += .016;
+
+
+        /*
+            Pendant les premières secondes,
+            le fil répond normalement au doigt.
+        */
+
+        if(
+            experienceTime < 5
+        ){
+
+            autonomy =
+                Math.min(
+                    autonomy + .0015,
+                    .08
+                );
+
+            updateRope();
+
+        }
+
+
+        /*
+            Transition progressive.
+
+            Elle ne remarque même pas forcément
+            que le fil commence à partir tout seul.
+        */
+
+        else if(
+    experienceTime < 10
+){
+
+    autonomy =
+        Math.min(
+            autonomy + .004,
+            .75
+        );
+
+    cinematicMovement();
+
+    /*
+        Romantic Homicide commence
+        doucement lorsque le fil
+        commence à prendre vie.
+    */
+
+    music.volume =
+        Math.min(
+            music.volume + .006,
+            .38
+        );
+
+}
+
+
+        /*
+            Maintenant le fil est complètement vivant.
+        */
+
+        else{
+
+            autonomy =
+                Math.min(
+                    autonomy + .002,
+                    1
+                );
+
+            cinematicMovement();
+
+        }
+
+
+        cinematicParticles();
+
+    }
+
+
+    drawRope();
+
+    drawParticles();
+
+}
+
+
+animatePart2();
+
+
+/* =====================================================
+          TRANSITION VISUELLE DU FOND
+===================================================== */
+
+let backgroundPulse = 0;
+
+
+function updateBackground(){
+
+    if(
+        state !== STATE.FOLLOW
+    ) return;
+
+
+    backgroundPulse += .012;
+
+
+    const pulse =
+        (
+            Math.sin(
+                backgroundPulse
+            ) + 1
+        ) / 2;
+
+
+    document
+        .getElementById("background")
+        .style.background = `
+
+            radial-gradient(
+                circle at
+                ${50 + Math.sin(backgroundPulse*.7)*10}%
+                ${50 + Math.cos(backgroundPulse*.5)*8}%,
+
+                rgba(
+                    255,
+                    40,
+                    110,
+                    ${.07 + pulse*.05}
+                ),
+
+                transparent 38%
+            ),
+
+            radial-gradient(
+                circle at center,
+
+                #141528 0%,
+
+                #05050d 72%
+            )
+
+        `;
+
+}
+
+
+function backgroundLoop(){
+
+    requestAnimationFrame(
+        backgroundLoop
+    );
+
+    updateBackground();
+
+}
+
+
+backgroundLoop();
+
+
+/* =====================================================
+        APRÈS QUELQUES SECONDES : GRANDE SPIRALE
+===================================================== */
+
+let spiralStarted = false;
+
+
+function checkSpiral(){
+
+    if(
+        state !== STATE.FOLLOW ||
+        spiralStarted
+    ) return;
+
+
+    /*
+        Après environ 16 secondes,
+        on passe à l'étape suivante.
+
+        La Partie 3 récupérera cet état.
+    */
+
+    if(
+        experienceTime >= 16
+    ){
+
+        spiralStarted = true;
+
+        state =
+            STATE.CINEMATIC;
+
+    }
+
+}
+
+
+function cinematicController(){
+
+    requestAnimationFrame(
+        cinematicController
+    );
+
+    checkSpiral();
+
+}
+
+
+cinematicController();
+
+</script><script>
+
+/* =====================================================
+        PARTIE 3 — LA GRANDE CHORÉGRAPHIE
+===================================================== */
+
+let cinematicTime = 0;
+
+let cinematicPhase = 0;
+
+let cinematicStartX = width / 2;
+let cinematicStartY = height / 2;
+
+
+/* =====================================================
+              POINT CIBLE
+===================================================== */
+
+function getCinematicTarget(){
+
+    const t = cinematicTime;
+
+    const cx = width / 2;
+    const cy = height / 2;
+
+    /*
+        PHASE 0
+        Grande spirale autour de l'écran
+    */
+
+    if(cinematicPhase === 0){
+
+        const radiusX =
+            Math.min(width * .38, 300);
+
+        const radiusY =
+            Math.min(height * .30, 300);
+
+        return {
+
+            x:
+                cx +
+                Math.cos(t * .9) *
+                radiusX,
+
+            y:
+                cy +
+                Math.sin(t * .9) *
+                radiusY
+
+        };
+
+    }
+
+
+    /*
+        PHASE 1
+        Mouvement en huit
+    */
+
+    if(cinematicPhase === 1){
+
+        const radius =
+            Math.min(width,height) * .30;
+
+        return {
+
+            x:
+                cx +
+                Math.sin(t * 1.4) *
+                radius,
+
+            y:
+                cy +
+                Math.sin(t * 2.8) *
+                radius *
+                .55
+
+        };
+
+    }
+
+
+    /*
+        PHASE 2
+        Retour lent au centre
+    */
+
+    if(cinematicPhase === 2){
+
+        return {
+
+            x:
+                cx,
+
+            y:
+                cy
+
+        };
+
+    }
+
+
+    /*
+        PHASE 3
+        Petite orbite finale
+    */
+
+    const radius =
+        Math.min(width,height) * .12;
+
+    return {
+
+        x:
+            cx +
+            Math.cos(t * 1.8) *
+            radius,
+
+        y:
+            cy +
+            Math.sin(t * 1.8) *
+            radius
+
+    };
+
+}
+
+
+/* =====================================================
+              MOUVEMENT CINÉMATIQUE
+===================================================== */
+
+function runCinematic(){
+
+    cinematicTime += .016;
+
+
+    const target =
+        getCinematicTarget();
+
+
+    /*
+        Le point lumineux se déplace
+        avec une accélération douce.
+    */
+
+    rope[0].x +=
+        (target.x - rope[0].x)
+        * .055;
+
+    rope[0].y +=
+        (target.y - rope[0].y)
+        * .055;
+
+
+    /*
+        Toute la longueur du fil
+        suit avec un retard naturel.
+    */
+
+    for(
+        let i=1;
+        i<rope.length;
+        i++
+    ){
+
+        const previous =
+            rope[i-1];
+
+        const current =
+            rope[i];
+
+
+        const distance =
+            Math.hypot(
+                previous.x-current.x,
+                previous.y-current.y
+            );
+
+
+        /*
+            Les premiers segments réagissent
+            rapidement.
+
+            Les derniers restent plus lourds.
+        */
+
+        const strength =
+            .20 -
+            (i / rope.length) * .07;
+
+
+        current.x +=
+            (previous.x-current.x)
+            * strength;
+
+        current.y +=
+            (previous.y-current.y)
+            * strength;
+
+
+        /*
+            Petite ondulation naturelle.
+        */
+
+        const wave =
+            Math.sin(
+                cinematicTime * 2.2 +
+                i * .18
+            )
+            *
+            (i / rope.length)
+            *
+            2.5;
+
+
+        current.x +=
+            wave * .35;
+
+        current.y +=
+            wave * .18;
+
+    }
+
+}
+
+
+/* =====================================================
+            TRAÎNÉE CINÉMATOGRAPHIQUE
+===================================================== */
+
+function cinematicTrail(){
+
+    /*
+        Beaucoup de petites particules
+        sur toute la longueur du fil.
+    */
+
+    for(
+        let i=0;
+        i<rope.length;
+        i+=4
+    ){
+
+        if(
+            Math.random() > .28
+        ) continue;
+
+
+        createParticle(
+            rope[i].x,
+            rope[i].y
+        );
+
+    }
+
+
+    /*
+        Particules supplémentaires
+        autour de la tête.
+    */
+
+    for(
+        let i=0;
+        i<3;
+        i++
+    ){
+
+        if(
+            Math.random() < .75
+        ){
+
+            createParticle(
+                rope[0].x +
+                (Math.random()-.5)*15,
+
+                rope[0].y +
+                (Math.random()-.5)*15
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+                DESSIN SPÉCIAL
+===================================================== */
+
+function drawCinematicGlow(){
+
+    const glowSize =
+        85 +
+        Math.sin(
+            cinematicTime * 3
+        ) * 15;
+
+
+    const gradient =
+        ctx.createRadialGradient(
+            rope[0].x,
+            rope[0].y,
+            0,
+            rope[0].x,
+            rope[0].y,
+            glowSize
+        );
+
+
+    gradient.addColorStop(
+        0,
+        "rgba(255,120,175,.9)"
+    );
+
+    gradient.addColorStop(
+        .35,
+        "rgba(255,60,130,.35)"
+    );
+
+    gradient.addColorStop(
+        1,
+        "rgba(255,40,100,0)"
+    );
+
+
+    ctx.beginPath();
+
+    ctx.fillStyle =
+        gradient;
+
+    ctx.arc(
+        rope[0].x,
+        rope[0].y,
+        glowSize,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+}
+
+
+/* =====================================================
+             REMPLACEMENT DU CONTRÔLEUR
+===================================================== */
+
+function cinematicLoop(){
+
+    requestAnimationFrame(
+        cinematicLoop
+    );
+
+
+    if(
+        state !== STATE.CINEMATIC
+    ){
+
+        return;
+
+    }
+
+
+    cinematicTime += .004;
+
+
+    runCinematic();
+
+    cinematicTrail();
+
+    drawCinematicGlow();
+
+}
+
+
+/* =====================================================
+                DÉMARRAGE
+===================================================== */
+
+cinematicLoop();
+
+
+/* =====================================================
+          CHANGEMENT DES PHASES
+===================================================== */
+
+function cinematicPhases(){
+
+    if(
+        state !== STATE.CINEMATIC
+    ){
+
+        requestAnimationFrame(
+            cinematicPhases
+        );
+
+        return;
+
+    }
+
+
+    /*
+        Phase 0 :
+        grande orbite
+    */
+
+    if(
+        cinematicPhase === 0 &&
+        cinematicTime > 5
+    ){
+
+        cinematicPhase = 1;
+
+    }
+
+
+    /*
+        Phase 1 :
+        mouvement en huit
+    */
+
+    if(
+        cinematicPhase === 1 &&
+        cinematicTime > 10
+    ){
+
+        cinematicPhase = 2;
+
+    }
+
+
+    /*
+        Phase 2 :
+        retour au centre
+    */
+
+    if(
+        cinematicPhase === 2 &&
+        cinematicTime > 14
+    ){
+
+        cinematicPhase = 3;
+
+    }
+
+
+    /*
+        Phase 3 terminé :
+        préparation du cœur.
+    */
+
+    if(
+        cinematicPhase === 3 &&
+        cinematicTime > 19
+    ){
+
+        state = STATE.HEART;
+
+        startHeart();
+
+        return;
+
+    }
+
+
+    requestAnimationFrame(
+        cinematicPhases
+    );
+
+}
+
+
+cinematicPhases();
+
+
+/* =====================================================
+              PRÉPARATION DU CŒUR
+===================================================== */
+
+const heartPoints = [];
+
+
+for(
+    let i=0;
+    i<260;
+    i++
+){
+
+    const t =
+        (i / 260) *
+        Math.PI *
+        2;
+
+
+    /*
+        Formule classique du cœur.
+    */
+
+    const hx =
+        16 *
+        Math.pow(
+            Math.sin(t),
+            3
+        );
+
+
+    const hy =
+        13 *
+        Math.cos(t)
+        -
+        5 *
+        Math.cos(2*t)
+        -
+        2 *
+        Math.cos(3*t)
+        -
+        Math.cos(4*t);
+
+
+    const scale =
+        Math.min(
+            width,
+            height
+        ) * .020;
+
+
+    heartPoints.push({
+
+        x:
+            width/2 +
+            hx * scale,
+
+        y:
+            height/2 -
+            hy * scale
+
+    });
+
+}
+
+
+/* =====================================================
+                DESSIN DU CŒUR
+===================================================== */
+
+let heartIndex = 0;
+
+let heartStarted = false;
+
+
+function startHeart(){
+
+    if(
+        heartStarted
+    ) return;
+
+
+    heartStarted = true;
+
+    heartIndex = 0;
+
+}
+
+
+/* =====================================================
+            ANIMATION DU CŒUR
+===================================================== */
+
+function drawHeartPath(){
+
+    if(
+        heartIndex >=
+        heartPoints.length
+    ){
+
+        return true;
+
+    }
+
+
+    const target =
+        heartPoints[
+            heartIndex
+        ];
+
+
+    rope[0].x +=
+    (target.x - rope[0].x) * .075;
+
+     rope[0].y +=
+    (target.y - rope[0].y) * .075;
+
+    /*
+        Quand le point est suffisamment proche,
+        on passe au suivant.
+    */
+
+    if(
+        Math.hypot(
+            rope[0].x-target.x,
+            rope[0].y-target.y
+        ) < 12
+    ){
+
+        heartIndex++;
+
+    }
+
+
+    /*
+        Le reste du fil suit.
+    */
+
+    for(
+        let i=1;
+        i<rope.length;
+        i++
+    ){
+
+        const previous =
+            rope[i-1];
+
+        const current =
+            rope[i];
+
+
+        current.x +=
+            (previous.x-current.x)
+            * .27;
+
+        current.y +=
+            (previous.y-current.y)
+            * .27;
+
+    }
+
+
+    return false;
+
+}
+
+
+/* =====================================================
+              BOUCLE DU CŒUR
+===================================================== */
+
+function heartLoop(){
+
+    requestAnimationFrame(
+        heartLoop
+    );
+
+
+    if(
+        state !== STATE.HEART
+    ){
+
+        return;
+
+    }
+
+
+    const finished =
+        drawHeartPath();
+
+
+    /*
+        Traînée beaucoup plus légère
+        pour laisser apparaître la forme.
+    */
+
+    if(
+        Math.random() < .8
+    ){
+
+        createParticle(
+            rope[0].x,
+            rope[0].y
+        );
+
+    }
+
+
+    if(
+        finished
+    ){
+
+        state =
+            STATE.FINAL;
+
+        startFinalMessage();
+
+    }
+
+}
+
+
+heartLoop();
+
+
+</script><script>
+
+/* =====================================================
+        PARTIE 4 — LE GRAND FINAL ❤️
+===================================================== */
+
+let finalStarted = false;
+let finalTime = 0;
+music.volume = 0.42;
+
+/* =====================================================
+              MESSAGE FINAL
+===================================================== */
+
+function startFinalMessage(){
+
+    if(finalStarted) return;
+
+    finalStarted = true;
+
+    finalTime = 0;
+
+    /*
+        Petit délai pour laisser le cœur
+        rester seul à l'écran.
+    */
+
+    setTimeout(()=>{
+
+        showFinalMessage();
+
+    },1800);
+
+}
+
+
+/* =====================================================
+              CRÉATION DE LA BULLE
+===================================================== */
+
+function showFinalMessage(){
+
+    /*
+        On crée la bulle uniquement maintenant.
+        Aucun texte pendant toute l'expérience.
+    */
+
+    const box =
+        document.createElement("div");
+
+    box.id =
+        "finalMessage";
+
+    box.innerHTML = `
+
+        <div class="finalHeart">
+            ❤️
+        </div>
+
+        <div class="finalTitle">
+            Inès ❤️ Haroun
+        </div>
+
+        <div class="finalText">
+
+            Même quand la distance nous sépare...
+
+            <br><br>
+
+            le fil trouve toujours
+            son chemin jusqu'à toi.
+
+        </div>
+
+    `;
+
+    document.body.appendChild(box);
+
+
+    /*
+        Apparition douce.
+    */
+
+    requestAnimationFrame(()=>{
+
+        box.classList.add("visible");
+
+    });
+
+
+    /*
+        On prépare le retour.
+    */
+
+    setTimeout(()=>{
+
+        fadeToCalendar();
+
+    },7000);
+
+}
+
+
+/* =====================================================
+                CŒUR PULSANT
+===================================================== */
+
+function finalHeartPulse(){
+
+    if(
+        state !== STATE.FINAL
+    ){
+
+        return;
+
+    }
+
+
+    finalTime += .035;
+
+
+    /*
+        Pulsation très légère.
+    */
+
+    const pulse =
+        1 +
+        Math.sin(finalTime * 2.4)
+        * .035;
+
+
+    /*
+        La tête du fil devient
+        progressivement plus lumineuse.
+    */
+
+    ctx.save();
+
+    ctx.globalCompositeOperation =
+        "lighter";
+
+
+    const glowSize =
+        90 +
+        Math.sin(finalTime * 2.4)
+        * 15;
+
+
+    const glow =
+        ctx.createRadialGradient(
+
+            rope[0].x,
+            rope[0].y,
+            0,
+
+            rope[0].x,
+            rope[0].y,
+            glowSize
+
+        );
+
+
+    glow.addColorStop(
+        0,
+        "rgba(255,130,180,.9)"
+    );
+
+    glow.addColorStop(
+        .35,
+        "rgba(255,70,140,.35)"
+    );
+
+    glow.addColorStop(
+        1,
+        "rgba(255,40,110,0)"
+    );
+
+
+    ctx.fillStyle =
+        glow;
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+
+        rope[0].x,
+        rope[0].y,
+        glowSize,
+        0,
+        Math.PI*2
+
+    );
+
+    ctx.fill();
+
+
+    ctx.restore();
+
+}
+
+
+/* =====================================================
+              PARTICULES FINALES
+===================================================== */
+
+function finalParticles(){
+
+    if(
+        state !== STATE.FINAL
+    ){
+
+        return;
+
+    }
+
+
+    /*
+        Quelques particules seulement.
+        On évite de surcharger le téléphone.
+    */
+
+    if(
+        Math.random() < .35
+    ){
+
+        createParticle(
+
+            width/2 +
+            (Math.random()-.5)
+            * width*.35,
+
+            height/2 +
+            (Math.random()-.5)
+            * height*.30
+
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+              BOUCLE FINALE
+===================================================== */
+
+function finalLoop(){
+
+    requestAnimationFrame(
+        finalLoop
+    );
+
+
+    if(
+        state !== STATE.FINAL
+    ){
+
+        return;
+
+    }
+
+
+    finalHeartPulse();
+
+    finalParticles();
+
+}
+
+
+finalLoop();
+
+
+/* =====================================================
+                STYLE FINAL
+===================================================== */
+
+const finalStyle =
+document.createElement("style");
+
+
+finalStyle.textContent = `
+
+/* =========================================
+            MESSAGE FINAL
+========================================= */
+
+#finalMessage{
+
+    position:fixed;
+
+    left:50%;
+
+    bottom:9vh;
+
+    transform:
+        translateX(-50%)
+        translateY(30px)
+        scale(.96);
+
+    width:min(
+        430px,
+        88vw
+    );
+
+    padding:
+        25px 24px;
+
+    border-radius:24px;
+
+    text-align:center;
+
+    color:white;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(25,15,25,.78),
+            rgba(5,5,12,.72)
+        );
+
+    border:
+
+        1px solid
+        rgba(255,100,150,.16);
+
+    box-shadow:
+
+        0 25px 80px
+        rgba(0,0,0,.5),
+
+        0 0 50px
+        rgba(255,50,120,.08);
+
+    backdrop-filter:
+        blur(22px);
+
+    -webkit-backdrop-filter:
+        blur(22px);
+
+    opacity:0;
+
+    transition:
+
+        opacity 1.4s ease,
+
+        transform 1.4s
+        cubic-bezier(.2,.8,.2,1);
+
+    z-index:50;
+
+    pointer-events:none;
+
+}
+
+
+/* apparition */
+
+#finalMessage.visible{
+
+    opacity:1;
+
+    transform:
+        translateX(-50%)
+        translateY(0)
+        scale(1);
+
+}
+
+
+/* cœur */
+
+.finalHeart{
+
+    font-size:42px;
+
+    margin-bottom:10px;
+
+    filter:
+
+        drop-shadow(
+            0 0 18px
+            rgba(255,60,130,.65)
+        );
+
+    animation:
+        finalHeartBeat
+        1.8s
+        ease-in-out
+        infinite;
+
+}
+
+
+/* titre */
+
+.finalTitle{
+
+    font-size:1.35rem;
+
+    font-weight:700;
+
+    margin-bottom:15px;
+
+}
+
+
+/* texte */
+
+.finalText{
+
+    font-size:.92rem;
+
+    line-height:1.85;
+
+    opacity:.86;
+
+}
+
+
+/* battement */
+
+@keyframes finalHeartBeat{
+
+    0%,100%{
+
+        transform:scale(1);
+
+    }
+
+    50%{
+
+        transform:scale(1.08);
+
+    }
+
+}
+
+
+/* téléphone */
+
+@media(max-width:600px){
+
+    #finalMessage{
+
+        bottom:7vh;
+
+        width:88vw;
+
+        padding:22px 18px;
+
+        border-radius:21px;
+
+    }
+
+
+    .finalHeart{
+
+        font-size:38px;
+
+    }
+
+
+    .finalTitle{
+
+        font-size:1.15rem;
+
+    }
+
+
+    .finalText{
+
+        font-size:.84rem;
+
+        line-height:1.75;
+
+    }
+
+}
+
+`;
+
+
+document.head.appendChild(
+    finalStyle
+);
+
+
+/* =====================================================
+             RETOUR AU CALENDRIER
+===================================================== */
+
+function fadeToCalendar(){
+
+    const message =
+        document.getElementById(
+            "finalMessage"
+        );
+
+
+    if(message){
+
+        message.classList.remove(
+            "visible"
+        );
+
+    }
+
+
+    /*
+        Petit temps de respiration.
+    */
+
+    setTimeout(()=>{
+
+        document.body.animate(
+
+            [
+
+                {
+                    opacity:1
+                },
+
+                {
+                    opacity:0
+                }
+
+            ],
+
+            {
+
+                duration:1600,
+
+                easing:"ease-in-out",
+
+                fill:"forwards"
+
+            }
+
+        );
+
+
+        setTimeout(()=>{
+
+            window.location.href =
+                "calendrier.html";
+
+        },1600);
+
+    },1000);
+
+}
+
+</script>

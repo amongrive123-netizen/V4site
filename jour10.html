@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>Jour 10 ♡ — Si j'étais avec toi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#ff4f95;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Poppins',sans-serif;}
+
+/* Background layers */
+#bg-blur{position:fixed;inset:0;background-size:cover;background-position:center;filter:blur(40px) brightness(0.6);transform:scale(1.2);transition:opacity 1.2s ease-in-out;z-index:0;}
+#bg-main{position:fixed;inset:0;background-size:contain;background-repeat:no-repeat;background-position:center;transition:opacity 1s ease-in-out;z-index:1;}
+#bg-main::after{content:'';position:absolute;inset:0;background:linear-gradient(transparent 55%,rgba(0,0,0,0.85) 100%);}
+
+/* Grain */
+#grain{position:fixed;inset:0;pointer-events:none;z-index:2;opacity:0.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px;}
+
+/* Vignette */
+#vignette{position:fixed;inset:0;pointer-events:none;z-index:3;background:radial-gradient(circle at center,transparent 40%,rgba(0,0,0,0.5) 100%);}
+
+/* Content */
+#content{position:absolute;left:0;right:0;bottom:max(30px,env(safe-area-inset-bottom));padding:30px;text-align:center;color:#fff;z-index:10;}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:999px;background:rgba(255,255,255,0.12);backdrop-filter:blur(10px);font-weight:700;font-size:0.85rem;margin-bottom:16px;opacity:0;transform:translateY(10px);animation:fadeUp 0.8s 0.3s forwards;}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+
+h1{font-size:clamp(2rem,6vw,2.8rem);line-height:1.1;margin-bottom:18px;font-weight:800;opacity:0;transform:translateY(15px);animation:fadeUp 0.8s 0.5s forwards;}
+h1 span{font-family:'Playfair Display',serif;font-style:italic;font-weight:600;color:var(--rose);}
+
+#story{font-size:clamp(1rem,3.5vw,1.15rem);line-height:1.9;min-height:100px;max-width:460px;margin:0 auto;font-weight:300;opacity:0.95;text-shadow:0 2px 20px rgba(0,0,0,0.6);}
+#story .char{display:inline-block;opacity:0;transform:translateY(4px);animation:charIn 0.35s forwards;}
+@keyframes charIn{to{opacity:1;transform:translateY(0);}}
+
+.cursor{display:inline-block;width:2px;height:1.1em;background:var(--rose);margin-left:3px;vertical-align:middle;animation:blink 0.9s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+.btn{margin-top:28px;padding:16px 32px;border:none;border-radius:18px;background:linear-gradient(135deg,var(--rose),#e6387d);color:#fff;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 15px 35px rgba(255,79,149,0.35);transition:transform 0.2s,box-shadow 0.2s;opacity:0;animation:fadeUp 0.8s 0.7s forwards;position:relative;overflow:hidden;}
+.btn:active{transform:scale(0.97);}
+
+/* Scene indicator */
+#sceneDots{position:fixed;bottom:max(20px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:20;opacity:0;transition:opacity 0.5s;}
+#sceneDots.visible{opacity:1;}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.25);transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);}
+.dot.active{background:var(--rose);transform:scale(1.3);box-shadow:0 0 10px rgba(255,79,149,0.5);}
+
+/* Audio hint */
+#audioHint{position:fixed;top:max(16px,env(safe-area-inset-top));right:16px;z-index:30;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);color:#fff;font-size:0.8rem;font-weight:600;opacity:0;transition:opacity 0.5s;cursor:pointer;}
+#audioHint.visible{opacity:1;}
+#audioHint.muted{opacity:0.5;}
+
+/* Fade overlay for transitions */
+#fadeOverlay{position:fixed;inset:0;background:#000;opacity:0;pointer-events:none;z-index:5;transition:opacity 0.6s;}
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<div id="bg-blur"></div>
+<div id="bg-main"></div>
+<div id="grain"></div>
+<div id="vignette"></div>
+<div id="fadeOverlay"></div>
+
+<div id="audioHint">🔊 Musique activée</div>
+
+<div id="content">
+  <div class="badge">❤️ Jour 10</div>
+  <h1>Si j'étais<br><span>avec toi...</span></h1>
+  <div id="story">Aujourd'hui, je vais t'emmener vivre une journée que j'aimerais tellement partager avec toi...</div>
+  <button class="btn" id="startBtn">Commencer notre journée ❤️</button>
+</div>
+
+<div id="sceneDots"></div>
+
+<script>
+/* ============================
+   SCENES
+   ============================ */
+const scenes = [
+  { image:"assets/jour10-1.jpg", label:"Matin", mood:"morning",
+    texts:["🌞 Ce matin...","Je me réveillerais à côté de toi.","Je te ferais un gros câlin.","Puis quelques petits bisous pour commencer la journée tout doucement. ❤️"] },
+  { image:"assets/jour10-2.jpg", label:"Petit-déj", mood:"breakfast",
+    texts:["🥐 Ensuite...","Direction le petit-déjeuner.","Des tartines au Nutella, évidemment...","Parce qu'on les adore tous les deux. 😋"] },
+  { image:"assets/jour10-3.jpg", label:"Promenade", mood:"walk",
+    texts:["🌾 Après ça...","On irait se promener tranquillement dans Fort-Moville.","Sans se presser.","Juste toi et moi.","À discuter de tout...","Et de rien. ❤️"] },
+  { image:"assets/jour10-4.jpg", label:"Cocooning", mood:"cozy",
+    texts:["🏠 Puis on rentrerait chez moi.","On se poserait tranquillement.","Une série...","Ou un film.","Comme on aime le faire.","Et je profiterais simplement de chaque seconde avec toi. ❤️"] },
+  { image:"assets/jour10-5.jpg", label:"Coucher de soleil", mood:"sunset",
+    texts:["🌅 Et pour terminer cette journée...","On irait regarder le coucher du soleil sur la plage.","Avec une bonne pizza.","Main dans la main.","Et je me dirais simplement...","J'espère vivre encore des centaines de journées comme celle-ci avec toi. ❤️"] }
+];
+
+/* ============================
+   AUDIO ENGINE — Ambiances procédurales
+   ============================ */
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx, masterGain, isMuted = false;
+let currentOscs = [];
+let currentInterval = null;
+
+function initAudio(){
+  if(audioCtx) return;
+  audioCtx = new AudioCtx();
+  masterGain = audioCtx.createGain();
+  masterGain.gain.value = 0.12; // Volume modéré
+  masterGain.connect(audioCtx.destination);
+}
+
+function stopAmbiance(){
+  currentOscs.forEach(o => { try{ o.stop(); o.disconnect(); }catch(e){} });
+  currentOscs = [];
+  if(currentInterval){ clearInterval(currentInterval); currentInterval = null; }
+}
+
+function playNote(freq, type, duration, delay, vol=0.06){
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.connect(g); g.connect(masterGain);
+  o.type = type;
+  o.frequency.value = freq;
+  g.gain.setValueAtTime(0, audioCtx.currentTime + delay);
+  g.gain.linearRampToValueAtTime(vol, audioCtx.currentTime + delay + 0.1);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + duration);
+  o.start(audioCtx.currentTime + delay);
+  o.stop(audioCtx.currentTime + delay + duration);
+  currentOscs.push(o);
+}
+
+function playChord(freqs, type, duration, delay, vol=0.05){
+  freqs.forEach(f => playNote(f, type, duration, delay, vol));
+}
+
+/* Ambiances par scène */
+function setAmbiance(mood){
+  stopAmbiance();
+  if(isMuted) return;
+
+  switch(mood){
+    case 'morning': // Léger, joyeux, major
+      playChord([523,659,784], 'sine', 3, 0, 0.04);
+      currentInterval = setInterval(()=>{
+        if(isMuted) return;
+        const base = [523,659,784,880][Math.floor(Math.random()*4)];
+        playNote(base, 'sine', 1.5 + Math.random(), 0, 0.025);
+        if(Math.random()>0.6) playNote(base*1.5, 'sine', 1, 0.1, 0.02);
+      }, 2200);
+      break;
+
+    case 'breakfast': // Gourmand, doux
+      playChord([392,494,587], 'triangle', 3, 0, 0.035);
+      currentInterval = setInterval(()=>{
+        if(isMuted) return;
+        const notes = [392,440,494,523,587];
+        const n = notes[Math.floor(Math.random()*notes.length)];
+        playNote(n, 'sine', 1.2, 0, 0.03);
+      }, 2800);
+      break;
+
+    case 'walk': // Calme, nature
+      playChord([349,440,523], 'sine', 4, 0, 0.03);
+      currentInterval = setInterval(()=>{
+        if(isMuted) return;
+        const notes = [349,392,440,523,587];
+        const n = notes[Math.floor(Math.random()*notes.length)];
+        playNote(n, 'sine', 2, 0, 0.025);
+      }, 3500);
+      break;
+
+    case 'cozy': // Chaud, enveloppant
+      playChord([329,392,494], 'triangle', 4, 0, 0.035);
+      currentInterval = setInterval(()=>{
+        if(isMuted) return;
+        const notes = [329,349,392,440,494];
+        const n = notes[Math.floor(Math.random()*notes.length)];
+        playNote(n, 'sine', 1.8, 0, 0.025);
+      }, 3200);
+      break;
+
+    case 'sunset': // Mélancolique, beau
+      playChord([311,392,466], 'sine', 5, 0, 0.03);
+      currentInterval = setInterval(()=>{
+        if(isMuted) return;
+        const notes = [311,349,392,466,523];
+        const n = notes[Math.floor(Math.random()*notes.length)];
+        playNote(n, 'sine', 2.5, 0, 0.025);
+        if(Math.random()>0.7) playNote(n*0.75, 'triangle', 3, 0.2, 0.02);
+      }, 4000);
+      break;
+
+    case 'ending': // Final, émouvant
+      playChord([523,659,784,1047], 'sine', 6, 0, 0.04);
+      [523,659,784,1047,1319].forEach((f,i)=>{
+        setTimeout(()=>playNote(f,'sine',3,0,0.035), i*600);
+      });
+      break;
+  }
+}
+
+/* Bruitages */
+function playClick(){
+  if(!audioCtx || isMuted) return;
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.connect(g); g.connect(masterGain);
+  o.type = 'sine';
+  o.frequency.setValueAtTime(600, audioCtx.currentTime);
+  o.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 0.06);
+  g.gain.setValueAtTime(0.05, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+  o.start(); o.stop(audioCtx.currentTime + 0.12);
+}
+
+function playType(){
+  if(!audioCtx || isMuted) return;
+  const b = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.012, audioCtx.sampleRate);
+  const d = b.getChannelData(0);
+  for(let i=0;i<d.length;i++) d[i] = (Math.random()*2-1) * 0.4;
+  const s = audioCtx.createBufferSource();
+  const f = audioCtx.createBiquadFilter();
+  const g = audioCtx.createGain();
+  s.buffer = b; s.connect(f); f.connect(g); g.connect(masterGain);
+  f.type = 'bandpass'; f.frequency.value = 4000; f.Q.value = 8;
+  g.gain.setValueAtTime(0.015, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.01);
+  s.start(); s.stop(audioCtx.currentTime + 0.012);
+}
+
+function playTransition(){
+  if(!audioCtx || isMuted) return;
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.connect(g); g.connect(masterGain);
+  o.type = 'sine';
+  o.frequency.setValueAtTime(400, audioCtx.currentTime);
+  o.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.3);
+  g.gain.setValueAtTime(0, audioCtx.currentTime);
+  g.gain.linearRampToValueAtTime(0.04, audioCtx.currentTime + 0.05);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+  o.start(); o.stop(audioCtx.currentTime + 0.5);
+}
+
+/* ============================
+   DOM
+   ============================ */
+const bgBlur = document.getElementById('bg-blur');
+const bgMain = document.getElementById('bg-main');
+const story = document.getElementById('story');
+const startBtn = document.getElementById('startBtn');
+const sceneDots = document.getElementById('sceneDots');
+const audioHint = document.getElementById('audioHint');
+const fadeOverlay = document.getElementById('fadeOverlay');
+
+let currentScene = 0;
+let started = false;
+
+// Build dots
+scenes.forEach((_,i)=>{
+  const d = document.createElement('div');
+  d.className = 'dot' + (i===0?' active':'');
+  sceneDots.appendChild(d);
+});
+
+function updateDots(){
+  document.querySelectorAll('.dot').forEach((d,i)=>{
+    d.classList.toggle('active', i===currentScene);
+  });
+}
+
+/* ============================
+   IMAGES
+   ============================ */
+function changeImage(src){
+  playTransition();
+  fadeOverlay.style.opacity = '0.4';
+  bgMain.style.opacity = '0';
+  bgBlur.style.opacity = '0';
+
+  setTimeout(()=>{
+    bgMain.style.backgroundImage = `url('${src}')`;
+    bgBlur.style.backgroundImage = `url('${src}')`;
+    bgMain.style.opacity = '1';
+    bgBlur.style.opacity = '1';
+    fadeOverlay.style.opacity = '0';
+  }, 600);
+}
+
+/* ============================
+   TYPEWRITER
+   ============================ */
+function typeText(text){
+  return new Promise(resolve=>{
+    story.innerHTML = '';
+    const chars = text.split('');
+    let i = 0;
+    const interval = setInterval(()=>{
+      if(i < chars.length){
+        const span = document.createElement('span');
+        span.className = 'char';
+        span.textContent = chars[i] === ' ' ? ' ' : chars[i];
+        span.style.animationDelay = '0s';
+        story.appendChild(span);
+        if(i % 3 === 0) playType();
+        i++;
+      } else {
+        clearInterval(interval);
+        // Add cursor
+        const cursor = document.createElement('span');
+        cursor.className = 'cursor';
+        story.appendChild(cursor);
+        resolve();
+      }
+    }, 38);
+  });
+}
+
+function wait(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+/* ============================
+   SCENE PLAYER
+   ============================ */
+async function playScene(){
+  if(currentScene >= scenes.length){
+    await playEnding();
+    return;
+  }
+
+  const s = scenes[currentScene];
+  updateDots();
+  setAmbiance(s.mood);
+  changeImage(s.image);
+
+  await wait(900);
+
+  for(const text of s.texts){
+    await typeText(text);
+    await wait(2000);
+  }
+
+  currentScene++;
+  if(currentScene < scenes.length){
+    setTimeout(playScene, 400);
+  } else {
+    setTimeout(playEnding, 400);
+  }
+}
+
+async function playEnding(){
+  stopAmbiance();
+  setAmbiance('ending');
+
+  story.innerHTML = '';
+  const endText = `❤️\n\nMerci d'être entrée dans ma vie.\n\nJ'espère vraiment vivre cette journée avec toi...\nPas seulement dans mon imagination.\n\nJe t'aime énormément, mon amour. ❤️`;
+
+  const lines = endText.split('\n');
+  for(const line of lines){
+    if(line.trim()===''){
+      story.appendChild(document.createElement('br'));
+      continue;
+    }
+    const p = document.createElement('p');
+    p.style.marginBottom = '8px';
+    story.appendChild(p);
+    const chars = line.split('');
+    for(let i=0;i<chars.length;i++){
+      const span = document.createElement('span');
+      span.className = 'char';
+      span.textContent = chars[i] === ' ' ? ' ' : chars[i];
+      p.appendChild(span);
+      if(i % 3 === 0) playType();
+      await wait(30);
+    }
+  }
+
+  // Back button
+  const btn = document.createElement('a');
+  btn.href = 'calendrier.html';
+  btn.textContent = 'Retour au calendrier ♡';
+  btn.className = 'btn';
+  btn.style.display = 'inline-block';
+  btn.style.textDecoration = 'none';
+  btn.style.marginTop = '30px';
+  document.getElementById('content').appendChild(btn);
+}
+
+/* ============================
+   START
+   ============================ */
+startBtn.onclick = async () =>{
+  initAudio();
+  playClick();
+  if(navigator.vibrate) navigator.vibrate(10);
+  started = true;
+
+  startBtn.style.display = 'none';
+  audioHint.classList.add('visible');
+  sceneDots.classList.add('visible');
+
+  // Preload images
+  scenes.forEach(s=>{ const img=new Image(); img.src=s.image; });
+
+  await wait(300);
+  playScene();
+};
+
+/* Mute toggle */
+audioHint.onclick = ()=>{
+  isMuted = !isMuted;
+  audioHint.textContent = isMuted ? '🔇 Musique coupée' : '🔊 Musique activée';
+  audioHint.classList.toggle('muted', isMuted);
+  if(!isMuted && started && currentScene < scenes.length){
+    setAmbiance(scenes[currentScene].mood);
+  } else if(isMuted){
+    stopAmbiance();
+  }
+};
+
+// Pause audio when tab hidden
+document.addEventListener('visibilitychange', ()=>{
+  if(document.hidden && audioCtx){
+    audioCtx.suspend();
+  } else if(audioCtx){
+    audioCtx.resume();
+  }
+});
+</script>
+</body>
+</html>

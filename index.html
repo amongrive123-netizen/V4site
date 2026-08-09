@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pour mon amour ♡</title>
+
+  <style>
+    :root {
+      --rose: #ff4f95;
+      --rose-fonce: #e6367c;
+      --texte: #24171e;
+      --texte-doux: #79636d;
+      --blanc: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--texte);
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255, 167, 204, 0.65), transparent 27rem),
+        radial-gradient(circle at 88% 78%, rgba(255, 112, 169, 0.36), transparent 26rem),
+        linear-gradient(135deg, #fffafd 0%, #fff0f6 50%, #ffe0ec 100%);
+    }
+
+    .page {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 28px clamp(24px, 6vw, 90px);
+    }
+
+    .forme {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .forme-1 {
+      width: 18px;
+      height: 18px;
+      top: 21%;
+      right: 18%;
+      background: #ff74ae;
+    }
+
+    .forme-2 {
+      width: 10px;
+      height: 10px;
+      bottom: 21%;
+      left: 14%;
+      background: #ff9dc6;
+    }
+
+    nav {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .signature {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.96rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .coeur {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
+      color: var(--blanc);
+      background: var(--rose);
+      box-shadow: 0 9px 22px rgba(255, 79, 149, 0.28);
+      font-size: 1.2rem;
+    }
+
+    .pour-ines {
+      color: var(--texte-doux);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex: 1;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .hero {
+      max-width: 760px;
+      animation: apparition 0.9s ease-out both;
+    }
+
+    .petit-titre {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 15px;
+      margin-bottom: 28px;
+      border: 1px solid rgba(255, 79, 149, 0.17);
+      border-radius: 999px;
+      color: var(--rose-fonce);
+      background: rgba(255, 255, 255, 0.55);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    h1 {
+      font-size: clamp(3.2rem, 8vw, 7rem);
+      line-height: 0.97;
+      letter-spacing: -0.075em;
+      font-weight: 800;
+    }
+
+    .rose {
+      color: var(--rose);
+    }
+
+    .description {
+      max-width: 540px;
+      margin: 28px auto 36px;
+      color: var(--texte-doux);
+      font-size: clamp(1rem, 2vw, 1.14rem);
+      line-height: 1.65;
+    }
+
+    .bouton-calendrier {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      padding: 16px 22px;
+      border-radius: 16px;
+      color: var(--blanc);
+      background: var(--rose);
+      box-shadow: 0 16px 34px rgba(230, 54, 124, 0.28);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 700;
+      transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .bouton-calendrier:hover {
+      transform: translateY(-3px);
+      background: var(--rose-fonce);
+      box-shadow: 0 21px 38px rgba(230, 54, 124, 0.34);
+    }
+
+    .fleche {
+      font-size: 1.25rem;
+      transition: transform 0.25s ease;
+    }
+
+    .bouton-calendrier:hover .fleche {
+      transform: translateX(4px);
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      color: rgba(121, 99, 109, 0.75);
+      text-align: center;
+      font-size: 0.83rem;
+    }
+
+    @keyframes apparition {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 520px) {
+      .page {
+        padding: 22px;
+      }
+
+      .pour-ines {
+        display: none;
+      }
+
+      .description {
+        margin-top: 23px;
+        margin-bottom: 30px;
+      }
+
+      .bouton-calendrier {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <div class="forme forme-1"></div>
+    <div class="forme forme-2"></div>
+
+    <nav>
+      <div class="signature">
+        <div class="coeur">♡</div>
+        Pour mon amour
+      </div>
+
+      <p class="pour-ines">Pour Inès ♡</p>
+    </nav>
+
+    <main>
+      <section class="hero">
+        <p class="petit-titre">✦ Une aventure rien que pour toi</p>
+
+        <h1>
+          Bienvenue,<br />
+          <span class="rose">mon amour.</span>
+        </h1>
+
+        <p class="description">
+          Pendant quelques jours, une petite surprise t’attendra ici.
+          Des mots doux, des jeux et plein de petites attentions
+          pour te faire sourire, même de loin.
+        </p>
+
+        <a class="bouton-calendrier" href="calendrier.html">
+          Découvrir le calendrier
+          <span class="fleche">→</span>
+        </a>
+      </section>
+    </main>
+
+    <footer>Fait avec beaucoup d’amour, juste pour toi ♡</footer>
+  </div>
+
+  <script>
+    console.log("Bienvenue Inès ♡");
+  </script>
+</body>
+</html>
